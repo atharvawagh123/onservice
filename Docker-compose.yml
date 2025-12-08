@@ -1,0 +1,79 @@
+# version: "3.9"
+# services:
+#   app:
+#     build: .
+#     container_name: next_app
+#     depends_on:
+#       - db
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       DATABASE_URL: postgres://postgres:admin@db:5432/management?schema=public
+#       NODE_ENV: production
+#     command: ["npm", "start"]
+#   db:
+#     image: postgres:15
+#     container_name: db
+#     restart: always
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: admin
+#       POSTGRES_DB: management
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+# volumes:
+#   pgdata:
+
+
+
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: next_app
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:admin@db:5432/management?schema=public
+    volumes:
+      - .:/app              # Mount local project files
+      - /app/node_modules   # Prevents overwriting node_modules
+    command: ["npm", "run", "dev"]
+
+  db:
+    image: postgres:15
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: management
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+
+
+
+
+
+
+
+
+
+
+
+
+
+

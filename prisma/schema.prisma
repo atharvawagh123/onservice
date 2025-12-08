@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model userapi_userprofile {
+  id            BigInt    @id @default(autoincrement())
+  email         String    @unique @db.VarChar(254)
+  age           Int
+  password      String?   @db.VarChar(100)
+  is_active     Boolean
+  date_joined   DateTime  @default(now()) @db.Timestamptz(6)
+  first_name    String    @db.VarChar(150)
+  is_staff      Boolean
+  is_superuser  Boolean
+  last_login    DateTime? @db.Timestamptz(6)
+  last_name     String    @db.VarChar(150)
+  username      String    @db.VarChar(150)
+  name          String?   @db.VarChar(150)
+  totalservice  Int?      @default(0)
+  is_verified   Boolean?  @default(false)
+  imagepublicid String?
+  imageurl      String?
+  role          String?   @default("USER") @db.VarChar(10)
+  Enquiry       Enquiry[]
+  services      Service[]
+}
+
+model Service {
+  id            BigInt              @id @default(autoincrement())
+  title         String              @db.VarChar(200)
+  userId        BigInt
+  description   String?
+  price         Float?
+  thumbnail     String?
+  imageurl      String?
+  imagepublicid String?
+  isactive      Boolean?            @default(true)
+  createdat     DateTime?           @default(now()) @db.Timestamp(6)
+  updatedat     DateTime?           @default(now()) @db.Timestamp(6)
+  Enquiry       Enquiry[]           
+  user          userapi_userprofile @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+}
+
+model Enquiry {
+  id         Int       @id @default(autoincrement())
+  user_id    BigInt?
+  service_id BigInt?
+  name       String    @db.VarChar(100)
+  email      String    @db.VarChar(150)
+  phone      String?   @db.VarChar(20)
+  message    String
+  status     String?   @default("pending") @db.VarChar(20)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+
+  Service             Service?             @relation(fields: [service_id], references: [id])
+  userapi_userprofile userapi_userprofile? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_enquiry")
+}
+
+
+model category {
+  id        BigInt    @id @default(autoincrement())
+  name      String    @unique @db.VarChar(100)
+  createdat DateTime? @default(now()) @db.Timestamp(6)
+  updatedat DateTime? @default(now()) @db.Timestamp(6)
+}
