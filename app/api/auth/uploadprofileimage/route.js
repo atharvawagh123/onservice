@@ -5,8 +5,10 @@ import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { Buffer } from "buffer"; // ✅ important
 
+
 export async function POST(req) {
   try {
+    // 🔍 1. Get token from cookies using your custom verify method
     const token = await verifyuser(req);
 
     if (!token) {
@@ -16,13 +18,16 @@ export async function POST(req) {
       );
     }
 
+    // 🔍 2. Verify JWT
     let payload;
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
-    } catch {
+    } catch (err) {
+      console.error("Invalid token:", err);
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
+    // 🔍 3. Parse uploaded file
     const form = await req.formData();
     const file = form.get("file");
 
@@ -38,22 +43,31 @@ export async function POST(req) {
       );
     }
 
+    // 🔍 4. Check user exists
     const user = await prisma.userapi_userprofile.findUnique({
       where: { id: BigInt(payload.userId) },
     });
-    console.log("Available fields:", Object.keys(user));
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (user.imagePublicId) {
-      await cloudinary.uploader.destroy(user.imagePublicId);
+    console.log("Updating user image. Existing ID:", user.imagepublicid);
+
+    // 🔍 5. Delete old image if available
+    if (user.imagepublicid) {
+      try {
+        await cloudinary.uploader.destroy(user.imagepublicid);
+      } catch (err) {
+        console.error("Old image delete failed:", err);
+      }
     }
 
+    // 🔍 6. Convert file buffer to Base64
     const arrayBuffer = await file.arrayBuffer();
     const base64 = Buffer.from(arrayBuffer).toString("base64");
 
+    // 🔍 7. Upload to Cloudinary
     let uploadedImage;
     try {
       uploadedImage = await cloudinary.uploader.upload(
@@ -67,18 +81,20 @@ export async function POST(req) {
         { status: 500 }
       );
     }
+
+    // 🔍 8. Update user in DB
     const updatedUser = await prisma.userapi_userprofile.update({
       where: { id: BigInt(payload.userId) },
       data: {
-        imageurl: uploadedImage.secure_url, // ✅ match schema
-        imagepublicid: uploadedImage.public_id, // ✅ match schema
+        imageurl: uploadedImage.secure_url,
+        imagepublicid: uploadedImage.public_id,
       },
     });
 
     return NextResponse.json(
       {
         message: "Profile image updated",
-        imageUrl: updatedUser.imageUrl,
+        imageUrl: updatedUser.imageurl,
       },
       { status: 200 }
     );
@@ -90,7 +106,6 @@ export async function POST(req) {
     );
   }
 }
-
 export async function DELETE(req) {
   try {
     // Verify user token
