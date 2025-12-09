@@ -60,13 +60,13 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
     }
   };
 
-  
   const logout = async () => {
     try {
       const res = await fetch(`${BASE_URL}/api/auth/logout`, {
         method: "POST",
-        credentials: "include", // Important for cookies
+        credentials: "include", // ✅ important
       });
+
       const data = await res.json();
       if (data.success) {
         localStorage.removeItem("token");
@@ -74,7 +74,7 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
         setisLogin(false);
         window.location.href = "/login";
       } else {
-        console.error("Logout failed");
+        console.error("Logout failed:", data.error);
       }
     } catch (error) {
       console.error("Logout error", error);
