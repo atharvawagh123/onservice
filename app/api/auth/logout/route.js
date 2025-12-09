@@ -1,33 +1,7 @@
-import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
-
 export async function POST(req) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-    console.log("Token from cookie:", token);
-
-    if (token) {
-      let payload;
-      try {
-        payload = jwt.verify(token, process.env.JWT_SECRET);
-      } catch (err) {
-        console.error("JWT verify failed:", err);
-        payload = null;
-      }
-      console.log("Payload after verify:", payload);
-
-      if (payload?.sessionId) {
-        console.log("Deleting session:", payload.sessionId);
-        await prisma.session.deleteMany({
-          where: { id: Number(payload.sessionId) }, // <-- FIXED here
-        });
-      }
-    }
-
-    // Clear cookie
-    const cookie = `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure=${
+    // Clear the 'token' cookie by setting it with Max-Age=0
+    const cookie = `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict; Secure=${
       process.env.NODE_ENV === "production" ? "true" : "false"
     }`;
 
@@ -38,8 +12,10 @@ export async function POST(req) {
         headers: {
           "Set-Cookie": cookie,
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Origin":
+            "https://myonservice-p9hl3can4-aths-projects-1561d76f.vercel.app", // <--- frontend origin
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
       }
     );
@@ -47,7 +23,9 @@ export async function POST(req) {
     console.error("Logout error:", err);
     return new Response(
       JSON.stringify({ error: "Internal Server Error", success: false }),
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }

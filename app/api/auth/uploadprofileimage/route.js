@@ -1,9 +1,9 @@
-import prisma from "@/lib/prisma";
+import  prisma from "@/lib/prisma";
 import { verifyuser } from "@/lib/auth";
 import cloudinary from "@/lib/cloudinary";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import { Buffer } from "buffer";
+import { Buffer } from "buffer"; // ✅ important
 
 export async function POST(req) {
   try {
@@ -47,8 +47,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (user.imagepublicid) {
-      await cloudinary.uploader.destroy(user.imagepublicid);
+    if (user.imagePublicId) {
+      await cloudinary.uploader.destroy(user.imagePublicId);
     }
 
     const arrayBuffer = await file.arrayBuffer();
@@ -74,10 +74,14 @@ export async function POST(req) {
         imagepublicid: uploadedImage.public_id, // ✅ match schema
       },
     });
-    return NextResponse.json({
-      message: "Profile image updated",
-      imageUrl: updatedUser.imageurl, // lowercase
-    });
+
+    return NextResponse.json(
+      {
+        message: "Profile image updated",
+        imageUrl: updatedUser.imageUrl,
+      },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("Upload profile image error:", err);
     return NextResponse.json(
@@ -137,7 +141,7 @@ export async function DELETE(req) {
     });
 
     return NextResponse.json(
-      { message: "Profile image deleted", imageUrl: updatedUser.imageurl },
+      { message: "Profile image deleted", imageUrl: updatedUser.imageUrl },
       { status: 200 }
     );
   } catch (err) {

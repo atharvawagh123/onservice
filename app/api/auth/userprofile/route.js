@@ -7,8 +7,6 @@ export async function GET(req) {
     // Pass the request to verifyuser
     const token = await verifyuser(req);
 
-    
-
     if (!token) {
       return new Response(JSON.stringify({ error: "Token not available" }), {
         status: 401,
