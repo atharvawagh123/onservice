@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser, setloginstate ,setname} from "@/app/store/usersclice";
+import { setUser, setloginstate, setname } from "@/app/store/usersclice";
 // import { getUserProfile } from "../../customhook/user"
 import { useAuthContext } from "@/app/context/ContextProvider";
 export default function LoginPage() {
@@ -32,8 +32,11 @@ export default function LoginPage() {
       } else {
         // console.log(res);
         // Save token in localStorage (or use cookies for better security)
-
+        if(!res.is_active){
+          alert("you are inactive now a days ")
+        }
         if (res.success) {
+          
           localStorage.setItem("token", res.token);
           dispatch(setname(res.name));
           setisLogin(true);

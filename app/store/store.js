@@ -2,9 +2,13 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./usersclice"; // Import your slice reducer
+import Adminreducer from "./Adminslice"
+import CategoriesSlice from "./Categoryslice"
 
 export const store = configureStore({
   reducer: {
-    user: userReducer, // key "user" matches slice name
+    user: userReducer,
+    Admin:Adminreducer,
+    Categories:CategoriesSlice
   },
 });

@@ -1,148 +1,146 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+// API Calls
 import {
   getUserProfile,
   getservicecurrentuser,
   deleteservice,
 } from "../../customhook/user";
-import {
-  MdVisibility,
-  MdOutlineVisibilityOff,
-  MdPermDeviceInformation,
-  MdOutlineAddBusiness,
-  MdDeleteForever,
-} from "react-icons/md";
-import { FaFileUpload } from "react-icons/fa";
-import { toast } from "react-toastify";
-import ServiceCard from "../../component/ServiceCard";
+
+import { uploadprofileimage, deleteprofileimage } from "../../customhook/auth";
+
+import { MdPermDeviceInformation, MdOutlineAddBusiness } from "react-icons/md";
+
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { uploadprofileimage, deleteprofileimage } from "../../customhook/auth";
+import { toast } from "react-toastify";
+
 import ProfileCard from "../../component/ProfileCard";
+import ServiceCard from "../../component/ServiceCard";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null);
-  const [userservice, setUserservice] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
+
+  // Local UI State
   const [file, setFile] = useState(null);
-  const [showService, setShowService] = useState(false);
-  const [message, setMessage] = useState("");
   const [preview, setPreview] = useState(null);
+  const [message, setMessage] = useState("");
+  const [showService, setShowService] = useState(false);
 
-  // Fetch user profile and services
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const profileRes = await getUserProfile();
-        if (profileRes.success) setUser(profileRes);
+  // Fetch User Profile
+  const {
+    data: user,
+    isLoading: loadingUser,
+    error: userError,
+  } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: getUserProfile,
+    select: (res) => res, // return original response
+  });
 
-        const serviceRes = await getservicecurrentuser();
-        if (serviceRes?.data) setUserservice(serviceRes.data);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load profile or services");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  // Fetch Services
+  const {
+    data: userservice = [],
+    isLoading: loadingServices,
+    error: serviceError,
+  } = useQuery({
+    queryKey: ["userServices"],
+    queryFn: getservicecurrentuser,
+    select: (res) => res?.data || [],
+    enabled: !!user, // runs after user loads
+  });
+
+  const loading = loadingUser || loadingServices;
+  const error = userError || serviceError;
 
   const canAddService = useMemo(() => user?.totalservice < 2, [user]);
 
-  // Service delete handler
+  // Delete Service
   const handleDeleteService = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "This action cannot be undone!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
     });
+
     if (!result.isConfirmed) return;
 
     try {
       const response = await deleteservice(id);
-      if (response) {
-        toast.success(response.message);
-        const serviceRes = await getservicecurrentuser();
-        if (serviceRes?.data) setUserservice(serviceRes.data);
-      }
+      toast.success(response.message);
+
+      // Refresh service list
+      queryClient.invalidateQueries(["userServices"]);
     } catch (err) {
-      toast.error(err);
+      toast.error("Failed to delete service");
     }
   };
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (!selectedFile) return;
 
-    setFile(selectedFile);
-    setPreview(URL.createObjectURL(selectedFile)); // Only preview!
+  // File preview
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (!selected) return;
+
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
   };
 
-  // Upload profile image
+  // Upload Profile Image
   const handleUpload = async () => {
     if (!file) return setMessage("Please select an image first");
 
-    setLoading(true);
-    setMessage("");
+    setMessage("Uploading...");
 
     try {
       const data = await uploadprofileimage(file);
+
       if (data?.imageUrl) {
-        setUser((prev) => ({ ...prev, imageUrl: data.imageUrl })); // Real URL
-        setMessage("Profile image updated successfully!");
-        setPreview(null); // Remove preview after real upload
+        setMessage("Profile image updated!");
+
+        // Refresh user
+        queryClient.invalidateQueries(["userProfile"]);
+
+        setPreview(null);
         setFile(null);
       } else {
-        setMessage(data.error || "Upload failed");
+        setMessage("Upload failed");
       }
     } catch (err) {
-      console.error(err);
       setMessage("Something went wrong");
-    } finally {
-      setLoading(false);
     }
   };
-  // Delete profile image
+
+  // Delete Profile Image
   const handleDeleteProfileImage = async () => {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "This action cannot be undone!",
+      title: "Remove image?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
     });
+
     if (!result.isConfirmed) return;
+
     try {
-      const response = await deleteprofileimage();
-      if (response?.message) {
-        toast.success(response.message);
-        setUser((prev) => ({ ...prev, imageUrl: null }));
-      } else {
-        toast.error(response?.error || "Failed to delete image");
-      }
+      const res = await deleteprofileimage();
+      toast.success(res?.message || "Deleted");
+
+      // Refresh user
+      queryClient.invalidateQueries(["userProfile"]);
     } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong");
+      toast.error("Error deleting image");
     }
   };
 
   if (loading)
-    return (
-      <p className="text-center mt-20 text-gray-500 dark:text-gray-400">
-        Loading...
-      </p>
-    );
+    return <p className="text-center mt-20 text-gray-500">Loading...</p>;
+
   if (error)
     return (
-      <p className="text-center mt-20 text-red-500 dark:text-red-400">
-        {error}
-      </p>
+      <p className="text-center mt-20 text-red-500">Failed to load profile</p>
     );
 
   const userInfo = [
@@ -153,39 +151,40 @@ export default function ProfilePage() {
   ];
 
   return (
-    <main className="min-h-screen p-6 w-full flex flex-col items-center bg-sky-50 dark:bg-gray-950 transition-colors duration-300">
+    <main className="min-h-screen p-6 w-full flex flex-col items-center bg-sky-50 dark:bg-gray-950 duration-300">
       {/* Profile Card */}
-    <ProfileCard
-      user={user}
-      userInfo={userInfo}
-      preview={preview}
-      file={file}
-      loading={loading}
-      message={message}
-      showService={showService}
-      canAddService={canAddService}
-      handleFileChange={handleFileChange}
-      handleUpload={handleUpload}
-      handleDeleteProfileImage={handleDeleteProfileImage}
-      setShowService={setShowService}
-    />
+      <ProfileCard
+        user={user}
+        userInfo={userInfo}
+        preview={preview}
+        file={file}
+        loading={loading}
+        message={message}
+        showService={showService}
+        canAddService={canAddService}
+        handleFileChange={handleFileChange}
+        handleUpload={handleUpload}
+        handleDeleteProfileImage={handleDeleteProfileImage}
+        setShowService={setShowService}
+      />
 
-      {/* Services Section */}
+      {/* Services */}
       {showService && (
-        <div className="mt-8 w-full max-w-full p-5">
-          <h2 className="text-xl text-center font-bold mb-4 text-sky-700 dark:text-sky-400">
+        <div className="mt-8 w-full">
+          <h2 className="text-xl text-center font-bold mb-4 text-sky-700">
             My Services
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {userservice.length === 0 ? (
-              <p className="text-gray-500 text-center dark:text-gray-400 col-span-full">
+              <p className="text-center text-gray-500 col-span-full">
                 No services found
               </p>
             ) : (
-              userservice.map((service) => (
+              userservice.map((s) => (
                 <ServiceCard
-                  key={service.id}
-                  service={service}
+                  key={s.id}
+                  service={s}
                   onDelete={handleDeleteService}
                 />
               ))

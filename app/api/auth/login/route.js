@@ -48,6 +48,7 @@ export async function POST(req) {
         token,
         success: true,
         name: user.name,
+        is_active:user.is_active
       }),
       {
         status: 200,

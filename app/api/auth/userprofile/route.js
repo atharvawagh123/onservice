@@ -6,7 +6,6 @@ export async function GET(req) {
   try {
     // Pass the request to verifyuser
     const token = await verifyuser(req);
-
     if (!token) {
       return new Response(JSON.stringify({ error: "Token not available" }), {
         status: 401,
@@ -52,8 +51,7 @@ export async function GET(req) {
       headers: {
         "Content-Type": "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin":
-          "*", // <--- frontend origin
+        "Access-Control-Allow-Origin": "*", // <--- frontend origin
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },

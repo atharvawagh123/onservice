@@ -48,3 +48,9 @@ export async function deleteservice(id) {
 
   return res.json();
 }
+
+export async function updateactivity( id) {
+  return fetch(`${BASE_URL}/api/auth/activity/${id}`, {
+    method:"PATCH"
+  }).then((res) => res.json());
+}

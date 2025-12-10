@@ -6,6 +6,7 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import { AuthContextProvider } from "./context/ContextProvider";
 import { useState, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const queryClient = new QueryClient();
 export default function RootLayout({
   children,
 }: {
@@ -35,12 +37,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <title>Management System</title>
-
-        <Provider store={store}>
-          <AuthContextProvider isLoginstate={isLogin}>
-            {children}
-          </AuthContextProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <AuthContextProvider isLoginstate={isLogin}>
+              {children}
+            </AuthContextProvider>
+          </Provider>
+        </QueryClientProvider>
 
         <ToastProvider />
       </body>

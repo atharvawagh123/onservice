@@ -24,9 +24,15 @@ model userapi_userprofile {
   is_verified   Boolean?  @default(false)
   imagepublicid String?
   imageurl      String?
-  role          String?   @default("USER") @db.VarChar(10)
+  role          Role      @default(USER)
   Enquiry       Enquiry[]
   services      Service[]
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+  USER
 }
 
 model Service {
