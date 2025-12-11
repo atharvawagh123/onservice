@@ -8,13 +8,22 @@ import { useAuthContext } from "../context/ContextProvider";
 import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+// import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme, isLogin, logout } = useAuthContext();
-  const name = useSelector((state) => state.user.name);
+  // const name = useSelector((state) => state.user.name);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      setMounted(true); // Runs only on client
+    };
+    load();
+  }, []);
 
   const linkClass = (path) =>
     pathname.startsWith(path)
@@ -79,12 +88,14 @@ const Navbar = () => {
           </ul>
 
           {/* Theme Toggle Icon */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:scale-110 transition"
-          >
-            {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
-          </button>
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:scale-110 transition"
+            >
+              {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
+            </button>
+          )}
 
           {/* {name && (
             <span className="text-gray-800 dark:text-gray-200 font-medium">
@@ -94,30 +105,31 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-            {isLogin ? (
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition flex items-center gap-2"
-              >
-                <IoLogOut size={20} /> Logout
-              </button>
-            ) : (
-              <div className="flex flex-col md:flex-row gap-3">
-                <Link
-                  href="/login"
-                  className="px-5 py-2 border border-blue-600 dark:border-blue-400 
-                  text-blue-600 dark:text-blue-400 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 transition"
+            {mounted &&
+              (isLogin ? (
+                <button
+                  onClick={handleLogout}
+                  className="px-5 py-2 bg-yellow-600 text-white rounded-md hover:bg-red-700 transition flex items-center gap-2"
                 >
-                  Login
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-5 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 transition"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+                  <IoLogOut size={20} /> Logout
+                </button>
+              ) : (
+                <div className="flex flex-col md:flex-row gap-3">
+                  <Link
+                    href="/login"
+                    className="px-5 py-2 border border-blue-600 dark:border-blue-400 
+          text-blue-600 dark:text-blue-400 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 transition"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="px-5 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 transition"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
       </div>

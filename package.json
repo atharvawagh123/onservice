@@ -8,7 +8,17 @@
     "vercel-build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "eslint"
+    "format": "prettier --write .",
+    "lint": "next lint",
+    "prepare": "husky",
+    "test": "echo \"No tests yet\""
+
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -31,14 +41,22 @@
     "sweetalert2": "^11.26.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@prisma/nextjs-monorepo-workaround-plugin": "^7.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.15.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.3",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "prisma": "^7.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 export function middleware(request) {
   const token = request.cookies.get("token")?.value;
@@ -14,5 +14,10 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/about/:path*", "/service/:path*", "/profile/:path*","/admin/:path*"],
+  matcher: [
+    "/about/:path*",
+    "/service/:path*",
+    "/profile/:path*",
+    "/admin/:path*",
+  ],
 };

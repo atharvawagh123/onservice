@@ -16,6 +16,7 @@ export async function PATCH(req, { params }) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
+      console.error("JWT verification failed:", err);
       return new Response(JSON.stringify({ error: "Invalid token" }), {
         status: 401,
       });

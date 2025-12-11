@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
-const token =
-  typeof window !== "undefined" ? localStorage.getItem("token") || null : null;
+// const token =
+//   typeof window !== "undefined" ? localStorage.getItem("token") || null : null;
 
 export async function getcategory() {
   return fetch(`${BASE_URL}/api/category`).then((res) => res.json());

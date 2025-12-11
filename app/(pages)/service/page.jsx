@@ -1,6 +1,6 @@
 "use client";
 import { useAuthContext } from "../../context/ContextProvider";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Service from "../../component/service";
 import Loading from "./Loading";
 import { toast } from "react-toastify";
@@ -24,11 +24,7 @@ export default function ServicePage() {
   const filterCache = useRef({});
 
   // Fetch only when not searching
-  useEffect(() => {
-    if (!isSearching) fetchServices();
-  }, [currentpage, isSearching]);
-
-  async function fetchServices() {
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getservice(currentpage, 6);
@@ -39,7 +35,11 @@ export default function ServicePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [currentpage, getservice]);
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
 
   // ------------------ SEARCH ------------------
   const findservice = async () => {

@@ -11,20 +11,18 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
     typeof window !== "undefined" ? localStorage.getItem("token") : null,
   );
 
-  const [theme, setTheme] = useState("light");
-  const [isLogin, setIsLogin] = useState(isLoginstate);
+  const [isLogin, setIsLogin] = useState(() => !!token);
+
+  const [theme, setTheme] = useState(() =>
+    typeof window !== "undefined"
+      ? localStorage.getItem("theme") || "light"
+      : "light",
+  );
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    const storedToken = localStorage.getItem("token");
-
-    if (storedToken) setIsLogin(true);
-    setTheme(savedTheme);
-
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
+    // Only update the DOM, not React state
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   const getservice = async (page = 1, limit = 6) => {
     try {
@@ -41,8 +39,6 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
   const logout = async () => {
@@ -51,7 +47,6 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
         method: "POST",
         credentials: "include",
       });
-
       const data = await res.json();
       if (data.success) {
         localStorage.removeItem("token");

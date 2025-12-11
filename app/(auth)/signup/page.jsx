@@ -54,6 +54,7 @@ export default function SignupPage() {
         router.push("/login");
       }
     } catch (err) {
+      console.log("error from signup page : ", err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

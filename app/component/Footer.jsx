@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
-import { useAuthContext } from "../context/ContextProvider";
 
 const Footer = () => {
-  const { theme } = useAuthContext(); // use theme from context if needed
-
   return (
     <footer className="  dark:bg-gray-900 text-gray-800 dark:text-gray-200 py-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between gap-8">

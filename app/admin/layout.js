@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 import Sidebar from "../component/Sidebar";
 import { getUserProfile } from "../customhook/user";
@@ -16,7 +17,7 @@ export default function Adminlayout({ children }) {
           getUserProfile(),
           getcategory(),
         ]);
-        console.log("form layout", category);
+        console.log("from layout", category);
         if (profile) dispatch(setinfo(profile));
         if (category) dispatch(setcategory(category));
       } catch (error) {
@@ -25,7 +26,7 @@ export default function Adminlayout({ children }) {
     };
 
     fetchdata();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="bg-white">

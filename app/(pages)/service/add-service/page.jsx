@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useAuthContext } from "../../../context/ContextProvider";
 import { toast } from "react-toastify";
 import { createservice } from "../../../customhook/service";
 

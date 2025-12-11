@@ -8,19 +8,19 @@ import { toast } from "react-toastify";
 const UserPage = () => {
   const [allUser, setAllUser] = useState([]);
 
-  // Move function before useEffect
-  const getAllUser = async () => {
-    try {
-      const response = await getuser();
-      setAllUser(response || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    getAllUser();
-  }, []);
+    // Define an async function inside useEffect
+    const fetchUsers = async () => {
+      try {
+        const response = await getuser();
+        setAllUser(response || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUsers();
+  }, []); // run only once on mount
 
   const changeActivity = async (id) => {
     if (!id) {
@@ -32,7 +32,9 @@ const UserPage = () => {
 
     if (response.success) {
       toast.success(`${response.id} ${response.message}`);
-      getAllUser();
+      // refresh user list after activity change
+      const refreshedUsers = await getuser();
+      setAllUser(refreshedUsers || []);
       return response;
     }
   };
@@ -40,18 +42,20 @@ const UserPage = () => {
   return (
     <>
       <div className="mb-6">
-        <h1 className="font-serif italic text-5xl">All Users in OnService</h1>
+        <h1 className="font-serif italic text-5xl text-black">
+          All Users in OnService
+        </h1>
       </div>
 
       <div className="overflow-x-auto mb-10">
         <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead className="bg-gray-100 border-b">
             <tr>
-              <th className="px-6 py-3">#</th>
-              <th className="px-6 py-3">Name</th>
-              <th className="px-6 py-3">Email</th>
-              <th className="px-6 py-3">User ID</th>
-              <th className="px-6 py-3 text-center">Action</th>
+              <th className="px-6 py-3 text-black">#</th>
+              <th className="px-6 py-3 text-black">Name</th>
+              <th className="px-6 py-3 text-black">Email</th>
+              <th className="px-6 py-3 text-black">User ID</th>
+              <th className="px-6 py-3 text-black text-center">Action</th>
             </tr>
           </thead>
 
@@ -59,7 +63,7 @@ const UserPage = () => {
             {allUser.length > 0 ? (
               allUser.map((user, index) => (
                 <UserTableCell
-                  key={user._id}
+                  key={index}
                   user={user}
                   index={index}
                   changeactivity={changeActivity}

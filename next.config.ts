@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-experimental: {
+  experimental: {
     serverMinification: false,
     serverComponentsExternalPackages: ["@prisma/client", "prisma"],
   },
   output: "standalone",
-     productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

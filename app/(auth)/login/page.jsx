@@ -6,9 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser, setloginstate, setname } from "@/app/store/usersclice";
-// import { getUserProfile } from "../../customhook/user"
-import { useAuthContext } from "@/app/context/ContextProvider";
+import { setname } from "@/app/store/usersclice";
+
 export default function LoginPage() {
   const router = useRouter();
   // const dispatch = useDispatch();
@@ -16,7 +15,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { isLogin, setisLogin } = useAuthContext();
+
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
@@ -30,15 +29,13 @@ export default function LoginPage() {
       if (res.error) {
         toast.error(res.error);
       } else {
-        // console.log(res);
-        // Save token in localStorage (or use cookies for better security)
         if (!res.is_active) {
           alert("you are inactive now a days ");
         }
         if (res.success) {
           localStorage.setItem("token", res.token);
           dispatch(setname(res.name));
-     
+
           localStorage.setItem("isLogin", true);
           // Show success toast
           toast.success("Login successful!");

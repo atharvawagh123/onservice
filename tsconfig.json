@@ -29,8 +29,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "app/(pages)/home/page.jsx", "middleware.js", "app/component/Sidebar.jsx"  ],
+    "**/*.mts",
+    "app/(pages)/home/page.jsx",
+    "middleware.js",
+    "app/component/Sidebar.jsx"
+  ],
   "exclude": ["node_modules"]
 }
-

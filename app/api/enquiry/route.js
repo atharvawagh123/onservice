@@ -102,20 +102,20 @@ export async function DELETE(req) {
       );
     }
 
-    // 2️⃣ Check authorization (JWT)
-    const authHeader = req.headers.get("authorization");
-    const token =
-      req.cookies.get("token")?.value ||
-      (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
+    // // 2️⃣ Check authorization (JWT)
+    // const authHeader = req.headers.get("authorization");
+    // const token =
+    //   req.cookies.get("token")?.value ||
+    //   (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
 
-    if (!token) {
-      return NextResponse.json(
-        { error: "Unauthorized: Token missing" },
-        { status: 401 },
-      );
-    }
+    // if (!token) {
+    //   return NextResponse.json(
+    //     { error: "Unauthorized: Token missing" },
+    //     { status: 401 },
+    //   );
+    // }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 3️⃣ Delete enquiry only if it belongs to this user
     const deletedEnquiry = await prisma.enquiry.deleteMany({
