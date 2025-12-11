@@ -12,7 +12,7 @@ import {
 
 import { uploadprofileimage, deleteprofileimage } from "../../customhook/auth";
 
-import { MdPermDeviceInformation, MdOutlineAddBusiness } from "react-icons/md";
+// import { MdPermDeviceInformation, MdOutlineAddBusiness } from "react-icons/md";
 
 import Swal from "sweetalert2";
 import Link from "next/link";
