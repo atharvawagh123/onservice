@@ -16,8 +16,12 @@ export default async function CommentslugPage({ params }) {
 
   return (
     <main>
-      <h1>Comment ID: {commentid} for: {slug}</h1>
-      <p>This is the detailed view of comment {commentid} for {slug}.</p>
+      <h1>
+        Comment ID: {commentid} for: {slug}
+      </h1>
+      <p>
+        This is the detailed view of comment {commentid} for {slug}.
+      </p>
     </main>
   );
 }

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const notfound = async () => {
-  return (
-    <div> comment page not found</div>
-  )
-}
+  return <div> comment page not found</div>;
+};
 
-export default notfound
+export default notfound;

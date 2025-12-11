@@ -1,18 +1,11 @@
 import { notFound } from "next/navigation";
 
-
 export const revalidate = 60;
 
-//for ssg 
+//for ssg
 export async function generateStaticParams() {
-  return [
-    { slug: "123" },
-    { slug: "456" },
-    { slug: "789" },
-  ];
-};
-
-
+  return [{ slug: "123" }, { slug: "456" }, { slug: "789" }];
+}
 
 export default async function AboutSlugPage({ params }) {
   const { slug } = await params;

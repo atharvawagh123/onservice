@@ -1,4 +1,4 @@
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 
 export async function PATCH(req, { params }) {
@@ -7,7 +7,7 @@ export async function PATCH(req, { params }) {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(
         JSON.stringify({ error: "Authorization header missing" }),
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -16,7 +16,9 @@ export async function PATCH(req, { params }) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
+      return new Response(JSON.stringify({ error: "Invalid token" }), {
+        status: 401,
+      });
     }
 
     // Fetch the authenticated user
@@ -25,12 +27,16 @@ export async function PATCH(req, { params }) {
     });
 
     if (!authUser) {
-      return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     // Only staff or superuser can toggle verification
     if (!authUser.is_staff && !authUser.is_superuser) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 403 });
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 403,
+      });
     }
 
     const { id } = params; // ID of the user to toggle verification
@@ -40,7 +46,9 @@ export async function PATCH(req, { params }) {
     });
 
     if (!userToVerify) {
-      return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     // Toggle is_verified
@@ -58,10 +66,12 @@ export async function PATCH(req, { params }) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   } catch (err) {
     console.error(err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+    });
   }
 }

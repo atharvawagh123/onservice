@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
   );
 }
 
@@ -22,7 +22,7 @@ export async function GET() {
     console.error("GET /categories error:", error);
     return NextResponse.json(
       { error: "Failed to fetch categories" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -36,7 +36,7 @@ export async function POST(req) {
     if (!name || typeof name !== "string" || name.trim() === "") {
       return NextResponse.json(
         { error: "Name is required and must be a non-empty string" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -50,7 +50,7 @@ export async function POST(req) {
     if (existingCategory) {
       return NextResponse.json(
         { error: "Category already exists" },
-        { status: 409 } // Conflict
+        { status: 409 }, // Conflict
       );
     }
 
@@ -64,13 +64,13 @@ export async function POST(req) {
         success: true,
         message: "category created successfully !",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("POST /categories error:", error);
     return NextResponse.json(
       { error: "Failed to create category" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

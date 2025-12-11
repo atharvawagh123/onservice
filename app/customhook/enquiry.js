@@ -30,18 +30,16 @@ export function ariseenquiry(formdata) {
 
 export function getserviceenquiry(id) {
   return fetch(
-    `${BASE_URL}/api/service/getallserviceenquiry?service_id=${id}`
+    `${BASE_URL}/api/service/getallserviceenquiry?service_id=${id}`,
   ).then((res) => res.json());
 }
 
-
-export function deletedEnquiry(id){
+export function deletedEnquiry(id) {
   return fetch(`${BASE_URL}/api/enquiry?id=${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-
   }).then((res) => res.json());
 }

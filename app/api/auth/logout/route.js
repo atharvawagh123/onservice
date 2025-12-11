@@ -17,7 +17,7 @@ export async function POST(req) {
           "Access-Control-Allow-Methods": "POST, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
-      }
+      },
     );
   } catch (err) {
     console.error("Logout error:", err);
@@ -25,7 +25,7 @@ export async function POST(req) {
       JSON.stringify({ error: "Internal Server Error", success: false }),
       {
         status: 500,
-      }
+      },
     );
   }
 }

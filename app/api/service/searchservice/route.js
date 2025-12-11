@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
   );
 }
 
@@ -54,7 +54,7 @@ export async function GET(request) {
           limit,
           totalPages: Math.ceil(total / limit),
         },
-      })
+      }),
     );
   } catch (err) {
     console.log("❌ ERROR:", err);

@@ -33,10 +33,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <title>Management System</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <title>Management System</title>
         <QueryClientProvider client={queryClient}>
           <Provider store={store}>
             <AuthContextProvider isLoginstate={isLogin}>

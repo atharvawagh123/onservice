@@ -106,7 +106,7 @@ export default function ServicePage() {
     const results = await findusersearchservice(
       `${filterCategory} ${filterPrice}`,
       1,
-      20
+      20,
     );
 
     const data = results.data || [];
@@ -190,9 +190,21 @@ export default function ServicePage() {
               Enter Enquiry
             </h2>
 
-            <input type="text" placeholder="Title" className="w-full px-2 py-1 rounded border" />
-            <textarea placeholder="Description" rows={3} className="w-full px-2 py-1 rounded border" />
-            <input type="number" placeholder="Price" className="w-full px-2 py-1 rounded border" />
+            <input
+              type="text"
+              placeholder="Title"
+              className="w-full px-2 py-1 rounded border"
+            />
+            <textarea
+              placeholder="Description"
+              rows={3}
+              className="w-full px-2 py-1 rounded border"
+            />
+            <input
+              type="number"
+              placeholder="Price"
+              className="w-full px-2 py-1 rounded border"
+            />
 
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-md">
               Submit
@@ -210,7 +222,9 @@ export default function ServicePage() {
                 No services available.
               </div>
             ) : (
-              services.map((service, index) => <Service service={service} key={index} />)
+              services.map((service, index) => (
+                <Service service={service} key={index} />
+              ))
             )}
           </section>
 

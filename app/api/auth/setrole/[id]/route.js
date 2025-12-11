@@ -3,8 +3,8 @@ import prisma from "@/lib/prisma";
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
   );
 }
 
@@ -14,9 +14,12 @@ export async function PUT(req, { params }) {
     const { id } = await params;
 
     if (!id) {
-      return new Response(JSON.stringify({ error: "User ID is required in URL" }), {
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "User ID is required in URL" }),
+        {
+          status: 400,
+        },
+      );
     }
 
     const userId = BigInt(id); // Convert safely
@@ -24,7 +27,9 @@ export async function PUT(req, { params }) {
 
     const validRoles = ["ADMIN", "CLIENT", "USER"];
     if (!validRoles.includes(role)) {
-      return new Response(JSON.stringify({ error: "Invalid role" }), { status: 400 });
+      return new Response(JSON.stringify({ error: "Invalid role" }), {
+        status: 400,
+      });
     }
 
     const updatedUser = await prisma.userapi_userprofile.update({
@@ -32,9 +37,13 @@ export async function PUT(req, { params }) {
       data: { role },
     });
 
-    return new Response(JSON.stringify(toPlainObject(updatedUser)), { status: 200 });
+    return new Response(JSON.stringify(toPlainObject(updatedUser)), {
+      status: 200,
+    });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
   }
 }

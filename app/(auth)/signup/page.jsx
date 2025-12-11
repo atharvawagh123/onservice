@@ -6,7 +6,6 @@ import { signup } from "@/app/customhook/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-
 export default function SignupPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -79,7 +78,6 @@ export default function SignupPage() {
           onSubmit={handleSubmit}
           className="flex flex-col gap-4 items-center justify-center w-full"
         >
-          
           {/* Full Name */}
           <div className="w-full">
             <label

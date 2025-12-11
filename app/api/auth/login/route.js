@@ -9,7 +9,7 @@ export async function POST(req) {
     if (!email || !password) {
       return new Response(
         JSON.stringify({ error: "Email and password required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,7 +35,7 @@ export async function POST(req) {
     const token = jwt.sign(
       { userId: user.id.toString(), email: user.email, name: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     const cookie = `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=None; Secure=true`;
@@ -48,7 +48,7 @@ export async function POST(req) {
         token,
         success: true,
         name: user.name,
-        is_active:user.is_active
+        is_active: user.is_active,
       }),
       {
         status: 200,
@@ -59,7 +59,7 @@ export async function POST(req) {
           "Access-Control-Allow-Methods": "POST, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
-      }
+      },
     );
   } catch (err) {
     console.error("Login error:", err);
@@ -67,7 +67,7 @@ export async function POST(req) {
       JSON.stringify({ error: "Internal Server Error", success: false }),
       {
         status: 500,
-      }
+      },
     );
   }
 }

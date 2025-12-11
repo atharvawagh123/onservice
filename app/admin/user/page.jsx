@@ -6,24 +6,30 @@ import UserTableCell from "../../component/usertablecell";
 import { toast } from "react-toastify";
 
 const UserPage = () => {
-  const [alluser, setalluser] = useState([]);
+  const [allUser, setAllUser] = useState([]);
+
+  // Move function before useEffect
+  const getAllUser = async () => {
+    try {
+      const response = await getuser();
+      setAllUser(response || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getAllUser();
   }, []);
 
-  const getAllUser = async () => {
-    const response = await getuser();
-    setalluser(response || []);
-  };
-
-  const changeactivity = async (id) => {
+  const changeActivity = async (id) => {
     if (!id) {
-      toast.error("id is not coming from component");
-      return
+      toast.error("ID not found");
+      return;
     }
 
     const response = await updateactivity(id);
+
     if (response.success) {
       toast.success(`${response.id} ${response.message}`);
       getAllUser();
@@ -34,31 +40,29 @@ const UserPage = () => {
   return (
     <>
       <div className="mb-6">
-        <h1 className="font-serif italic text-5xl text-black">
-          All Users in OnService
-        </h1>
+        <h1 className="font-serif italic text-5xl">All Users in OnService</h1>
       </div>
 
       <div className="overflow-x-auto mb-10">
-        <table className="min-w-full bg-white rounded-xl shadow-md border border-gray-200">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead className="bg-gray-100 border-b">
             <tr>
-              <th className="px-6 py-3  text-black">#</th>
-              <th className="px-6 py-3 text-black">Name</th>
-              <th className="px-6 py-3 text-black">Email</th>
-              <th className="px-6 py-3 text-black">User ID</th>
-              <th className="px-6 py-3 text-black text-center">Action</th>
+              <th className="px-6 py-3">#</th>
+              <th className="px-6 py-3">Name</th>
+              <th className="px-6 py-3">Email</th>
+              <th className="px-6 py-3">User ID</th>
+              <th className="px-6 py-3 text-center">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {alluser.length > 0 ? (
-              alluser.map((user, index) => (
+            {allUser.length > 0 ? (
+              allUser.map((user, index) => (
                 <UserTableCell
-                  key={index}
+                  key={user._id}
                   user={user}
                   index={index}
-                  changeactivity={changeactivity}
+                  changeactivity={changeActivity}
                 />
               ))
             ) : (

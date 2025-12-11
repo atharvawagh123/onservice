@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { verifyuser } from "@/lib/auth.js";
 import cloudinary from "@/lib/cloudinary.js";
@@ -7,9 +7,9 @@ import cloudinary from "@/lib/cloudinary.js";
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
-  )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
+  );
 }
 export async function GET(request) {
   try {
@@ -39,7 +39,7 @@ export async function GET(request) {
           limit,
           totalPages: Math.ceil(total / limit),
         },
-      })
+      }),
     );
   } catch (err) {
     console.error("Fetch services error:", err);
@@ -56,7 +56,7 @@ export async function POST(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Token not available" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -79,7 +79,7 @@ export async function POST(req) {
     if (!title || !description || !price) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -97,7 +97,7 @@ export async function POST(req) {
 
       const uploadedImage = await cloudinary.uploader.upload(
         `data:${file.type};base64,${base64}`,
-        { folder: "services" }
+        { folder: "services" },
       );
 
       imageurl = uploadedImage.secure_url;
@@ -120,7 +120,7 @@ export async function POST(req) {
           success: false,
           message: "You can only create 2 services per account.",
         },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -152,13 +152,13 @@ export async function POST(req) {
         success: true,
         message: "Service created!",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err) {
     console.error("Create service error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

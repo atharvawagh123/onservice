@@ -11,21 +11,21 @@ const initialState = {
   last_login: null,
   date_joined: "",
   islogin: false,
-  category:[],
+  category: [],
 };
 
-const  AdminSlice = createSlice({
-    name:'Admin',
-    initialState,
-    reducers:{
-        setinfo(state,action){
-            return { ...state, ...action.payload };
-        },
-        setcategory(state,action){
-           state.category = action.payload;
-        }
-    }
-})
+const AdminSlice = createSlice({
+  name: "Admin",
+  initialState,
+  reducers: {
+    setinfo(state, action) {
+      return { ...state, ...action.payload };
+    },
+    setcategory(state, action) {
+      state.category = action.payload;
+    },
+  },
+});
 
-export const {setinfo,setcategory} = AdminSlice.actions;
-export default AdminSlice.reducer
+export const { setinfo, setcategory } = AdminSlice.actions;
+export default AdminSlice.reducer;

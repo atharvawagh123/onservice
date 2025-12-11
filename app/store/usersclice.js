@@ -49,11 +49,12 @@ const userSlice = createSlice({
     settotalservice(state, action) {
       state.totalservice = action.payload;
     },
-    setname(state,action){
+    setname(state, action) {
       state.name = action.payload;
-    }
+    },
   },
 });
 
-export const { setUser, clearUserk, setloginstate,settotalservice ,setname} = userSlice.actions;
+export const { setUser, clearUserk, setloginstate, settotalservice, setname } =
+  userSlice.actions;
 export default userSlice.reducer;

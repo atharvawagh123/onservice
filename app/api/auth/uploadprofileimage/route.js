@@ -1,10 +1,9 @@
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { verifyuser } from "@/lib/auth";
 import cloudinary from "@/lib/cloudinary";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { Buffer } from "buffer"; // ✅ important
-
 
 export async function POST(req) {
   try {
@@ -14,7 +13,7 @@ export async function POST(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Token not available" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -39,7 +38,7 @@ export async function POST(req) {
     ) {
       return NextResponse.json(
         { error: "Invalid or no file uploaded" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -72,13 +71,13 @@ export async function POST(req) {
     try {
       uploadedImage = await cloudinary.uploader.upload(
         `data:${file.type};base64,${base64}`,
-        { folder: "profile_images" }
+        { folder: "profile_images" },
       );
     } catch (err) {
       console.error("Cloudinary upload error:", err);
       return NextResponse.json(
         { error: "Image upload failed" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -96,13 +95,13 @@ export async function POST(req) {
         message: "Profile image updated",
         imageUrl: updatedUser.imageurl,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     console.error("Upload profile image error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -113,7 +112,7 @@ export async function DELETE(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Token not available" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -141,7 +140,7 @@ export async function DELETE(req) {
         console.error("Cloudinary delete error:", err);
         return NextResponse.json(
           { error: "Failed to delete image" },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -157,13 +156,13 @@ export async function DELETE(req) {
 
     return NextResponse.json(
       { message: "Profile image deleted", imageUrl: updatedUser.imageUrl },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     console.error("Delete profile image error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

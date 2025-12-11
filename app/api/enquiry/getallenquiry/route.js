@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import  prisma from "@/lib/prisma";
-import { verifyuser} from "@/lib/auth.js"
+import prisma from "@/lib/prisma";
+import { verifyuser } from "@/lib/auth.js";
 import jwt from "jsonwebtoken";
 
 export async function GET(req) {
@@ -14,15 +14,15 @@ export async function GET(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Unauthorized: Token missing" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     const token1 = await verifyuser();
-    if(token1){
+    if (token1) {
       return NextResponse.json({
-        error:"token not coming for verify user function "
-      })
+        error: "token not coming for verify user function ",
+      });
     }
     const decoded = jwt.verify(token1, process.env.JWT_SECRET);
 
@@ -34,7 +34,7 @@ export async function GET(req) {
     });
 
     return NextResponse.json({
-      message:"get all ",
+      message: "get all ",
       success: true,
       data: enquiries,
     });

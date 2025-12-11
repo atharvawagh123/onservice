@@ -3,7 +3,6 @@ import { FaTrash } from "react-icons/fa";
 export default function EnquiryCard({ enquiry, onDelete }) {
   return (
     <div className="w-full p-4 sm:p-6 bg-white dark:bg-gray-800 shadow-md rounded-xl border border-gray-200 dark:border-gray-700 transition-colors relative">
-
       {/* Delete Button */}
       <button
         onClick={() => onDelete(enquiry.id)}
@@ -23,7 +22,6 @@ export default function EnquiryCard({ enquiry, onDelete }) {
       </h2>
 
       <div className="space-y-1.5 sm:space-y-2 text-gray-700 dark:text-gray-300 text-sm sm:text-base">
-
         {/* Name */}
         <p>
           <span className="font-sans font-semibold">Name:</span>{" "}

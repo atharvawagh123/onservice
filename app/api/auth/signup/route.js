@@ -1,4 +1,4 @@
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function POST(req) {
@@ -7,7 +7,10 @@ export async function POST(req) {
       await req.json();
 
     if (!email || !password) {
-      return new Response(JSON.stringify({ error: "Email and password required" }), { status: 400 });
+      return new Response(
+        JSON.stringify({ error: "Email and password required" }),
+        { status: 400 },
+      );
     }
 
     const existingUser = await prisma.userapi_userprofile.findUnique({
@@ -15,7 +18,9 @@ export async function POST(req) {
     });
 
     if (existingUser) {
-      return new Response(JSON.stringify({ error: "User already exists" }), { status: 400 });
+      return new Response(JSON.stringify({ error: "User already exists" }), {
+        status: 400,
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,10 +44,12 @@ export async function POST(req) {
     // Convert BigInt to string
     return new Response(
       JSON.stringify({ message: "User created", userId: user.id.toString() }),
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err) {
     console.error("Signup error:", err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+    });
   }
 }

@@ -32,14 +32,13 @@ export default function LoginPage() {
       } else {
         // console.log(res);
         // Save token in localStorage (or use cookies for better security)
-        if(!res.is_active){
-          alert("you are inactive now a days ")
+        if (!res.is_active) {
+          alert("you are inactive now a days ");
         }
         if (res.success) {
-          
           localStorage.setItem("token", res.token);
           dispatch(setname(res.name));
-          setisLogin(true);
+     
           localStorage.setItem("isLogin", true);
           // Show success toast
           toast.success("Login successful!");

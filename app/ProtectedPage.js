@@ -10,7 +10,7 @@ export default function ProtectedPage({ children }) {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        alert("Protect page trigger !!!!");
+      alert("Protect page trigger !!!!");
       router.replace("/login"); // redirect if no token
     }
   }, [router]);

@@ -1,27 +1,24 @@
 "use client";
+
 import { createContext, useContext, useState, useEffect } from "react";
 
-// Create context
 export const AuthContext = createContext(null);
 
-// Provider component
 export const AuthContextProvider = ({ children, isLoginstate }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
-  const [token, setToken] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("token");
-    }
-    return null;
-  });
+
+  const [token, setToken] = useState(() =>
+    typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  );
+
   const [theme, setTheme] = useState("light");
-  const [isLogin, setisLogin] = useState(isLoginstate);
+  const [isLogin, setIsLogin] = useState(isLoginstate);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
-    const token = localStorage.getItem("token");
-    if (token) {
-      setisLogin(!!token);
-    }
+    const storedToken = localStorage.getItem("token");
+
+    if (storedToken) setIsLogin(true);
     setTheme(savedTheme);
 
     if (savedTheme === "dark") {
@@ -33,18 +30,10 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
     try {
       const res = await fetch(
         `${BASE_URL}/api/service?page=${page}&limit=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
-
-      const data = await res.json();
-      return data;
+      return await res.json();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -53,28 +42,22 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
 
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
-  
   const logout = async () => {
     try {
       const res = await fetch(`${BASE_URL}/api/auth/logout`, {
         method: "POST",
-        credentials: "include", // Important for cookies
+        credentials: "include",
       });
+
       const data = await res.json();
       if (data.success) {
         localStorage.removeItem("token");
         setToken(null);
-        setisLogin(false);
+        setIsLogin(false);
         window.location.href = "/login";
-      } else {
-        console.error("Logout failed");
       }
     } catch (error) {
       console.error("Logout error", error);
@@ -90,7 +73,7 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
         toggleTheme,
         theme,
         isLogin,
-        setisLogin,
+        setIsLogin,
         logout,
         isLoginstate,
       }}
@@ -100,5 +83,4 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
   );
 };
 
-// Custom hook to consume context
 export const useAuthContext = () => useContext(AuthContext);

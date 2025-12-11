@@ -20,6 +20,8 @@ export async function addcategory(name) {
   }).then((res) => res.json());
 }
 
-export async function getcategoryaccordingtoserivce(query,limit=50){
-  return fetch(`${BASE_URL}/api/category/servicecategory?search=${query}&limit=${limit}`).then(res => res.json())
+export async function getcategoryaccordingtoserivce(query, limit = 50) {
+  return fetch(
+    `${BASE_URL}/api/category/servicecategory?search=${query}&limit=${limit}`,
+  ).then((res) => res.json());
 }

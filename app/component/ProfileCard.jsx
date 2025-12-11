@@ -1,7 +1,13 @@
 "use client";
 
 import { FaFileUpload } from "react-icons/fa";
-import { MdDeleteForever, MdVisibility, MdOutlineVisibilityOff, MdOutlineAddBusiness, MdPermDeviceInformation } from "react-icons/md";
+import {
+  MdDeleteForever,
+  MdVisibility,
+  MdOutlineVisibilityOff,
+  MdOutlineAddBusiness,
+  MdPermDeviceInformation,
+} from "react-icons/md";
 import Link from "next/link";
 
 export default function ProfileCard({
@@ -18,17 +24,14 @@ export default function ProfileCard({
   handleDeleteProfileImage,
   setShowService,
 }) {
- 
   return (
     <div className="bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full mx-auto transition-colors duration-300">
-
       <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400 text-center sm:text-left">
         My Profile
       </h1>
 
       {/* =============== PROFILE IMAGE SECTION =============== */}
       <div className="flex flex-col items-center mb-4">
-
         {/* Image Wrapper */}
         <div className="w-32 h-32 mb-3 rounded-full overflow-hidden border-2 border-sky-400 dark:border-sky-600 relative shadow-md">
           <img
@@ -39,7 +42,9 @@ export default function ProfileCard({
 
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-              <div className="text-white text-sm animate-pulse">Uploading...</div>
+              <div className="text-white text-sm animate-pulse">
+                Uploading...
+              </div>
             </div>
           )}
         </div>
@@ -66,7 +71,6 @@ export default function ProfileCard({
 
         {/* Upload / Delete */}
         <div className="flex gap-2 mt-3 w-full">
-
           {/* Upload */}
           <button
             onClick={handleUpload}
@@ -100,7 +104,10 @@ export default function ProfileCard({
       {/* =============== USER INFO SECTION =============== */}
       <div className="space-y-4">
         {userInfo.map((item) => (
-          <p key={item.label} className="flex flex-col sm:flex-row sm:items-center">
+          <p
+            key={item.label}
+            className="flex flex-col sm:flex-row sm:items-center"
+          >
             <strong className="text-gray-800 dark:text-gray-100 w-24">
               {item.label}:
             </strong>
@@ -146,7 +153,6 @@ export default function ProfileCard({
         <MdPermDeviceInformation className="text-lg sm:text-xl" />
         <span className="font-medium">Add Enquiry</span>
       </Link>
-
     </div>
   );
 }

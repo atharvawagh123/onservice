@@ -28,7 +28,7 @@ export async function PATCH(req) {
     if (typeof is_active !== "boolean") {
       return new Response(
         JSON.stringify({ error: "is_active must be true or false" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -63,7 +63,7 @@ export async function PATCH(req) {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
-      }
+      },
     );
   } catch (err) {
     console.error("Update active status error:", err);

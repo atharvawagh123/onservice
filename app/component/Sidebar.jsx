@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
-  const state = useSelector((state=>state.Admin))
+  const state = useSelector((state) => state.Admin);
 
   const pathname = usePathname(); // ⭐ detect active route
 
@@ -27,7 +27,7 @@ export default function Sidebar() {
     { name: "Counter", icon: <FaCalculator />, link: "/admin/counter" },
     { name: "Enquiry", icon: <FaQuestionCircle />, link: "/admin/enquiry" },
   ];
-// console.log("sidebar state",state);
+  // console.log("sidebar state",state);
   return (
     <>
       {/* Mobile Toggle */}
@@ -46,7 +46,7 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="flex items-center space-x-3 mb-10">
           <div className="bg-black text-white w-10 h-10 flex items-center justify-center rounded-lg text-xl font-bold">
-           {state.username|| "np"} 
+            {state.username || "np"}
           </div>
           <h1 className="text-2xl font-bold text-black">{state.email}</h1>
         </div>

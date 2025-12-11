@@ -42,7 +42,7 @@ export async function DELETE(req, { params }) {
 
     return Response.json(
       { message: "Category deleted successfully", success: true },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

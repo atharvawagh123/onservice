@@ -40,11 +40,10 @@ export async function createservice(data, file) {
   } catch (e) {
     console.log(e);
   }
-};
-
+}
 
 export async function findusersearchservice(serach, page, limit = 10) {
   return fetch(
-    `${BASE_URL}//api/service/searchservice?search=${serach}&page=${page}&limit=${10}`
+    `${BASE_URL}//api/service/searchservice?search=${serach}&page=${page}&limit=${10}`,
   ).then((res) => res.json());
 }

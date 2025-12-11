@@ -4,7 +4,7 @@ import Sidebar from "../component/Sidebar";
 import { getUserProfile } from "../customhook/user";
 import { getcategory } from "../customhook/category";
 import { setinfo } from "../store/Adminslice";
-import {setcategory} from "../store/Categoryslice"
+import { setcategory } from "../store/Categoryslice";
 import { useDispatch } from "react-redux";
 
 export default function Adminlayout({ children }) {
@@ -16,7 +16,7 @@ export default function Adminlayout({ children }) {
           getUserProfile(),
           getcategory(),
         ]);
-console.log("form layout",category)
+        console.log("form layout", category);
         if (profile) dispatch(setinfo(profile));
         if (category) dispatch(setcategory(category));
       } catch (error) {

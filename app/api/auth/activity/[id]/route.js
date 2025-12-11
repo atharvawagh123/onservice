@@ -27,7 +27,7 @@ export async function PATCH(req, { params }) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -40,7 +40,7 @@ export async function PATCH(req, { params }) {
       },
       {
         status: 201,
-      }
+      },
     );
   } catch (err) {
     console.log(err);
@@ -50,7 +50,7 @@ export async function PATCH(req, { params }) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 }

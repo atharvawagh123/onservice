@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 
 function convertBigInt(obj) {
   return JSON.parse(
     JSON.stringify(obj, (_, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
   );
 }
 
@@ -17,7 +17,7 @@ export async function GET(req) {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
         { error: "authorization header missing" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -33,7 +33,7 @@ export async function GET(req) {
     if (!payload.userId || isNaN(payload.userId)) {
       return NextResponse.json(
         { error: "Invalid userId in token" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

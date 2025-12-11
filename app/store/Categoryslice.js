@@ -19,13 +19,13 @@ const CategoriesSlice = createSlice({
     removeCategory(state, action) {
       // Optional: remove a category by id
       state.categories = state.categories.filter(
-        (cat) => cat.id !== action.payload
+        (cat) => cat.id !== action.payload,
       );
     },
     updateCategory(state, action) {
       // Optional: update a category by id
       const index = state.categories.findIndex(
-        (cat) => cat.id === action.payload.id
+        (cat) => cat.id === action.payload.id,
       );
       if (index !== -1) {
         state.categories[index] = action.payload;

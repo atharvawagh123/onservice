@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import  prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 
 function convertBigInt(obj) {
   return JSON.parse(
     JSON.stringify(obj, (_, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+      typeof value === "bigint" ? value.toString() : value,
+    ),
   );
 }
 
@@ -24,7 +24,7 @@ export async function POST(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Unauthorized: Token missing" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -63,7 +63,7 @@ export async function GET(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Unauthorized: Token missing" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -98,7 +98,7 @@ export async function DELETE(req) {
     if (!enquiryId) {
       return NextResponse.json(
         { error: "Enquiry ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -111,7 +111,7 @@ export async function DELETE(req) {
     if (!token) {
       return NextResponse.json(
         { error: "Unauthorized: Token missing" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -128,7 +128,7 @@ export async function DELETE(req) {
     if (deletedEnquiry.count === 0) {
       return NextResponse.json(
         { error: "Enquiry not found or you are not authorized" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
