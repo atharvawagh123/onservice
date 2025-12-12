@@ -58,26 +58,30 @@ const Service = () => {
   return (
     <>
       {/* Header Section */}
-      <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-6 rounded-xl shadow gap-4">
+      <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-4">
         <div>
-          <h1 className="font-serif italic text-4xl text-gray-900">
+          <h1 className="font-serif italic text-4xl text-gray-900 dark:text-gray-100">
             All Services in OnService
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             Manage and monitor all registered Services
           </p>
         </div>
 
-        <div className="bg-gray-100 px-5 py-3 rounded-xl shadow-inner">
-          <p className="text-gray-700 font-medium text-lg">Total Services</p>
-          <h2 className="text-xl font-bold text-gray-900">{total}</h2>
+        <div className="bg-gray-100 dark:bg-gray-800 px-5 py-3 rounded-xl shadow-inner">
+          <p className="text-gray-700 dark:text-gray-200 font-medium text-lg">
+            Total Services
+          </p>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            {total}
+          </h2>
         </div>
       </div>
 
       {/* Responsive Table */}
-      <div className="overflow-x-auto bg-white rounded-xl shadow p-4 font-sans">
-        <table className="min-w-full text-left text-black">
-          <thead className="bg-gray-100 text-black">
+      <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow p-4 font-sans">
+        <table className="min-w-full text-left text-black dark:text-gray-100">
+          <thead className="bg-gray-100 dark:bg-gray-700 text-black dark:text-gray-100 ">
             <tr>
               <th className="p-3">#</th>
               <th className="p-3">Service Image</th>
@@ -89,12 +93,16 @@ const Service = () => {
             </tr>
           </thead>
 
-          <tbody className="text-black">
+          <tbody className="text-black dark:text-gray-100">
             {isLoading && !data ? (
               <tr>
-                <td colSpan="3">
+                <td colSpan="7">
                   <div className="flex justify-center p-10">
-                    <div className="animate-spin size-6 border-3 border-current border-t-transparent text-red-600 rounded-full" />
+                    <div
+                      className="animate-spin inline-block w-6 h-6 border-3 border-current border-t-transparent text-red-600 dark:text-yellow-300 rounded-full"
+                      role="status"
+                      aria-label="loading"
+                    />
                   </div>
                 </td>
               </tr>
@@ -110,8 +118,8 @@ const Service = () => {
             ) : (
               <tr>
                 <td
-                  colSpan="6"
-                  className="text-center py-5 text-gray-500 font-medium"
+                  colSpan="7"
+                  className="text-center py-5 text-gray-500 dark:text-gray-300 font-medium"
                 >
                   No services found
                 </td>
@@ -120,33 +128,14 @@ const Service = () => {
           </tbody>
         </table>
       </div>
-      <div
-        className="
-    w-full 
-    bg-gray-100 dark:bg-gray-800 
-    p-4 md:p-5 
-    flex flex-col md:flex-row 
-    items-center justify-between 
-    gap-4 md:gap-0 
-    my-5 
-    rounded-lg shadow
-  "
-      >
+
+      {/* Pagination */}
+      <div className="w-full bg-gray-100 dark:bg-gray-900 p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 my-5 rounded-lg shadow">
         {/* Previous Button */}
         <button
           disabled={page === 1}
           onClick={movepre}
-          className="
-      flex items-center gap-2 
-      px-4 py-2 
-      bg-white dark:bg-gray-700 
-      text-gray-900 dark:text-gray-100 
-      font-medium 
-      rounded-lg 
-      hover:bg-gray-200 dark:hover:bg-gray-600 
-      disabled:opacity-50 disabled:cursor-not-allowed 
-      transition
-    "
+          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           <FcPrevious size={18} />
           Previous
@@ -161,17 +150,7 @@ const Service = () => {
         <button
           disabled={page === totalPages}
           onClick={movenext}
-          className="
-      flex items-center gap-2 
-      px-4 py-2 
-      bg-white dark:bg-gray-700 
-      text-gray-900 dark:text-gray-100 
-      font-medium 
-      rounded-lg 
-      hover:bg-gray-200 dark:hover:bg-gray-600 
-      disabled:opacity-50 disabled:cursor-not-allowed 
-      transition
-    "
+          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           Next
           <FcNext size={18} />

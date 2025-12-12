@@ -93,12 +93,14 @@ export default function Sidebar() {
           </div>
 
           {/* Desktop Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="hidden md:flex p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
-          >
-            {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
-          </button>
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="hidden md:flex p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
+            >
+              {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
+            </button>
+          )}
         </div>
 
         {/* Menu */}

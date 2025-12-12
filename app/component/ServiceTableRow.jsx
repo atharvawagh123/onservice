@@ -7,7 +7,7 @@ const ServiceTableRow = ({ service, index, changeservicestate }) => {
     await changeservicestate(service.id);
   };
   return (
-    <tr className="hover:bg-gray-50 text-black">
+    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700 text-black dark:text-gray-100">
       <td className="p-3">{index + 1}</td>
 
       <td className="p-3">
@@ -24,11 +24,11 @@ const ServiceTableRow = ({ service, index, changeservicestate }) => {
 
       <td className="p-3">
         {service.isactive ? (
-          <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-sm shadow-sm">
+          <span className="inline-block px-3 py-1 rounded-full bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 font-semibold text-sm shadow-sm">
             Active
           </span>
         ) : (
-          <span className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-sm shadow-sm">
+          <span className="inline-block px-3 py-1 rounded-full bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200 font-semibold text-sm shadow-sm">
             Not Active
           </span>
         )}
@@ -40,8 +40,8 @@ const ServiceTableRow = ({ service, index, changeservicestate }) => {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors duration-200
       ${
         service.isactive
-          ? "bg-red-100 text-red-700 hover:bg-red-200"
-          : "bg-green-100 text-green-700 hover:bg-green-200"
+          ? "bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-100 hover:bg-red-200 dark:hover:bg-red-600"
+          : "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-100 hover:bg-green-200 dark:hover:bg-green-600"
       }`}
         >
           {service.isactive ? (

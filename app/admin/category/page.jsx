@@ -64,24 +64,32 @@ const Category = () => {
 
   return (
     <>
-      <div className="mb-10 flex items-center justify-between bg-white p-6 rounded-xl shadow">
+      {/* Header Section */}
+      <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-4">
         <div>
-          <h1 className="font-serif italic text-4xl text-gray-900">
+          <h1 className="font-serif italic text-4xl text-gray-900 dark:text-gray-200">
             All Categories in OnService
           </h1>
-          <p className="text-gray-600 mt-1">Manage all categories</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Manage all categories
+          </p>
         </div>
 
-        <div className="bg-gray-100 px-5 py-3 rounded-xl shadow-inner">
-          <p className="text-gray-700 font-medium text-lg">Total Categories</p>
-          <h2 className="text-1xl font-bold text-gray-900">
+        <div className="bg-gray-100 dark:bg-gray-800 px-5 py-3 rounded-xl shadow-inner">
+          <p className="text-gray-700 dark:text-gray-200 font-medium text-lg">
+            Total Categories
+          </p>
+          <h2 className="text-1xl font-bold text-gray-900 dark:text-gray-100">
             {totalCategories}
           </h2>
         </div>
       </div>
 
-      <div className="w-full flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-serif italic text-black">Add Category</h1>
+      {/* Add Category Button */}
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-serif italic text-black dark:text-gray-200">
+          Add Category
+        </h1>
         <Link
           href="./category/addcategory"
           className="flex items-center justify-center gap-2 px-4 py-2 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-600"
@@ -91,7 +99,8 @@ const Category = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
+      {/* Range Selector */}
+      <div className="flex flex-col items-center gap-2 mb-6">
         <input
           type="range"
           min={5}
@@ -100,18 +109,21 @@ const Category = () => {
           onChange={(e) => dispatch(setlimitcategory(parseInt(e.target.value)))}
           className="w-64"
         />
-        <span className="text-black font-semibold">
+        <span className="text-black dark:text-gray-200 font-semibold">
           Selected Value: {limitrange}
         </span>
       </div>
 
+      {/* Categories Table */}
       <div className="overflow-x-auto mb-10">
-        <table className="min-w-full bg-white rounded-xl shadow-md border">
-          <thead className="bg-gray-100 border-b">
+        <table className="min-w-full bg-white dark:bg-gray-900 rounded-xl shadow-md border">
+          <thead className="bg-gray-100 dark:bg-gray-800 border-b">
             <tr>
-              <th className="px-6 py-3 text-black">#</th>
-              <th className="px-6 py-3 text-black">Name</th>
-              <th className="px-6 py-3 text-black">Action</th>
+              <th className="px-6 py-3 text-black dark:text-gray-200">#</th>
+              <th className="px-6 py-3 text-black dark:text-gray-200">Name</th>
+              <th className="px-6 py-3 text-black dark:text-gray-200">
+                Action
+              </th>
             </tr>
           </thead>
 
@@ -120,7 +132,7 @@ const Category = () => {
               <tr>
                 <td colSpan="3">
                   <div className="flex justify-center p-10">
-                    <div className="animate-spin size-6 border-3 border-current border-t-transparent text-red-600 rounded-full" />
+                    <div className="animate-spin w-6 h-6 border-3 border-current border-t-transparent text-red-600 rounded-full" />
                   </div>
                 </td>
               </tr>
@@ -131,11 +143,15 @@ const Category = () => {
                   category={category}
                   index={index}
                   deletecat={deletecatmutation.mutate}
+                  darkMode={true} // pass darkMode prop if needed in row component
                 />
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="text-center py-4 text-gray-500">
+                <td
+                  colSpan="3"
+                  className="text-center py-4 text-gray-500 dark:text-gray-400"
+                >
                   No category found
                 </td>
               </tr>
@@ -143,18 +159,15 @@ const Category = () => {
           </tbody>
         </table>
 
-        <div className="w-full p-4 md:p-5  flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 ">
+        {/* Pagination */}
+        <div className="w-full p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
           {/* Previous Button */}
           <button
             disabled={page === 1}
             onClick={moveprevious}
-            className="
-      flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
-      bg-gray-200 text-gray-700 hover:bg-gray-300
-      disabled:opacity-50 disabled:cursor-not-allowed
-
-      dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600
-    "
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
+                  bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed
+                  dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             <FcPrevious size={16} />
             Previous
@@ -169,13 +182,9 @@ const Category = () => {
           <button
             disabled={page === totalPages}
             onClick={movenext}
-            className="
-      flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
-      bg-gray-200 text-gray-700 hover:bg-gray-300
-      disabled:opacity-50 disabled:cursor-not-allowed
-
-      dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600
-    "
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
+                  bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed
+                  dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             Next
             <FcNext size={16} />
