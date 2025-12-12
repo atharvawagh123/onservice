@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   categories: [], // current page items
   page: 1, // current page
-  limit: 10, // items per page
+  limit: 5, // items per page
   totalCategories: 0, // total items in DB
   totalPages: 0, // total pages
   loading: false,

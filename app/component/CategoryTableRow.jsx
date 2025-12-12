@@ -19,16 +19,7 @@ const CategoryTableRow = ({ category, index, deletecat }) => {
     });
 
     if (result.isConfirmed) {
-      const response = await deletecat(category.id);
-      console.log("cat component", response);
-      if (response.success) {
-        toast.success(response.message);
-        dispatch(removeCategory(category.id));
-      }
-
-      if (response.error) {
-        toast.error(response.error);
-      }
+      await deletecat(category.id);
     }
   };
   return (

@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 
 export async function GET(req, { params }) {
   try {
@@ -36,12 +37,17 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { id } = await params;
-    await prisma.category.delete({
-      where: { id },
-    });
 
+    const category = await prisma.category.delete({
+      where: { id: BigInt(id) },
+    });
+    console.log("delete category : ", category);
     return Response.json(
-      { message: "Category deleted successfully", success: true },
+      {
+        message: "Category deleted successfully",
+        success: true,
+        category: serialize(category),
+      },
       { status: 200 },
     );
   } catch (error) {

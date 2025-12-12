@@ -15,10 +15,10 @@ import { useEffect } from "react";
 import { getallservice } from ".././../customhook/service";
 import { FcPrevious } from "react-icons/fc";
 import { FcNext } from "react-icons/fc";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 const Service = () => {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const { services, total, page, limit, totalPages } = useSelector(
     (state) => state.services,
   );
@@ -47,8 +47,8 @@ const Service = () => {
   const changestatemutation = useMutation({
     mutationFn: async (id) => {
       const response = await changeserviceactivestate(id);
-      console.log("on mutation", response);
       if (!response.success) throw new Error(response.message);
+      toast.success(response.message);
       return response.updateservice;
     },
     onSuccess: (updatedService) => {
@@ -67,7 +67,7 @@ const Service = () => {
             Manage and monitor all registered Services
           </p>
         </div>
-        <p className="text-3xl text-black">{totalPages}</p>
+
         <div className="bg-gray-100 px-5 py-3 rounded-xl shadow-inner">
           <p className="text-gray-700 font-medium text-lg">Total Services</p>
           <h2 className="text-xl font-bold text-gray-900">{total}</h2>
@@ -120,28 +120,61 @@ const Service = () => {
           </tbody>
         </table>
       </div>
-      <div className="w-full bg-amber-300 p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 my-5 rounded-lg">
+      <div
+        className="
+    w-full 
+    bg-gray-100 dark:bg-gray-800 
+    p-4 md:p-5 
+    flex flex-col md:flex-row 
+    items-center justify-between 
+    gap-4 md:gap-0 
+    my-5 
+    rounded-lg shadow
+  "
+      >
         {/* Previous Button */}
         <button
           disabled={page === 1}
           onClick={movepre}
-          className="flex items-center gap-2 px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="
+      flex items-center gap-2 
+      px-4 py-2 
+      bg-white dark:bg-gray-700 
+      text-gray-900 dark:text-gray-100 
+      font-medium 
+      rounded-lg 
+      hover:bg-gray-200 dark:hover:bg-gray-600 
+      disabled:opacity-50 disabled:cursor-not-allowed 
+      transition
+    "
         >
-          <FcPrevious size={16} />
+          <FcPrevious size={18} />
           Previous
         </button>
 
         {/* Current Page */}
-        <p className="text-lg font-semibold">{page}</p>
+        <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          Page {page} / {totalPages}
+        </p>
 
         {/* Next Button */}
         <button
           disabled={page === totalPages}
           onClick={movenext}
-          className="flex items-center gap-2 px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="
+      flex items-center gap-2 
+      px-4 py-2 
+      bg-white dark:bg-gray-700 
+      text-gray-900 dark:text-gray-100 
+      font-medium 
+      rounded-lg 
+      hover:bg-gray-200 dark:hover:bg-gray-600 
+      disabled:opacity-50 disabled:cursor-not-allowed 
+      transition
+    "
         >
           Next
-          <FcNext size={16} />
+          <FcNext size={18} />
         </button>
       </div>
     </>
