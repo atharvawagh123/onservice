@@ -12,6 +12,7 @@ import {
 } from "../../store/allUserslice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useQuery, useMutation } from "@tanstack/react-query";
 const UserPage = () => {
   const dispatch = useDispatch();
   const allusers = useSelector((state) => state.allUser.users || []);
@@ -20,13 +21,19 @@ const UserPage = () => {
   const totalUsers = useSelector((state) => state.allUser.totalUsers);
   const limit = useSelector((state) => state.allUser.limit);
   const loading = useSelector((state) => state.allUser.loading);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["users", page, limit],
+    queryFn: () => fetchusers(page, limit),
+    staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
+    cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
+    keepPreviousData: true, // keeps previous page data while fetching next page
+  });
   useEffect(() => {
-    // dispatch(setloading());
     const timer = setTimeout(() => {
       const loaduser = async () => {
         const response = await fetchusers(page, limit);
         if (response.success) {
-          // dispatch(setloading());
           dispatch(setUsers(response));
         }
       };
@@ -89,7 +96,7 @@ const UserPage = () => {
           </thead>
 
           <tbody>
-            {loading ? (
+            {isLoading && !data ? (
               <tr>
                 <td colSpan="5">
                   <div className="w-full flex justify-center p-10">
@@ -103,8 +110,8 @@ const UserPage = () => {
                   </div>
                 </td>
               </tr>
-            ) : allusers.length > 0 ? (
-              allusers.map((user, index) => (
+            ) : data.length > 0 ? (
+              data.map((user, index) => (
                 <UserTableCell
                   key={index}
                   user={user}

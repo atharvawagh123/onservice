@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   FaBars,
@@ -19,9 +19,17 @@ import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme } = useAuthContext();
+  const [mounted, setMounted] = useState(false);
   const state = useSelector((state) => state.Admin);
 
   const pathname = usePathname(); // ⭐ detect active route
+
+  useEffect(() => {
+    const load = async () => {
+      setMounted(true); // Runs only on client
+    };
+    load();
+  }, []);
 
   const menuItems = [
     { name: "User", icon: <FaUser />, link: "/admin/user" },
@@ -42,13 +50,14 @@ export default function Sidebar() {
           <FaBars size={28} />
         </button>
 
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
-        >
-          {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
-        </button>
+        {mounted && (
+          <button
+            onClick={toggleTheme}
+            className="hidden md:flex p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
+          >
+            {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
+          </button>
+        )}
       </div>
 
       {/* -----------  OVERLAY (Mobile Only) ----------- */}
