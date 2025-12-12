@@ -38,12 +38,13 @@ const AddCategory = () => {
 
   return (
     <div>
-      <h1 className="font-serif italic text-5xl text-black mb-6">
+      <h1 className="font-serif italic text-5xl text-black dark:text-gray-200 mb-6">
         Add Category
       </h1>
-      <div className="w-full flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-serif italic text-black">
-          back to category
+
+      <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-serif italic text-black dark:text-gray-200">
+          Back to category
         </h1>
         <Link
           href="/admin/category"
@@ -53,8 +54,12 @@ const AddCategory = () => {
           Back
         </Link>
       </div>
+
       <form onSubmit={submit} className="flex flex-col gap-4">
-        <label htmlFor="name" className="font-serif italic text-black">
+        <label
+          htmlFor="name"
+          className="font-serif italic text-black dark:text-gray-200"
+        >
           Category Name
         </label>
         <input
@@ -62,13 +67,13 @@ const AddCategory = () => {
           type="text"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="border px-4 py-2 rounded-md"
+          className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition"
           disabled={loading}
         />
         <button
           type="submit"
           disabled={loading}
-          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition disabled:opacity-50"
+          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 dark:hover:bg-green-700 transition disabled:opacity-50"
         >
           {loading ? "Adding..." : "Submit"}
         </button>
