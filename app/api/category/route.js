@@ -10,14 +10,36 @@ function toPlainObject(data) {
   );
 }
 
-// GET all categories
-export async function GET() {
+export async function GET(req) {
   try {
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1"); // default page 1
+    const limit = parseInt(url.searchParams.get("limit") || "10"); // default 10 items per page
+
+    // Calculate offset
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated categories
     const categories = await prisma.category.findMany({
+      skip,
+      take: limit,
       orderBy: { id: "desc" },
     });
 
-    return NextResponse.json(toPlainObject(categories), { status: 200 });
+    // Optional: total count for frontend pagination
+    const totalCategories = await prisma.category.count();
+
+    return NextResponse.json(
+      toPlainObject({
+        success: true,
+        page,
+        limit,
+        totalCategories,
+        totalPages: Math.ceil(totalCategories / limit),
+        categories,
+      }),
+      { status: 200 },
+    );
   } catch (error) {
     console.error("GET /categories error:", error);
     return NextResponse.json(

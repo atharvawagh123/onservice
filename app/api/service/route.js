@@ -32,13 +32,11 @@ export async function GET(request) {
 
     return NextResponse.json(
       toPlainObject({
-        data: services,
-        pagination: {
-          total,
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-        },
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        services: services,
       }),
     );
   } catch (err) {

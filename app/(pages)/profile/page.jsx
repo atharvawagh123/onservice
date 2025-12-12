@@ -15,7 +15,7 @@ import { uploadprofileimage, deleteprofileimage } from "../../customhook/auth";
 // import { MdPermDeviceInformation, MdOutlineAddBusiness } from "react-icons/md";
 
 import Swal from "sweetalert2";
-import Link from "next/link";
+// import Link from "next/link";
 import { toast } from "react-toastify";
 
 import ProfileCard from "../../component/ProfileCard";
@@ -76,6 +76,7 @@ export default function ProfilePage() {
       // Refresh service list
       queryClient.invalidateQueries(["userServices"]);
     } catch (err) {
+      console.log(err);
       toast.error("Failed to delete service");
     }
   };
@@ -110,6 +111,7 @@ export default function ProfilePage() {
         setMessage("Upload failed");
       }
     } catch (err) {
+      console.log(err);
       setMessage("Something went wrong");
     }
   };
@@ -131,6 +133,7 @@ export default function ProfilePage() {
       // Refresh user
       queryClient.invalidateQueries(["userProfile"]);
     } catch (err) {
+      console.log(err);
       toast.error("Error deleting image");
     }
   };
@@ -175,7 +178,7 @@ export default function ProfilePage() {
             My Services
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-5 bg-amber-200 p-5 ">
             {userservice.length === 0 ? (
               <p className="text-center text-gray-500 col-span-full">
                 No services found

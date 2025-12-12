@@ -1,9 +1,11 @@
-import React from "react";
 import { FaLock, FaUnlock } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
+import { setchangeactivity } from "../store/allUserslice";
+import { useDispatch } from "react-redux";
 
 const UserTableCell = ({ user, index, changeactivity }) => {
+  const dispatch = useDispatch();
   // Confirm and toggle user activity
   const makechange = async () => {
     const result = await Swal.fire({
@@ -21,6 +23,7 @@ const UserTableCell = ({ user, index, changeactivity }) => {
       const res = await changeactivity(user.id);
       console.log(res);
       if (res.success) {
+        dispatch(setchangeactivity(res.id));
         Swal.fire({
           icon: "success",
           title: "Updated!",

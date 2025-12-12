@@ -12,6 +12,15 @@ export function getuser() {
   }).then((res) => res.json());
 }
 
+export function fetchusers(page = 1, limit = 1) {
+  return fetch(`${BASE_URL}/api/userapi/getuser?page=${page}&limit=${limit}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+}
+
 export function getUserProfile() {
   return fetch(`${BASE_URL}/api/auth/userprofile`, {
     method: "GET",

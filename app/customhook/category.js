@@ -7,6 +7,12 @@ export async function getcategory() {
   return fetch(`${BASE_URL}/api/category`).then((res) => res.json());
 }
 
+export async function fetchcategory(page = 1, limit = 5) {
+  return fetch(`${BASE_URL}/api/category?page=${page}&limit=${limit}`).then(
+    (res) => res.json(),
+  );
+}
+
 export async function deletecategory(id) {
   return fetch(`${BASE_URL}/api/category/${id}`, {
     method: "DELETE",

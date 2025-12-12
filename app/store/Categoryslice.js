@@ -1,39 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  categories: [],
+  categories: [], // current page items
+  page: 1, // current page
+  limit: 10, // items per page
+  totalCategories: 0, // total items in DB
+  totalPages: 0, // total pages
+  loading: false,
+  error: null,
 };
 
 const CategoriesSlice = createSlice({
   name: "Categories",
   initialState,
   reducers: {
-    setcategory(state, action) {
-      // Replace the entire categories array with new data
-      state.categories = action.payload;
+    setCategories(state, action) {
+      const { categories, page, limit, totalCategories, totalPages } =
+        action.payload;
+      state.categories = categories;
+      state.page = page;
+      state.limit = limit;
+      state.totalCategories = totalCategories;
+      state.totalPages = totalPages;
+      // state.loading = !state.loading
     },
     addCategory(state, action) {
-      // Add new category at the beginning of the array
-      state.categories.unshift(action.payload);
+      state.categories.unshift(action.payload); // add new category to current page
+      state.totalCategories += 1;
+      state.totalPages = Math.ceil(state.totalCategories / state.limit);
     },
     removeCategory(state, action) {
-      // Optional: remove a category by id
       state.categories = state.categories.filter(
         (cat) => cat.id !== action.payload,
       );
+      state.totalCategories -= 1;
+      state.totalPages = Math.ceil(state.totalCategories / state.limit);
     },
     updateCategory(state, action) {
-      // Optional: update a category by id
       const index = state.categories.findIndex(
         (cat) => cat.id === action.payload.id,
       );
-      if (index !== -1) {
-        state.categories[index] = action.payload;
-      }
+      if (index !== -1) state.categories[index] = action.payload;
+    },
+    setlimitcategory(state, action) {
+      state.limit = action.payload;
+    },
+    setpage(state, action) {
+      state.page = action.payload;
+    },
+    setLoading(state) {
+      state.loading = !state.loading;
+    },
+    setError(state, action) {
+      state.error = action.payload;
     },
   },
 });
 
-export const { setcategory, addCategory, removeCategory, updateCategory } =
-  CategoriesSlice.actions;
+export const {
+  setCategories,
+  addCategory,
+  removeCategory,
+  updateCategory,
+  setLoading,
+  setError,
+  setlimitcategory,
+  setpage,
+} = CategoriesSlice.actions;
 export default CategoriesSlice.reducer;

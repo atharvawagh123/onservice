@@ -24,7 +24,7 @@ export default function ServicePage() {
   const filterCache = useRef({});
 
   // Fetch only when not searching
-  const fetchServices = useCallbackallback(async () => {
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getservice(currentpage, 6);

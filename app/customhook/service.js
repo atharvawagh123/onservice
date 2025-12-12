@@ -3,6 +3,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") || null : null;
 
+export async function getallservice(page = 1, limit = 1) {
+  return await fetch(
+    `${BASE_URL}/api/service?page=${page}&limit=${limit}`,
+  ).then((res) => res.json());
+}
+
 export async function fecthservice(id) {
   return await fetch(`${BASE_URL}/api/service/${id}`).then((res) => res.json());
 }
