@@ -20,18 +20,7 @@ const UserTableCell = ({ user, index, changeactivity }) => {
     });
 
     if (result.isConfirmed) {
-      const res = await changeactivity(user.id);
-      console.log(res);
-      if (res.success) {
-        dispatch(setchangeactivity(res.id));
-        Swal.fire({
-          icon: "success",
-          title: "Updated!",
-          text: `${res.user.name}User activity has been changed successfully.`,
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      }
+      await changeactivity(user.id);
     }
   };
 
@@ -59,39 +48,62 @@ const UserTableCell = ({ user, index, changeactivity }) => {
     }
   };
   return (
-    <tr className="border-b hover:bg-gray-50 transition">
-      <td className="px-6 py-3 text-black">{index + 1}</td>
-      <td className="px-6 py-3 text-black">{user.first_name || "No Name"}</td>
-      <td className="px-6 py-3 text-blue-600">{user.email}</td>
-      <td className="px-6 py-3 text-gray-700">{user.id}</td>
+    <tr className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-700 transition">
+      {/* Index */}
+      <td className="px-4 py-3 text-black dark:text-white text-sm">
+        {index + 1}
+      </td>
 
-      <td className="px-6 py-4">
-        <div className="flex gap-3">
+      {/* Image */}
+      <td className="px-4 py-3">
+        <img
+          src={user.imageurl}
+          alt="no image"
+          className="w-12 h-12 rounded-full object-cover border dark:border-gray-600"
+        />
+      </td>
+
+      {/* Name */}
+      <td className="px-4 py-3 text-black dark:text-gray-200 text-sm">
+        {user.first_name || "No Name"}
+      </td>
+
+      {/* Email */}
+      <td className="px-4 py-3 text-blue-600 dark:text-blue-400 text-sm">
+        {user.email}
+      </td>
+
+      {/* ID */}
+      <td className="px-4 py-3 text-gray-700 dark:text-gray-300 text-sm">
+        {user.id}
+      </td>
+
+      {/* Buttons */}
+      <td className="px-4 py-3">
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* Delete Button */}
           <button
             onClick={deleteuser}
-            className="bg-red-500 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-red-600 transition shadow"
+            className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition shadow dark:bg-red-600 dark:hover:bg-red-700"
           >
-            <MdDelete className="text-1xl" />
+            <MdDelete className="text-xl" />
           </button>
 
+          {/* Status Toggle Button */}
           <button
-            className={`px-4 py-1.5 rounded-lg text-sm transition shadow flex items-center gap-2
-              ${
-                user.is_active
-                  ? "bg-green-500 hover:bg-green-600 text-black"
-                  : "bg-red-500 hover:bg-red-600 text-white"
-              }
-            `}
             onClick={makechange}
+            className={`px-4 py-2 rounded-lg text-sm transition shadow flex items-center gap-2
+          ${
+            user.is_active
+              ? "bg-green-500 hover:bg-green-600 text-black dark:bg-green-600 dark:hover:bg-green-700"
+              : "bg-red-500 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-700"
+          }
+        `}
           >
             {user.is_active ? (
-              <>
-                <FaUnlock className="text-1xl" />
-              </>
+              <FaUnlock className="text-xl" />
             ) : (
-              <>
-                <FaLock className="text-1xl" />
-              </>
+              <FaLock className="text-xl" />
             )}
           </button>
         </div>

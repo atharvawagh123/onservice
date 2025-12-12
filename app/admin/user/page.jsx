@@ -6,6 +6,7 @@ import UserTableCell from "../../component/usertablecell";
 import { toast } from "react-toastify";
 import {
   setUsers,
+  setchangeactivity,
   // setUserLimit,
   setpage,
   // setloading,
@@ -29,18 +30,13 @@ const UserPage = () => {
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
     keepPreviousData: true, // keeps previous page data while fetching next page
   });
+
+  console.log("user admin page ", data);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const loaduser = async () => {
-        const response = await fetchusers(page, limit);
-        if (response.success) {
-          dispatch(setUsers(response));
-        }
-      };
-      loaduser();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [page, dispatch, limit]);
+    if (data) {
+      dispatch(setUsers(data));
+    }
+  }, [page, data, limit]);
 
   const changeActivity = async (id) => {
     if (!id) {
@@ -54,6 +50,19 @@ const UserPage = () => {
     }
   };
 
+  const changeactivitymutation = useMutation({
+    mutationFn: async (id) => {
+      const response = await updateactivity(id);
+      console.log("chnage in mutaion", response);
+      return response;
+    },
+    onSuccess: (response) => {
+      console.log("chnage in onsuccess", response);
+      dispatch(setchangeactivity(response.id));
+      toast.success(response.message);
+    },
+  });
+
   const moveprevious = () => {
     dispatch(setpage(page - 1));
   };
@@ -64,88 +73,120 @@ const UserPage = () => {
 
   return (
     <>
-      <div className="mb-10 flex items-center justify-between bg-white p-6 rounded-xl shadow">
+      {/* Header Section */}
+      <div
+        className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between 
+                  bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-5"
+      >
+        {/* Title */}
         <div>
-          <h1 className="font-serif italic text-4xl text-gray-900">
+          <h1 className="font-serif italic text-3xl md:text-4xl text-gray-900 dark:text-white">
             All Users in OnService
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             Manage and monitor all registered users
           </p>
         </div>
 
-        <div className="bg-gray-100 px-5 py-3 rounded-xl shadow-inner">
-          <p className="text-gray-700 font-medium text-lg">Total Users</p>
-          <h2 className="text-1xl font-bold text-gray-900">
-            {/* {loading ? <>Loading....</> : totalUsers} */}
+        {/* Total Users Box */}
+        <div className="bg-gray-100 dark:bg-gray-800 px-6 py-4 rounded-xl shadow-inner">
+          <p className="text-gray-700 dark:text-gray-300 font-medium text-lg">
+            Total Users
+          </p>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {totalUsers}
           </h2>
         </div>
       </div>
 
-      <div className="overflow-x-auto mb-10">
-        <table className="min-w-full bg-white rounded-xl shadow-md border">
-          <thead className="bg-gray-100 border-b">
+      {/* Table Section */}
+      <div className="overflow-x-auto mb-10 border dark:border-gray-700 rounded-xl shadow">
+        <table className="min-w-full bg-white dark:bg-gray-900 rounded-xl">
+          <thead className="bg-gray-100 dark:bg-gray-800 border-b dark:border-gray-700">
             <tr>
-              <th className="px-6 py-3 text-black">#</th>
-              <th className="px-6 py-3 text-black">Name</th>
-              <th className="px-6 py-3 text-black">Email</th>
-              <th className="px-6 py-3 text-black">User ID</th>
-              <th className="px-6 py-3 text-black text-center">Action</th>
+              <th className="px-6 py-3 text-black dark:text-white text-left">
+                #
+              </th>
+              <th className="px-6 py-3 text-black dark:text-white text-left">
+                Profile
+              </th>
+              <th className="px-6 py-3 text-black dark:text-white text-left">
+                Name
+              </th>
+              <th className="px-6 py-3 text-black dark:text-white text-left">
+                Email
+              </th>
+              <th className="px-6 py-3 text-black dark:text-white text-left">
+                User ID
+              </th>
+              <th className="px-6 py-3 text-black dark:text-white text-center">
+                Action
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {isLoading && !data ? (
               <tr>
-                <td colSpan="5">
+                <td colSpan="6">
                   <div className="w-full flex justify-center p-10">
                     <div
-                      className="animate-spin inline-block size-6 border-3 border-current border-t-transparent text-red-600 rounded-full"
-                      role="status"
-                      aria-label="loading"
-                    >
-                      <span className="sr-only">Loading...</span>
-                    </div>
+                      className="animate-spin inline-block size-6 border-4 border-current border-t-transparent 
+                             text-sky-600 rounded-full"
+                    ></div>
                   </div>
                 </td>
               </tr>
-            ) : data.length > 0 ? (
-              data.map((user, index) => (
+            ) : allusers.length > 0 ? (
+              allusers.map((user, index) => (
                 <UserTableCell
                   key={index}
                   user={user}
                   index={index}
-                  changeactivity={changeActivity}
+                  changeactivity={changeactivitymutation.mutate}
                 />
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
+                <td
+                  colSpan="6"
+                  className="text-center py-4 text-gray-500 dark:text-gray-300"
+                >
                   No users found
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-        <div className="w-full flex bg-amber-200 p-5 my-3 justify-center gap-5">
-          <button
-            type="button"
-            disabled={page === 1}
-            onClick={moveprevious}
-            className="text-black disabled:text-gray-400"
-          >
-            previous
-          </button>
-          <button
-            type="button"
-            disabled={page === totalPages}
-            onClick={movenext}
-            className="text-black disabled:text-gray-400"
-          >
-            next
-          </button>
-        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="w-full flex justify-center gap-6 py-5">
+        <button
+          type="button"
+          disabled={page === 1}
+          onClick={moveprevious}
+          className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-black 
+                dark:text-white disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-700 
+                transition"
+        >
+          Previous
+        </button>
+
+        <span className="text-lg font-semibold text-gray-900 dark:text-white">
+          {page} / {totalPages}
+        </span>
+
+        <button
+          type="button"
+          disabled={page === totalPages}
+          onClick={movenext}
+          className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-black 
+                dark:text-white disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-700 
+                transition"
+        >
+          Next
+        </button>
       </div>
     </>
   );

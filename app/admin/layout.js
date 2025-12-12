@@ -22,8 +22,9 @@ export default function Adminlayout({ children }) {
   }, [dispatch]);
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-gray-900 min-h-screen text-black dark:text-white">
       <Sidebar />
+
       <main className="flex-1 p-5 md:ml-64">{children}</main>
     </div>
   );
