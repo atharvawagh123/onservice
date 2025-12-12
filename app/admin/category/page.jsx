@@ -143,7 +143,7 @@ const Category = () => {
           </tbody>
         </table>
 
-        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 ">
+        <div className="w-full p-4 md:p-5  flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 ">
           {/* Previous Button */}
           <button
             disabled={page === 1}
