@@ -37,6 +37,7 @@ export async function GET(request) {
         limit,
         totalPages: Math.ceil(total / limit),
         services: services,
+        success: true,
       }),
     );
   } catch (err) {

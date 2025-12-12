@@ -33,14 +33,16 @@ export default function LoginPage() {
           alert("you are inactive now a days ");
         }
         if (res.success) {
+          // console.log(res);
           localStorage.setItem("token", res.token);
-          dispatch(setname(res.name));
-
           localStorage.setItem("isLogin", true);
-          // Show success toast
+          dispatch(setname(res.name));
           toast.success("Login successful!");
-
-          router.push("/home");
+          if (res.role == "ADMIN") {
+            router.push("/admin/user");
+          } else {
+            router.push("/home");
+          }
         }
       }
     } catch (err) {

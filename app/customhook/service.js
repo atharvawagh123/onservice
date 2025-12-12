@@ -53,3 +53,9 @@ export async function findusersearchservice(serach, page, limit = 10) {
     `${BASE_URL}//api/service/searchservice?search=${serach}&page=${page}&limit=${limit}`,
   ).then((res) => res.json());
 }
+
+export async function changeserviceactivestate(id) {
+  return fetch(`${BASE_URL}/api/service/changeactivestate/${id}`, {
+    method: "PUT",
+  }).then((res) => res.json());
+}

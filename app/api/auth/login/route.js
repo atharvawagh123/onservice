@@ -49,6 +49,7 @@ export async function POST(req) {
         success: true,
         name: user.name,
         is_active: user.is_active,
+        role: user.role,
       }),
       {
         status: 200,

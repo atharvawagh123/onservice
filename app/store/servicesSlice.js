@@ -4,8 +4,9 @@ const initialState = {
   services: [],
   total: 0,
   page: 1,
-  limit: 10,
+  limit: 1,
   totalPages: 1,
+  loading: false,
 };
 
 const servicesSlice = createSlice({
@@ -19,25 +20,31 @@ const servicesSlice = createSlice({
       state.limit = action.payload.limit;
       state.totalPages = action.payload.totalPages;
     },
-
+    updateservice(state, action) {
+      const updateservice = action.payload;
+      state.services = state.services.map((ser) => {
+        if (ser.id.toString() === updateservice.id.toString()) {
+          return { ...ser, isactive: !ser.isactive };
+        }
+        return ser;
+      });
+    },
     setServicePage(state, action) {
       state.page = action.payload;
     },
-
+    setloading(state) {
+      state.loading = !state.loading;
+    },
     setServiceLimit(state, action) {
       state.limit = action.payload;
     },
 
-    nextServicePage(state) {
-      if (state.page < state.totalPages) {
-        state.page += 1;
-      }
+    nextServicePage(state, action) {
+      state.page = action.payload;
     },
 
-    prevServicePage(state) {
-      if (state.page > 1) {
-        state.page -= 1;
-      }
+    prevServicePage(state, action) {
+      state.page = action.payload;
     },
 
     toggleServiceActive(state, action) {
@@ -56,6 +63,8 @@ export const {
   nextServicePage,
   prevServicePage,
   toggleServiceActive,
+  updateservice,
+  setloading,
 } = servicesSlice.actions;
 
 export default servicesSlice.reducer;
