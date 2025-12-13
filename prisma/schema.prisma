@@ -33,6 +33,7 @@ enum Role {
   ADMIN
   CLIENT
   USER
+  SUBADMIN
 }
 
 model Service {
