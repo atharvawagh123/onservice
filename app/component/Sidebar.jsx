@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { useAuthContext } from "../context/ContextProvider";
 import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
-import { useRouter } from "next/navigation";
+import { GrUserAdmin } from "react-icons/gr";
 
 export default function Sidebar() {
   const { logout } = useAuthContext();
@@ -41,10 +41,11 @@ export default function Sidebar() {
     { name: "User", icon: <FaUser />, link: "/admin/user" },
     { name: "Service", icon: <FaServicestack />, link: "/admin/service" },
     { name: "Category", icon: <FaList />, link: "/admin/category" },
+    { name: "SubAdmin", icon: <GrUserAdmin />, link: "/admin/subadmin" },
     { name: "Counter", icon: <FaCalculator />, link: "/admin/counter" },
     { name: "Enquiry", icon: <FaQuestionCircle />, link: "/admin/enquiry" },
   ];
-  // console.log("sidebar state",state);
+
   return (
     <>
       {/* ---------- Mobile Header ---------- */}
