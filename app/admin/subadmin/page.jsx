@@ -24,7 +24,11 @@ const SubAdminpage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["subadmins", searchValue, subadminstate.page],
     queryFn: async () => {
-      const res = await fetchsubadmin(searchValue, subadminstate.page, 2);
+      const res = await fetchsubadmin(
+        searchValue,
+        subadminstate.page,
+        subadminstate.limit,
+      );
       console.log("search subadmin", res);
       return res;
     },
@@ -148,7 +152,7 @@ const SubAdminpage = () => {
                   </div>
                 </td>
               </tr>
-            ) : subadminstate.subadmins &&
+            ) : Array.isArray(subadminstate.subadmins) &&
               subadminstate.subadmins.length > 0 ? (
               subadminstate.subadmins.map((admin, index) => (
                 <SubAdminRow

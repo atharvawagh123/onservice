@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   subadmins: [],
   page: 1,
-  limit: 5,
+  limit: 2,
   total: 0,
   totalPages: 0,
 };
@@ -13,14 +13,15 @@ const subAdminSlice = createSlice({
   initialState,
   reducers: {
     setSubAdmins: (state, action) => {
-      state.subadmins = action.payload.subadmins;
-      state.total = action.payload.total;
-      state.totalPages = action.payload.totalPages;
-      state.page = action.payload.page;
+      state.subadmins = action.payload.subadmins || [];
+      state.total = action.payload.total || 0;
+      state.totalPages = action.payload.totalPages || 1;
     },
 
     // ✅ ADD SUBADMIN
     addSubAdmin: (state, action) => {
+      alert("adding subadmin in slice");
+      console.log("adding subadmin in slice", action.payload);
       state.subadmins.unshift(action.payload);
       state.total += 1;
       state.totalPages = Math.ceil(state.total / state.limit);

@@ -126,8 +126,6 @@ export async function GET(req) {
       limit,
       total,
       totalPages: Math.ceil(total / limit),
-      hasMore: skip + subadmins.length < total, // 🔥 virtualization helper
-
       subadmins: serialize(subadmins),
     });
   } catch (error) {
