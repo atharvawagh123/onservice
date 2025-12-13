@@ -11,12 +11,15 @@ import {
   FaCalculator,
   FaQuestionCircle,
 } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { useAuthContext } from "../context/ContextProvider";
 import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
+  const { logout } = useAuthContext();
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme } = useAuthContext();
   const [mounted, setMounted] = useState(false);
@@ -30,6 +33,9 @@ export default function Sidebar() {
     };
     load();
   }, []);
+  const handleLogout = () => {
+    logout();
+  };
 
   const menuItems = [
     { name: "User", icon: <FaUser />, link: "/admin/user" },
@@ -41,7 +47,7 @@ export default function Sidebar() {
   // console.log("sidebar state",state);
   return (
     <>
-      {/* Mobile Header (Toggle + Theme Button) */}
+      {/* ---------- Mobile Header ---------- */}
       <div className="flex items-center justify-between md:hidden p-3 z-50">
         <button
           className="text-gray-800 dark:text-gray-200"
@@ -50,45 +56,57 @@ export default function Sidebar() {
           <FaBars size={28} />
         </button>
 
+        {/* ✅ MOBILE THEME TOGGLE (VISIBLE NOW) */}
         {mounted && (
           <button
             onClick={toggleTheme}
-            className="hidden md:flex p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
+            className="p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
           >
             {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
           </button>
         )}
       </div>
 
-      {/* -----------  OVERLAY (Mobile Only) ----------- */}
+      {/* ---------- Overlay ---------- */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm md:hidden z-30"
           onClick={() => setOpen(false)}
         />
       )}
-      {/* --------------------------------------------- */}
 
-      {/* Sidebar */}
+      {/* ---------- Sidebar ---------- */}
       <aside
         className={`
-      fixed top-0 left-0 h-full w-64 
+      fixed top-0 left-0 h-full w-64
       bg-[#F8FAFC] dark:bg-gray-900
-      text-black dark:text-white 
-      p-5 shadow-xl 
+      text-black dark:text-white
+      p-5 shadow-xl
       transition-transform duration-300 z-40
-      ${open ? "translate-x-0" : "-translate-x-full"} 
+      ${open ? "translate-x-0" : "-translate-x-full"}
       md:translate-x-0
     `}
       >
-        {/* Profile + Theme Toggle */}
+        {/* ---------- Profile + Desktop Theme ---------- */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center space-x-3">
-            <div className="bg-black dark:bg-gray-700 text-white w-12 h-12 flex items-center justify-center rounded-lg text-xl font-bold">
-              {state.username || "np"}
+            {/* ✅ FIXED IMAGE */}
+            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+              {state?.imageurl ? (
+                <img
+                  src={state.imageurl}
+                  alt="profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-lg font-bold text-white">
+                  {state?.email?.[0]?.toUpperCase() || "U"}
+                </span>
+              )}
             </div>
-            <h1 className="text-lg md:text-xl font-bold text-black dark:text-white break-all">
-              {state.email}
+
+            <h1 className="text-sm md:text-base font-bold break-all">
+              {state?.email || "User"}
             </h1>
           </div>
 
@@ -103,8 +121,8 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* Menu */}
-        <nav className="space-y-2">
+        {/* ---------- Menu ---------- */}
+        <nav className="space-y-2 flex-1">
           {menuItems.map((item) => {
             const isActive = pathname === item.link;
 
@@ -112,11 +130,10 @@ export default function Sidebar() {
               <Link
                 key={item.name}
                 href={item.link}
-                onClick={() => setOpen(false)} // closes sidebar after navigation
+                onClick={() => setOpen(false)}
                 className={`
-              flex items-center space-x-3 
-              px-4 py-3 rounded-lg 
-              text-base md:text-lg
+              flex items-center space-x-3
+              px-4 py-3 rounded-lg
               transition
               ${
                 isActive
@@ -126,9 +143,9 @@ export default function Sidebar() {
             `}
               >
                 <span
-                  className={`${
+                  className={
                     isActive ? "text-sky-600" : "text-black dark:text-gray-300"
-                  }`}
+                  }
                 >
                   {item.icon}
                 </span>
@@ -137,6 +154,21 @@ export default function Sidebar() {
             );
           })}
         </nav>
+
+        {/* ---------- Logout ---------- */}
+        <button
+          onClick={handleLogout}
+          className="
+        mt-10 w-full flex items-center gap-3
+        px-4 py-3 rounded-lg
+        text-red-600 dark:text-red-400
+        hover:bg-red-100 dark:hover:bg-red-900/30
+        transition
+      "
+        >
+          <FiLogOut size={20} />
+          <span className="font-medium">Logout</span>
+        </button>
       </aside>
     </>
   );

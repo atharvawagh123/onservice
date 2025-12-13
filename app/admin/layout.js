@@ -12,6 +12,7 @@ export default function Adminlayout({ children }) {
     const fetchdata = async () => {
       try {
         const [profile] = await Promise.all([getUserProfile()]);
+        console.log("profile from layout ", profile);
         if (profile) dispatch(setinfo(profile));
       } catch (error) {
         console.error("Admin Layout load error:", error);

@@ -6,12 +6,12 @@ const initialState = {
   username: "",
   first_name: "",
   last_name: "",
+  imageurl: "",
   name: "",
   age: null,
   last_login: null,
   date_joined: "",
   islogin: false,
-  category: [],
 };
 
 const AdminSlice = createSlice({
