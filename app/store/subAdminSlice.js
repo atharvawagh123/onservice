@@ -20,7 +20,13 @@ const subAdminSlice = createSlice({
   reducers: {
     // ✅ SET LIST (after GET API)
     setSubAdmins: (state, action) => {
-      const { subadmins, page, total, totalPages, hasMore } = action.payload;
+      const {
+        subadmins = [], // ✅ default array
+        page = 1,
+        total = 0,
+        totalPages = 0,
+        hasMore = false,
+      } = action.payload || {}; // ✅ payload safety
 
       state.subadmins =
         page === 1 ? subadmins : [...state.subadmins, ...subadmins];
