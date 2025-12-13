@@ -6,23 +6,31 @@ import { useDispatch } from "react-redux";
 import { addCategory } from "../../../store/Categoryslice";
 import Link from "next/link";
 import { IoArrowBack } from "react-icons/io5";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddCategory = () => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState("");
+  const queryClient = useQueryClient();
 
   const submitmutation = useMutation({
     mutationFn: async (newCategory) => {
+      console.log("add category page mutation on mutation", newCategory);
       const response = await addcategory(newCategory);
+      console.log("add category page mutation on response:", response);
       return response;
     },
     onSuccess: (response) => {
       toast.success("Category added successfully!");
-      dispatch(addCategory(response));
+      console.log("add category page mutation on success", response.category);
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+      dispatch(addCategory(response.category));
       setCategory("");
     },
     onError: (error) => {
+      console.log("mutaion error ", error?.message);
       toast.error(error?.message || "Something went wrong");
     },
   });

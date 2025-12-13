@@ -27,7 +27,7 @@ const Category = () => {
     (state) => state.Categories.totalCategories,
   );
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["services", page, limitrange],
+    queryKey: ["categories", page, limitrange],
     queryFn: () => fetchcategory(page, limitrange),
     staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
@@ -39,7 +39,7 @@ const Category = () => {
     if (data) {
       dispatch(setCategories(data));
     }
-  }, [page, limitrange, data]);
+  }, [dispatch, data]);
 
   const deletecatmutation = useMutation({
     mutationFn: async (id) => {
