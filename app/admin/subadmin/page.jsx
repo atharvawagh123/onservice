@@ -22,9 +22,9 @@ const SubAdminpage = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["subadmins", searchValue, subadminstate.page, 5],
+    queryKey: ["subadmins", searchValue, subadminstate.page],
     queryFn: async () => {
-      const res = await fetchsubadmin(searchValue, subadminstate.page, 5);
+      const res = await fetchsubadmin(searchValue, subadminstate.page, 2);
       console.log("search subadmin", res);
       return res;
     },
@@ -37,7 +37,7 @@ const SubAdminpage = () => {
     if (data) {
       dispatch(setSubAdmins(data));
     }
-  }, [data, dispatch]);
+  }, [data, subadminstate.page, dispatch]);
   const changeactivitymutation = useMutation({
     mutationFn: async (id) => {
       const response = await updateactivity(id);
@@ -54,15 +54,13 @@ const SubAdminpage = () => {
   });
 
   const moveprevious = () => {
-    if (subadminstate.page > 1) {
-      dispatch(setpage(subadminstate.page - 1));
-    }
+    toast.info("Loading previous page...");
+    dispatch(setpage(subadminstate.page - 1));
   };
 
   const movenext = () => {
-    if (subadminstate.page < subadminstate.totalPages) {
-      dispatch(setpage(subadminstate.page + 1));
-    }
+    toast.info("Loading next page...");
+    dispatch(setpage(subadminstate.page + 1));
   };
 
   return (

@@ -2,39 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   subadmins: [],
-
-  // pagination + meta
   page: 1,
   limit: 5,
   total: 0,
   totalPages: 0,
-  hasMore: false,
-
-  loading: false,
-  error: null,
 };
 
 const subAdminSlice = createSlice({
   name: "subadmin",
   initialState,
   reducers: {
-    // ✅ SET LIST (after GET API)
     setSubAdmins: (state, action) => {
-      const {
-        subadmins = [], // ✅ default array
-        page = 1,
-        total = 0,
-        totalPages = 0,
-        hasMore = false,
-      } = action.payload || {}; // ✅ payload safety
-
-      state.subadmins =
-        page === 1 ? subadmins : [...state.subadmins, ...subadmins];
-
-      state.page = page;
-      state.total = total;
-      state.totalPages = totalPages;
-      state.hasMore = hasMore;
+      state.subadmins = action.payload.subadmins;
+      state.total = action.payload.total;
+      state.totalPages = action.payload.totalPages;
+      state.page = action.payload.page;
     },
 
     // ✅ ADD SUBADMIN
