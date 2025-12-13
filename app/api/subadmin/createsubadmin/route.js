@@ -81,7 +81,7 @@ export async function GET(req) {
 
     // pagination (optional)
     const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 10;
+    const limit = Number(searchParams.get("limit")) || 5;
 
     // search (optional)
     const search = searchParams.get("search") || "";
@@ -93,10 +93,8 @@ export async function GET(req) {
       role: "SUBADMIN",
       ...(search && {
         OR: [
-          { email: { contains: search, mode: "insensitive" } },
+          // { email: { contains: search, mode: "insensitive" } },
           { username: { contains: search, mode: "insensitive" } },
-          { first_name: { contains: search, mode: "insensitive" } },
-          { last_name: { contains: search, mode: "insensitive" } },
         ],
       }),
     };

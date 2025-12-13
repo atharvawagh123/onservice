@@ -4,22 +4,29 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { fetchsubadmin } from "../../customhook/subadmin";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { setSubAdmins } from "../../store/subAdminSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SubAdminRow from "../../component/SubAdminRow";
 import { useDispatch, useSelector } from "react-redux";
 import { updateactivity } from "../../customhook/user";
-import { toggleSubAdminStatus } from "../../store/subAdminSlice";
+import { toggleSubAdminStatus, setpage } from "../../store/subAdminSlice";
 // import { QueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import UniversalSearchBar from "../../component/UniversalSearchBar";
+import { FcPrevious } from "react-icons/fc";
+import { FcNext } from "react-icons/fc";
 
 const SubAdminpage = () => {
   const dispatch = useDispatch();
   const subadminstate = useSelector((state) => state.subadmin);
-  console.log("subadmin from  state", subadminstate);
+  // console.log("subadmin from  state", subadminstate);
+  const [searchValue, setSearchValue] = useState("");
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["subadmins"],
-    queryFn: () => {
-      return fetchsubadmin();
+    queryKey: ["subadmins", searchValue, subadminstate.page, 5],
+    queryFn: async () => {
+      const res = await fetchsubadmin(searchValue, subadminstate.page, 5);
+      console.log("search subadmin", res);
+      return res;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
@@ -30,8 +37,7 @@ const SubAdminpage = () => {
     if (data) {
       dispatch(setSubAdmins(data));
     }
-  }, [data]);
-
+  }, [data, dispatch]);
   const changeactivitymutation = useMutation({
     mutationFn: async (id) => {
       const response = await updateactivity(id);
@@ -46,6 +52,19 @@ const SubAdminpage = () => {
       toast.success(response.message);
     },
   });
+
+  const moveprevious = () => {
+    if (subadminstate.page > 1) {
+      dispatch(setpage(subadminstate.page - 1));
+    }
+  };
+
+  const movenext = () => {
+    if (subadminstate.page < subadminstate.totalPages) {
+      dispatch(setpage(subadminstate.page + 1));
+    }
+  };
+
   return (
     <>
       <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-4">
@@ -80,7 +99,21 @@ const SubAdminpage = () => {
           Add subadmin
         </Link>
       </div>
-
+      <div className="mb-6">
+        <UniversalSearchBar
+          value={searchValue}
+          onSearch={(query) => {
+            dispatch(setpage(1)); // 🔥 reset page
+            setSearchValue(query);
+          }}
+          fetchDefault={() => {
+            dispatch(setpage(1));
+            setSearchValue("");
+          }}
+          debounceTime={200}
+          placeholder="Search subadmins..."
+        />
+      </div>
       <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl shadow font-sans">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-800">
@@ -137,7 +170,58 @@ const SubAdminpage = () => {
               </tr>
             )}
           </tbody>
+          {/* <tbody>
+            {isLoading ? (
+              <tr>
+                <td colSpan="7">Loading...</td>
+              </tr>
+            ) : data?.subadmins.length > 0 ? (
+              data.subadmins.map((admin) => (
+                <SubAdminRow
+                  key={admin.id}
+                  admin={admin}
+                  changeActivity={changeactivitymutation.mutate}
+                />
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="text-center py-4 text-gray-500 dark:text-gray-400"
+                >
+                  No sub-admin found
+                </td>
+              </tr>
+            )}
+          </tbody> */}
         </table>
+        <div className="w-full p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <button
+            disabled={subadminstate.page === 1}
+            onClick={moveprevious}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
+                          bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed
+                          dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          >
+            <FcPrevious size={16} />
+            Previous
+          </button>
+
+          <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            Page {subadminstate.page} / {subadminstate.totalPages}
+          </p>
+
+          <button
+            disabled={subadminstate.page === subadminstate.totalPages}
+            onClick={movenext}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition
+                          bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed
+                          dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          >
+            Next
+            <FcNext size={16} />
+          </button>
+        </div>
       </div>
     </>
   );

@@ -5,7 +5,7 @@ const initialState = {
 
   // pagination + meta
   page: 1,
-  limit: 10,
+  limit: 5,
   total: 0,
   totalPages: 0,
   hasMore: false,
@@ -20,14 +20,12 @@ const subAdminSlice = createSlice({
   reducers: {
     // ✅ SET LIST (after GET API)
     setSubAdmins: (state, action) => {
-      const { subadmins, page, limit, total, totalPages, hasMore } =
-        action.payload;
+      const { subadmins, page, total, totalPages, hasMore } = action.payload;
 
       state.subadmins =
         page === 1 ? subadmins : [...state.subadmins, ...subadmins];
 
       state.page = page;
-      state.limit = limit;
       state.total = total;
       state.totalPages = totalPages;
       state.hasMore = hasMore;
@@ -74,7 +72,9 @@ const subAdminSlice = createSlice({
         subadmin.is_active = !subadmin.is_active;
       }
     },
-
+    setpage(state, action) {
+      state.page = action.payload;
+    },
     // optional helpers
     setLoading: (state, action) => {
       state.loading = action.payload;
@@ -97,6 +97,7 @@ export const {
   setLoading,
   setError,
   resetSubAdmins,
+  setpage,
 } = subAdminSlice.actions;
 
 export default subAdminSlice.reducer;
