@@ -137,7 +137,7 @@ const UserPage = () => {
                   </div>
                 </td>
               </tr>
-            ) : allusers.length > 0 ? (
+            ) : Array.isArray(allusers) && allusers.length > 0 ? (
               allusers.map((user, index) => (
                 <UserTableCell
                   key={index}

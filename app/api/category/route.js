@@ -26,9 +26,10 @@ export async function GET(req) {
       orderBy: { id: "desc" },
     });
 
-    // Optional: total count for frontend pagination
+    // Total count
     const totalCategories = await prisma.category.count();
 
+    // Ensure consistent response structure even if no categories
     return NextResponse.json(
       toPlainObject({
         success: true,
@@ -36,7 +37,7 @@ export async function GET(req) {
         limit,
         totalCategories,
         totalPages: Math.ceil(totalCategories / limit),
-        categories,
+        categories: categories || [], // empty array if none
       }),
       { status: 200 },
     );

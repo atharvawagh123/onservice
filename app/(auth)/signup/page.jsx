@@ -5,11 +5,16 @@ import Link from "next/link";
 import { signup } from "@/app/customhook/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import {
+  AiOutlineUser,
+  AiOutlineMail,
+  AiOutlineLock,
+  AiOutlineCalendar,
+} from "react-icons/ai";
 
 export default function SignupPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
     first_name: "",
     last_name: "",
     username: "",
@@ -42,7 +47,6 @@ export default function SignupPage() {
       } else {
         setSuccess("User created successfully!");
         setFormData({
-          name: "",
           first_name: "",
           last_name: "",
           username: "",
@@ -54,7 +58,7 @@ export default function SignupPage() {
         router.push("/login");
       }
     } catch (err) {
-      console.log("error from signup page : ", err);
+      console.log(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -62,12 +66,12 @@ export default function SignupPage() {
   };
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 sm:p-8 animate-fade-in">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 text-center">
+    <main className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 animate-fade-in">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 text-center">
           Sign Up
         </h1>
-        <p className="text-gray-600 mb-6 text-center">
+        <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
           Fill in the form to create an account.
         </p>
 
@@ -75,151 +79,93 @@ export default function SignupPage() {
         {success && (
           <p className="text-green-500 mb-4 text-center">{success}</p>
         )}
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-4 items-center justify-center w-full"
-        >
-          {/* Full Name */}
-          <div className="w-full">
-            <label
-              htmlFor="name"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
-            />
-          </div>
 
-          {/* First & Last Name */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
-            <div className="flex-1">
-              <label
-                htmlFor="first_name"
-                className="block text-gray-700 font-medium mb-1"
-              >
-                First Name
-              </label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+          {/* First & Last Name in one row */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
               <input
                 type="text"
-                id="first_name"
                 name="first_name"
                 placeholder="First Name"
                 value={formData.first_name}
                 onChange={handleChange}
                 required
-                className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+                className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
               />
             </div>
-            <div className="flex-1">
-              <label
-                htmlFor="last_name"
-                className="block text-gray-700 font-medium mb-1"
-              >
-                Last Name
-              </label>
+            <div className="flex-1 relative">
+              <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
               <input
                 type="text"
-                id="last_name"
                 name="last_name"
                 placeholder="Last Name"
                 value={formData.last_name}
                 onChange={handleChange}
                 required
-                className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+                className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
               />
             </div>
           </div>
 
           {/* Username */}
-          <div className="w-full">
-            <label
-              htmlFor="username"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Username
-            </label>
+          <div className="relative">
+            <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="text"
-              id="username"
               name="username"
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
               required
-              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
             />
           </div>
 
           {/* Email */}
-          <div className="w-full">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Email
-            </label>
+          <div className="relative">
+            <AiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="email"
-              id="email"
               name="email"
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
             />
           </div>
 
           {/* Password */}
-          <div className="w-full">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Password
-            </label>
+          <div className="relative">
+            <AiOutlineLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="password"
-              id="password"
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
               required
-              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
             />
           </div>
 
           {/* Age */}
-          <div className="w-full">
-            <label
-              htmlFor="age"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Age
-            </label>
+          <div className="relative">
+            <AiOutlineCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="number"
-              id="age"
               name="age"
               placeholder="Age"
               value={formData.age}
               onChange={handleChange}
               required
-              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full"
+              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -229,7 +175,7 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-gray-600 text-sm sm:text-base">
+        <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm sm:text-base">
           Already have an account?{" "}
           <Link href="/login" className="text-blue-500 hover:underline">
             Log in

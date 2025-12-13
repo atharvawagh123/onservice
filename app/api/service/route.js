@@ -26,17 +26,14 @@ export async function GET(request) {
       orderBy: { createdat: "desc" }, // ✅ corrected field name
     });
 
-    if (services.length === 0) {
-      return NextResponse.json({ message: "No services found" });
-    }
-
+    // Always return the same response structure
     return NextResponse.json(
       toPlainObject({
         total,
         page,
         limit,
         totalPages: Math.ceil(total / limit),
-        services: services,
+        services: services || [], // return empty array if none
         success: true,
       }),
     );

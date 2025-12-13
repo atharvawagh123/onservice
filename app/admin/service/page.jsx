@@ -23,6 +23,7 @@ const Service = () => {
     (state) => state.services,
   );
 
+  console.log("all service from state", services);
   const { data, isLoading } = useQuery({
     queryKey: ["services", page],
     queryFn: () => getallservice(page, limit),
@@ -30,6 +31,7 @@ const Service = () => {
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
     keepPreviousData: true, // keeps previous page data while fetching next page
   });
+  console.log("all service from api", data);
   useEffect(() => {
     if (data) {
       dispatch(setServices(data));
@@ -106,7 +108,7 @@ const Service = () => {
                   </div>
                 </td>
               </tr>
-            ) : services.length > 0 ? (
+            ) : Array.isArray(services) && services?.length > 0 ? (
               services.map((service, index) => (
                 <ServiceTableRow
                   key={index}

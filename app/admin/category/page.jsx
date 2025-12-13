@@ -137,7 +137,7 @@ const Category = () => {
                   </div>
                 </td>
               </tr>
-            ) : categories?.length > 0 ? (
+            ) : Array.isArray(categories) && categories?.length > 0 ? (
               categories.map((category, index) => (
                 <CategoryTableRow
                   key={index}
