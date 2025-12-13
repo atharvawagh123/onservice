@@ -35,6 +35,7 @@ const Category = () => {
   });
 
   useEffect(() => {
+    console.log("fetching cat for admin", data);
     if (data) {
       dispatch(setCategories(data));
     }

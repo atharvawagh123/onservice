@@ -22,17 +22,19 @@ const CategoryTableRow = ({ category, index, deletecat }) => {
       await deletecat(category.id);
     }
   };
+
+  console.log("console cat form admin page", category);
   return (
     <tr
       className="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-      key={category.id}
+      key={category?.id}
     >
       <td className="px-6 py-3 font-serif italic text-black dark:text-gray-200">
         {index + 1}
       </td>
 
       <td className="px-6 py-3 font-serif italic text-black dark:text-gray-200 capitalize">
-        {category.name}
+        {category?.name}
       </td>
 
       <td className="px-6 py-3 flex gap-4">

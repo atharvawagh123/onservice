@@ -6,34 +6,34 @@ import { useDispatch } from "react-redux";
 import { addCategory } from "../../../store/Categoryslice";
 import Link from "next/link";
 import { IoArrowBack } from "react-icons/io5";
+import { useMutation } from "@tanstack/react-query";
 
 const AddCategory = () => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const submit = async (e) => {
+  const submitmutation = useMutation({
+    mutationFn: async (newCategory) => {
+      const response = await addcategory(newCategory);
+      return response;
+    },
+    onSuccess: (response) => {
+      toast.success("Category added successfully!");
+      dispatch(addCategory(response));
+      setCategory("");
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Something went wrong");
+    },
+  });
+
+  const onsubmit = (e) => {
     e.preventDefault();
     if (!category.trim()) {
-      toast.error("Enter category name!!");
+      toast.error("Enter category name!");
       return;
     }
-
-    try {
-      setLoading(true);
-      const response = await addcategory({ name: category.trim() });
-      if (response.error) {
-        toast.error(response.error);
-      } else {
-        toast.success("Category added successfully!");
-        dispatch(addCategory(response.category));
-        setCategory("");
-      }
-    } catch (err) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
+    submitmutation.mutate({ name: category.trim() });
   };
 
   return (
@@ -55,7 +55,7 @@ const AddCategory = () => {
         </Link>
       </div>
 
-      <form onSubmit={submit} className="flex flex-col gap-4">
+      <form onSubmit={onsubmit} className="flex flex-col gap-4">
         <label
           htmlFor="name"
           className="font-serif italic text-black dark:text-gray-200"
@@ -68,14 +68,14 @@ const AddCategory = () => {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition"
-          disabled={loading}
+          disabled={submitmutation.isLoading}
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={submitmutation.isLoading}
           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 dark:hover:bg-green-700 transition disabled:opacity-50"
         >
-          {loading ? "Adding..." : "Submit"}
+          {submitmutation.isLoading ? "Adding..." : "Submit"}
         </button>
       </form>
     </div>
