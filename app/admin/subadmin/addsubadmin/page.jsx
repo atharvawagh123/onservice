@@ -4,11 +4,14 @@ import Link from "next/link";
 import { IoArrowBack } from "react-icons/io5";
 import { FiUser, FiMail, FiLock, FiUserCheck } from "react-icons/fi";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addsubadmin } from "../../../customhook/subadmin";
 import { toast } from "react-toastify";
-
+import { addSubAdmin } from "../../../store/subAdminSlice";
+import { useDispatch } from "react-redux";
 const Addsubadmin = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -36,6 +39,10 @@ const Addsubadmin = () => {
     },
     onSuccess: (response) => {
       console.log("onsuccess on add subadmin", { response });
+      dispatch(addSubAdmin(response.subadmin));
+      queryClient.invalidateQueries({
+        queryKey: ["subadmins"],
+      });
       toast.success(response.message);
     },
     onError: (e) => {
@@ -45,7 +52,7 @@ const Addsubadmin = () => {
 
   const onsubmit = (e) => {
     e.preventDefault();
-    toast.success("clicking properly");
+
     if (
       !form.first_name ||
       !form.last_name ||
@@ -55,6 +62,7 @@ const Addsubadmin = () => {
       !form.role
     ) {
       toast.warning("fill the from first then submit");
+      return;
     }
     onsubmitmutation.mutate(form);
   };
@@ -180,7 +188,24 @@ const Addsubadmin = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="px-8 py-3 bg-green-600 text-white rounded-lg font-serif italic"
+          disabled={
+            !form.first_name ||
+            !form.last_name ||
+            !form.email ||
+            !form.username ||
+            !form.password ||
+            !form.role
+          }
+          className={`px-8 py-3 rounded-lg font-serif italic ${
+            !form.first_name ||
+            !form.last_name ||
+            !form.email ||
+            !form.username ||
+            !form.password ||
+            !form.role
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 text-white"
+          }`}
         >
           Create
         </button>

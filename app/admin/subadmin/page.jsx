@@ -1,7 +1,51 @@
+"use client";
 import Link from "next/link";
 import { IoAddCircleSharp } from "react-icons/io5";
+import { fetchsubadmin } from "../../customhook/subadmin";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { setSubAdmins } from "../../store/subAdminSlice";
+import { useEffect } from "react";
+import SubAdminRow from "../../component/SubAdminRow";
+import { useDispatch, useSelector } from "react-redux";
+import { updateactivity } from "../../customhook/user";
+import { toggleSubAdminStatus } from "../../store/subAdminSlice";
+// import { QueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const SubAdminpage = () => {
+  const dispatch = useDispatch();
+  const subadminstate = useSelector((state) => state.subadmin);
+  console.log("subadmin from  state", subadminstate);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["subadmins"],
+    queryFn: () => {
+      return fetchsubadmin();
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
+    cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setSubAdmins(data));
+    }
+  }, [data]);
+
+  const changeactivitymutation = useMutation({
+    mutationFn: async (id) => {
+      const response = await updateactivity(id);
+      console.log("chnage in mutaion", response);
+      return response;
+    },
+    onSuccess: (response) => {
+      console.log("chnage in onsuccess", response);
+
+      dispatch(toggleSubAdminStatus(response.id));
+
+      toast.success(response.message);
+    },
+  });
   return (
     <>
       <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-4">
@@ -19,7 +63,7 @@ const SubAdminpage = () => {
             Total Sub-Admin
           </p>
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            0
+            {subadminstate.total}
           </h2>
         </div>
       </div>
@@ -35,6 +79,65 @@ const SubAdminpage = () => {
           <IoAddCircleSharp size={24} />
           Add subadmin
         </Link>
+      </div>
+
+      <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl shadow font-sans">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Username
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Active
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Joined
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+            {isLoading && !data ? (
+              <tr>
+                <td colSpan="7">
+                  <div className="flex justify-center p-10">
+                    <div className="animate-spin w-6 h-6 border-3 border-current border-t-transparent text-red-600 rounded-full" />
+                  </div>
+                </td>
+              </tr>
+            ) : subadminstate.subadmins &&
+              subadminstate.subadmins.length > 0 ? (
+              subadminstate.subadmins.map((admin, index) => (
+                <SubAdminRow
+                  key={index}
+                  admin={admin}
+                  changeActivity={changeactivitymutation.mutate}
+                />
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="text-center py-4 text-gray-500 dark:text-gray-400"
+                >
+                  No sub-admin found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </>
   );

@@ -38,17 +38,17 @@ const UserPage = () => {
     }
   }, [page, data, limit]);
 
-  const changeActivity = async (id) => {
-    if (!id) {
-      toast.error("ID not found");
-      return;
-    }
-    const response = await updateactivity(id);
-    if (response.success) {
-      toast.success(`${response.id} ${response.message}`);
-      return response;
-    }
-  };
+  // const changeActivity = async (id) => {
+  //   if (!id) {
+  //     toast.error("ID not found");
+  //     return;
+  //   }
+  //   const response = await updateactivity(id);
+  //   if (response.success) {
+  //     toast.success(`${response.id} ${response.message}`);
+  //     return response;
+  //   }
+  // };
 
   const changeactivitymutation = useMutation({
     mutationFn: async (id) => {
