@@ -9,7 +9,7 @@ export default function UniversalSearchBar({
   onSearch,
   debounceTime = 200,
   fetchDefault, // function to fetch default data when input cleared
-  placeholder = "Search...",
+  placeholder = "Search..",
 }) {
   const [timer, setTimer] = useState(null);
 

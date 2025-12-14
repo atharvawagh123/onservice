@@ -105,7 +105,7 @@ const SubAdminpage = () => {
         <UniversalSearchBar
           value={searchValue}
           onSearch={(query) => {
-            dispatch(setpage(1)); // 🔥 reset page
+            dispatch(setpage(1));
             setSearchValue(query);
           }}
           fetchDefault={() => {
