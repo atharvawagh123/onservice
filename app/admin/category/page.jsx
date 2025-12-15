@@ -5,7 +5,7 @@ import { deletecategory, fetchcategory } from "../../customhook/category";
 import { toast } from "react-toastify";
 import { IoAddCircleSharp } from "react-icons/io5";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCategories,
@@ -16,6 +16,7 @@ import {
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { FcPrevious } from "react-icons/fc";
 import { FcNext } from "react-icons/fc";
+import UniversalSearchBar from "../../component/UniversalSearchBar";
 
 const Category = () => {
   const dispatch = useDispatch();
@@ -23,19 +24,19 @@ const Category = () => {
   const limitrange = useSelector((state) => state.Categories.limit);
   const totalPages = useSelector((state) => state.Categories.totalPages);
   const page = useSelector((state) => state.Categories.page);
+  const [searchValue, setSearchValue] = useState("");
   const totalCategories = useSelector(
     (state) => state.Categories.totalCategories,
   );
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["categories", page, limitrange],
-    queryFn: () => fetchcategory(page, limitrange),
+    queryKey: ["categories", searchValue, page, limitrange],
+    queryFn: () => fetchcategory(page, limitrange, searchValue),
     staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
     keepPreviousData: true,
   });
 
   useEffect(() => {
-    console.log("fetching cat for admin", data);
     if (data) {
       dispatch(setCategories(data));
     }
@@ -85,7 +86,21 @@ const Category = () => {
           </h2>
         </div>
       </div>
-
+      <div className="mb-6">
+        <UniversalSearchBar
+          value={searchValue}
+          onSearch={(query) => {
+            dispatch(setpage(1));
+            setSearchValue(query);
+          }}
+          fetchDefault={() => {
+            dispatch(setpage(1));
+            setSearchValue("");
+          }}
+          debounceTime={200}
+          placeholder="Search category..."
+        />
+      </div>
       {/* Add Category Button */}
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <h1 className="text-3xl font-serif italic text-black dark:text-gray-200">

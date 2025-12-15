@@ -23,7 +23,6 @@ const CategoryTableRow = ({ category, index, deletecat }) => {
     }
   };
 
-  console.log("console cat form admin page", category);
   return (
     <tr
       className="hover:bg-gray-50 dark:hover:bg-gray-700 transition"

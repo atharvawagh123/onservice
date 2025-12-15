@@ -7,10 +7,17 @@ export async function getcategory() {
   return fetch(`${BASE_URL}/api/category`).then((res) => res.json());
 }
 
-export async function fetchcategory(page = 1, limit = 5) {
-  return fetch(`${BASE_URL}/api/category?page=${page}&limit=${limit}`).then(
-    (res) => res.json(),
+export async function fetchcategory(page = 1, limit = 5, search = "") {
+  console.log(`Fetching page=${page}, limit=${limit}, search=${search}`);
+  const res = await fetch(
+    `${BASE_URL}/api/category?page=${page}&limit=${limit}&search=${search}`,
   );
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  const data = await res.json();
+  console.log("fetch cateogry", data);
+  return data; // ✅ Make sure to always return data
 }
 
 export async function deletecategory(id) {

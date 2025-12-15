@@ -57,7 +57,7 @@ const UserTableCell = ({ user, index, changeactivity }) => {
       {/* Image */}
       <td className="px-4 py-3">
         <img
-          src={user.imageurl}
+          src={user.imageurl || "/image.png"}
           alt="no image"
           className="w-12 h-12 rounded-full object-cover border dark:border-gray-600"
         />

@@ -13,38 +13,56 @@ function toPlainObject(data) {
 export async function GET(req) {
   try {
     const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get("page") || "1"); // default page 1
-    const limit = parseInt(url.searchParams.get("limit") || "10"); // default 10 items per page
+    const page = parseInt(url.searchParams.get("page")) || 1;
+    const limit = parseInt(url.searchParams.get("limit")) || 10;
+    const search = url.searchParams.get("search") || "";
 
-    // Calculate offset
-    const skip = (page - 1) * limit;
+    const validPage = !isNaN(page) && page > 0 ? page : 1;
+    const validLimit = !isNaN(limit) && limit > 0 ? limit : 10;
 
-    // Fetch paginated categories
+    const skip = (validPage - 1) * validLimit;
+
+    const whereCondition = search
+      ? { name: { contains: search, mode: "insensitive" } }
+      : {};
+
     const categories = await prisma.category.findMany({
+      where: whereCondition,
       skip,
-      take: limit,
+      take: validLimit,
       orderBy: { id: "desc" },
     });
 
-    // Total count
-    const totalCategories = await prisma.category.count();
+    const totalCategories = await prisma.category.count({
+      where: whereCondition,
+    });
 
-    // Ensure consistent response structure even if no categories
     return NextResponse.json(
       toPlainObject({
         success: true,
-        page,
-        limit,
+        page: validPage,
+        limit: validLimit,
+        search,
         totalCategories,
-        totalPages: Math.ceil(totalCategories / limit),
-        categories: categories || [], // empty array if none
+        totalPages: Math.ceil(totalCategories / validLimit),
+        categories: categories.length ? categories : [],
       }),
       { status: 200 },
     );
   } catch (error) {
     console.error("GET /categories error:", error);
+
     return NextResponse.json(
-      { error: "Failed to fetch categories" },
+      toPlainObject({
+        success: false,
+        page: 1,
+        limit: 0,
+        search: "",
+        totalCategories: 0,
+        totalPages: 0,
+        categories: [],
+        error: "Failed to fetch categories",
+      }),
       { status: 500 },
     );
   }

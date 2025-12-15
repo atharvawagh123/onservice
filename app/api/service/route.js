@@ -23,7 +23,7 @@ export async function GET(request) {
     const services = await prisma.service.findMany({
       skip,
       take: limit,
-      orderBy: { createdat: "desc" }, // ✅ corrected field name
+      orderBy: { createdat: "desc" },
     });
 
     // Always return the same response structure
@@ -33,7 +33,7 @@ export async function GET(request) {
         page,
         limit,
         totalPages: Math.ceil(total / limit),
-        services: services || [], // return empty array if none
+        services: services || [],
         success: true,
       }),
     );
