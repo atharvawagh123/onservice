@@ -12,7 +12,6 @@
     "lint": "next lint",
     "prepare": "husky",
     "test": "echo \"No tests yet\""
-
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -30,7 +29,7 @@
     "cloudinary": "^2.8.0",
     "cookie": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
-    "next": "^16.0.7",
+    "next": "16.0.10",
     "ng": "^0.0.0",
     "pg": "^8.16.3",
     "react": "^19.2.0",
