@@ -61,6 +61,7 @@ const UpdateSubadminPage = () => {
     };
     setdata();
   }, [data]);
+
   const updatesubadminmutation = useMutation({
     mutationFn: ({ formData, id }) => updatesubadminbyadmin(formData, id),
 

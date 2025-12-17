@@ -54,3 +54,10 @@ export async function deleteprofileimage() {
     credentials: "include",
   }).then((res) => res.json());
 }
+
+export async function updateprofile(formData) {
+  return fetch(`${BASE_URL}/api/auth/updateadmin`, {
+    method: "POST",
+    body: formData,
+  }).then((res) => res.json());
+}

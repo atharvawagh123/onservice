@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useAuthContext } from "../context/ContextProvider";
 import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
 import { GrUserAdmin } from "react-icons/gr";
+import { CgProfile } from "react-icons/cg";
 
 export default function Sidebar() {
   const { logout } = useAuthContext();
@@ -44,6 +45,7 @@ export default function Sidebar() {
     { name: "SubAdmin", icon: <GrUserAdmin />, link: "/admin/subadmin" },
     { name: "Counter", icon: <FaCalculator />, link: "/admin/counter" },
     { name: "Enquiry", icon: <FaQuestionCircle />, link: "/admin/enquiry" },
+    { name: "Profile", icon: <CgProfile />, link: "/admin/profile" },
   ];
 
   return (
