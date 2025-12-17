@@ -21,7 +21,7 @@ const SubAdminpage = () => {
   // console.log("subadmin from  state", subadminstate);
   const [searchValue, setSearchValue] = useState("");
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["subadmins", searchValue, subadminstate.page],
     queryFn: async () => {
       const res = await fetchsubadmin(
@@ -124,6 +124,9 @@ const SubAdminpage = () => {
                 ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Profile
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -143,6 +146,7 @@ const SubAdminpage = () => {
               </th>
             </tr>
           </thead>
+
           <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
             {isLoading && !data ? (
               <tr>

@@ -7,45 +7,75 @@ import { serialize } from "@/lib/serialize";
 
 export async function PUT(req, { params }) {
   try {
-    const body = await req.json();
-    const { email, age, first_name, last_name, username } = body;
+    const { id } = await params;
 
-    console.log("data from frontend:", body);
+    const formdata = await req.formData();
 
-    const { id } = await params; // Extract id correctly
-    console.log("ID from params:", id);
+    const email = formdata.get("email");
+    const age = formdata.get("age");
+    const first_name = formdata.get("first_name");
+    const last_name = formdata.get("last_name");
+    const username = formdata.get("username");
+    const file = formdata.get("file");
 
-    // Find the user by id
-    const usergoingtoupdate = await prisma.userapi_userprofile.update({
+    let imageurl;
+    let imagepublicid;
+
+    // 🔹 Upload image only if file exists
+    if (file && typeof file !== "string" && file.size > 0) {
+      if (!file.type.startsWith("image/")) {
+        return NextResponse.json(
+          { error: "Only image files are allowed" },
+          { status: 400 },
+        );
+      }
+
+      const arrayBuffer = await file.arrayBuffer();
+      const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+      try {
+        const uploadedImage = await cloudinary.uploader.upload(
+          `data:${file.type};base64,${base64}`,
+          { folder: "profile_images" },
+        );
+
+        imageurl = uploadedImage.secure_url;
+        imagepublicid = uploadedImage.public_id;
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+        return NextResponse.json(
+          { error: "Image upload failed" },
+          { status: 500 },
+        );
+      }
+    }
+
+    // 🔹 Update user
+    const updatedUser = await prisma.userapi_userprofile.update({
       where: { id: BigInt(id) },
       data: {
         email,
-        age,
+        age: Number(age),
         first_name,
         last_name,
         username,
+        ...(imageurl && {
+          imageurl,
+          imagepublicid,
+        }),
       },
     });
 
-    if (!usergoingtoupdate) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // // Example: update a message field
-    // const updatedUser = await prisma.userapi_userprofile.update({
-    //   where: { id: BigInt(id) },
-    //   data: { message },
-    // });
-
     return NextResponse.json({
-      message: "Subadmin updated properly",
-      params: id,
-      user: serialize(usergoingtoupdate),
+      success: true,
+      message: "User updated successfully",
+      user: serialize(updatedUser),
     });
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
-      { error: "Error from client, check frontend field" },
+      { success: false, error: "Failed to update user" },
       { status: 500 },
     );
   }

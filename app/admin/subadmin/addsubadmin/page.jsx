@@ -9,9 +9,12 @@ import { addsubadmin } from "../../../customhook/subadmin";
 import { toast } from "react-toastify";
 import { addSubAdmin } from "../../../store/subAdminSlice";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+
 const Addsubadmin = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const router = useRouter();
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -44,8 +47,10 @@ const Addsubadmin = () => {
         queryKey: ["subadmins"],
       });
       toast.success(response.message);
+      router.back();
     },
     onError: (e) => {
+      console.log("Error on mutation", e);
       toast.error("Error form system review code !!");
     },
   });

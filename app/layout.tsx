@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import { AuthContextProvider } from "./context/ContextProvider";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

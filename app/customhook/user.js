@@ -63,3 +63,9 @@ export async function updateactivity(id) {
     method: "PATCH",
   }).then((res) => res.json());
 }
+
+export async function getuserbyid(id) {
+  return fetch(`${BASE_URL}/api/userapi/getuserdetailbyid/${id}`).then((res) =>
+    res.json(),
+  );
+}
