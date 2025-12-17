@@ -21,13 +21,28 @@ export async function PUT(req, { params }) {
     let imageurl;
     let imagepublicid;
 
-    // 🔹 Upload image only if file exists
+    // 🔹 Get current user to check old image
+    const currentUser = await prisma.userapi_userprofile.findUnique({
+      where: { id: BigInt(id) },
+    });
+
+    // 🔹 Upload new image only if file exists
     if (file && typeof file !== "string" && file.size > 0) {
       if (!file.type.startsWith("image/")) {
         return NextResponse.json(
           { error: "Only image files are allowed" },
           { status: 400 },
         );
+      }
+
+      // 🔹 Delete old image from Cloudinary if exists
+      if (currentUser.imagepublicid) {
+        try {
+          await cloudinary.uploader.destroy(currentUser.imagepublicid);
+        } catch (err) {
+          console.error("Cloudinary delete error:", err);
+          // You can continue even if delete fails
+        }
       }
 
       const arrayBuffer = await file.arrayBuffer();

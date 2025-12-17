@@ -49,7 +49,6 @@ const UpdateSubadminPage = () => {
 
   useEffect(() => {
     if (!data?.user) return;
-
     const setdata = () => {
       setuserdetail((prev) => ({
         ...prev,
