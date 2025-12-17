@@ -41,7 +41,7 @@ const Addsubadmin = () => {
       return response;
     },
     onSuccess: (response) => {
-      console.log("onsuccess on add subadmin", { response });
+      console.log("onsuccess on  subadmin", { response });
       dispatch(addSubAdmin(response.subadmin));
       queryClient.invalidateQueries({
         queryKey: ["subadmins"],
