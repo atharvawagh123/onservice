@@ -5,9 +5,17 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { serialize } from "@/lib/serialize";
 
+function serializeUser(user) {
+  return {
+    ...user,
+    id: user.id.toString(), // BigInt fix
+  };
+}
 export async function GET(req, { params }) {
   try {
-    console.log(await params);
+    console.log(
+      "hitt........................................................................",
+    );
     const { id } = await params;
 
     if (!id) {
@@ -33,7 +41,8 @@ export async function GET(req, { params }) {
       );
     }
 
-    const userprofile = serialize(user);
+    const userprofile = serializeUser(user);
+    console.log("user getuserbydetailbyid", userprofile);
 
     return NextResponse.json(
       {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { serialize } from "@/lib/serialize.js";
+import cloudinary from "@/lib/cloudinary.js";
 
 export async function PUT(req, { params }) {
   try {

@@ -15,9 +15,11 @@ import UniversalSearchBar from "../../component/UniversalSearchBar";
 import { FcPrevious } from "react-icons/fc";
 import { FcNext } from "react-icons/fc";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SubAdminpage = () => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const subadminstate = useSelector((state) => state.subadmin);
   const router = useRouter();
   // console.log("subadmin from  state", subadminstate);
@@ -39,6 +41,7 @@ const SubAdminpage = () => {
     keepPreviousData: true,
   });
 
+  console.log("subadmin detail", data);
   useEffect(() => {
     if (data) {
       dispatch(setSubAdmins(data));
@@ -51,12 +54,9 @@ const SubAdminpage = () => {
       return response;
     },
     onSuccess: (response) => {
-      console.log("chnage in onsuccess", response);
-
       dispatch(toggleSubAdminStatus(response.id));
-
+      // queryClient.invalidateQueries(["subadmin"]);
       toast.success(response.message);
-      router.back();
     },
   });
 

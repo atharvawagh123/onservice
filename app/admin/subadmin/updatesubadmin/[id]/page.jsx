@@ -5,7 +5,14 @@ import { updatesubadminbyadmin } from "../../../../customhook/subadmin";
 import { getuserbyid } from "../../../../customhook/user";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { FaUser, FaEnvelope, FaBirthdayCake, FaUpload } from "react-icons/fa";
+import {
+  FaUser,
+  FaEnvelope,
+  FaBirthdayCake,
+  FaUpload,
+  FaCloudUploadAlt,
+} from "react-icons/fa";
+import { ImSpinner2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -22,11 +29,14 @@ const UpdateSubadminPage = () => {
     first_name: "",
     last_name: "",
     username: "",
+    imageurl: "",
   });
   const [file, setfile] = useState(null);
+  const [editmode, seteditmode] = useState(false);
 
   const onfilechnage = (e) => {
     const selectedfile = e.target.files[0];
+    console.log(selectedfile);
     setfile(selectedfile);
   };
 
@@ -42,10 +52,12 @@ const UpdateSubadminPage = () => {
     queryKey: ["subadmin", id],
     queryFn: async () => {
       const response = await getuserbyid(id);
+      // console.log("data comming from usequery", response);
       return response;
     },
     enabled: !!id,
   });
+  // console.log("data coming from updatesubadmin", data);
 
   useEffect(() => {
     if (!data?.user) return;
@@ -57,28 +69,30 @@ const UpdateSubadminPage = () => {
         first_name: data.user.first_name ?? "",
         last_name: data.user.last_name ?? "",
         username: data.user.username ?? "",
+        imageurl: data.user.imageurl ?? "",
       }));
     };
     setdata();
   }, [data]);
 
+  // console.log("information state:-", userdetail);
+
   const updatesubadminmutation = useMutation({
     mutationFn: ({ formData, id }) => updatesubadminbyadmin(formData, id),
-
     onSuccess: (response) => {
+      // console.log("updatemutation response", response);
       toast.success(response.message || "Updated successfully");
       queryClient.invalidateQueries(["subadmins"]);
+      queryClient.invalidateQueries(["subadmins", id]);
       if (response.success) {
         router.back();
       }
     },
-
     onError: (error) => {
       toast.error(error.message || "Update failed");
     },
   });
 
-  console.log("updatesubadminmutation :", updatesubadminmutation);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
@@ -166,90 +180,145 @@ const UpdateSubadminPage = () => {
           </div>
         </div>
 
-        {/* Form Section */}
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-4xl bg-green-50 dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6 mx-auto"
-        >
-          <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 text-center font-serif italic">
-            Update Subadmin
-          </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6  p-5">
+          {/* LEFT: Image Section */}
+          <div className="flex flex-col items-center gap-4 md:col-span-1">
+            <div className="relative w-48 h-48 rounded-lg border-2 border-dashed flex items-center justify-center bg-gray-100 dark:bg-gray-900 dark:border-gray-600 overflow-hidden">
+              {file ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : data.user.imageurl ? (
+                <img
+                  src={data?.user?.imageurl}
+                  alt="preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <span className="text-gray-400 text-sm">Profile Image</span>
+              )}
 
-          {/* Row 1: First Name & Last Name */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 flex items-center space-x-2">
-              <FaUser className="text-green-600 dark:text-green-400" />
-              <input
-                type="text"
-                name="first_name"
-                value={userdetail.first_name}
-                onChange={onChange}
-                placeholder="First Name"
-                className="flex-1 p-3 border border-green-300 dark:border-green-700 rounded focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white font-serif italic"
-              />
+              {updatesubadminmutation.isPending && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <ImSpinner2 className="animate-spin text-white text-2xl" />
+                </div>
+              )}
             </div>
 
-            <div className="flex-1 flex items-center space-x-2">
-              <FaUser className="text-green-600 dark:text-green-400" />
+            <label className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 bg-blue-100 text-blue-800">
+              {updatesubadminmutation.isPending ? (
+                <>
+                  <ImSpinner2 className="animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <FaCloudUploadAlt />
+                  Upload Image
+                </>
+              )}
               <input
-                type="text"
-                name="last_name"
-                value={userdetail.last_name}
-                onChange={onChange}
-                placeholder="Last Name"
-                className="flex-1 p-3 border border-green-300 dark:border-green-700 rounded focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white font-serif italic"
+                type="file"
+                className="hidden"
+                onChange={onfilechnage}
+                disabled={updatesubadminmutation.isPending}
               />
-            </div>
+            </label>
           </div>
-
-          {/* Row 2: Email & Age */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 flex items-center space-x-2">
-              <FaEnvelope className="text-green-600 dark:text-green-400" />
-              <input
-                type="email"
-                name="email"
-                value={userdetail.email}
-                onChange={onChange}
-                placeholder="Email"
-                className="flex-1 p-3 border border-green-300 dark:border-green-700 rounded focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white font-serif"
-              />
-            </div>
-
-            <div className="flex-1 flex items-center space-x-2">
-              <FaBirthdayCake className="text-green-600 dark:text-green-400" />
-              <input
-                type="number"
-                name="age"
-                value={userdetail.age}
-                onChange={onChange}
-                placeholder="Age"
-                className="flex-1 p-3 border border-green-300 dark:border-green-700 rounded focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white font-serif italic"
-              />
-            </div>
-          </div>
-
-          {/* Row 3: File Upload */}
-          <div className="flex items-center space-x-2">
-            <FaUpload className="text-green-600 dark:text-green-400" />
-            <input
-              type="file"
-              onChange={onfilechnage}
-              className="flex-1 p-3 border border-green-300 dark:border-green-700 rounded focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white font-serif italic"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={updatesubadminmutation.isPending}
-            className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white dark:text-black font-bold py-3 px-4 rounded transition-colors duration-200 font-serif"
+          {/* RIGHT: Form Section */}
+          <form
+            onSubmit={handleSubmit}
+            className={`
+                         md:col-span-2 bg-green-50 dark:bg-gray-900 rounded-xl shadow-lg p-6 space-y-6
+                         transition-all duration-300
+                         ${
+                           updatesubadminmutation.isPending
+                             ? "opacity-60 pointer-events-none blur-[1px]"
+                             : ""
+                         }
+                      `}
           >
-            {updatesubadminmutation.isPending
-              ? "Updating..."
-              : "Update Subadmin"}
-          </button>
-        </form>
+            <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 text-center font-serif italic">
+              Update Subadmin
+            </h2>
+
+            {/* First + Last Name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <FaUser className="text-green-600" />
+                <input
+                  type="text"
+                  name="first_name"
+                  value={userdetail.first_name}
+                  onChange={onChange}
+                  placeholder="First Name"
+                  disabled={updatesubadminmutation.isPending}
+                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaUser className="text-green-600" />
+                <input
+                  type="text"
+                  name="last_name"
+                  value={userdetail.last_name}
+                  disabled={updatesubadminmutation.isPending}
+                  onChange={onChange}
+                  placeholder="Last Name"
+                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                />
+              </div>
+            </div>
+
+            {/* Email + Age */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <FaEnvelope className="text-green-600" />
+                <input
+                  type="email"
+                  name="email"
+                  value={userdetail.email}
+                  disabled={updatesubadminmutation.isPending}
+                  onChange={onChange}
+                  placeholder="Email"
+                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaBirthdayCake className="text-green-600" />
+                <input
+                  type="number"
+                  name="age"
+                  value={userdetail.age}
+                  disabled={updatesubadminmutation.isPending}
+                  onChange={onChange}
+                  placeholder="Age"
+                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={updatesubadminmutation.isPending}
+              className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white font-bold py-3 rounded flex items-center justify-center gap-2"
+            >
+              {updatesubadminmutation.isPending ? (
+                <>
+                  <ImSpinner2 className="animate-spin text-lg" />
+                  Updating...
+                </>
+              ) : (
+                "Update Subadmin"
+              )}
+            </button>
+          </form>
+        </div>
       </div>
     </>
   );
