@@ -18,7 +18,7 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
       ? localStorage.getItem("theme") || "light"
       : "light",
   );
-
+  const MAX_SIZE = 300 * 1024;
   useEffect(() => {
     // Only update the DOM, not React state
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -71,6 +71,7 @@ export const AuthContextProvider = ({ children, isLoginstate }) => {
         setIsLogin,
         logout,
         isLoginstate,
+        MAX_SIZE,
       }}
     >
       {children}

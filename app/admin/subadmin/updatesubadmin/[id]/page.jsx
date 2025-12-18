@@ -15,9 +15,11 @@ import {
 import { ImSpinner2 } from "react-icons/im";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuthContext } from "../../../../context/ContextProvider";
 
 const UpdateSubadminPage = () => {
   const pathname = usePathname();
+  const { MAX_SIZE } = useAuthContext();
   const part = pathname.split("/");
   const id = part[part.length - 1];
   const router = useRouter();
@@ -32,11 +34,15 @@ const UpdateSubadminPage = () => {
     imageurl: "",
   });
   const [file, setfile] = useState(null);
-  const [editmode, seteditmode] = useState(false);
 
   const onfilechnage = (e) => {
     const selectedfile = e.target.files[0];
+    if (selectedfile.size > MAX_SIZE) {
+      alert("Image must be less than 300KB");
+      return;
+    }
     console.log(selectedfile);
+
     setfile(selectedfile);
   };
 

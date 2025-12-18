@@ -16,9 +16,10 @@ import { toast } from "react-toastify";
 import { setinfo } from "../../store/Adminslice";
 import { FaCloudUploadAlt } from "react-icons/fa"; // upload icon
 import { ImSpinner2 } from "react-icons/im"; // spinner icon
-
+import { useAuthContext } from "../../context/ContextProvider";
 const Adminprofile = () => {
   const admin = useSelector((state) => state.Admin);
+  const { MAX_SIZE } = useAuthContext();
   const dispatch = useDispatch();
   const [editmode, seteditmode] = useState(false);
   const [file, setfile] = useState(null);
@@ -55,7 +56,12 @@ const Adminprofile = () => {
   };
 
   const onfileChange = (e) => {
-    setfile(e.target.files[0]);
+    const selectedfile = e.target.files[0];
+    if (selectedfile.size > MAX_SIZE) {
+      alert("Image must be less than 300 KB");
+      return;
+    }
+    setfile(selectedfile);
   };
 
   const submituseMutation = useMutation({
