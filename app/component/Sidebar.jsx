@@ -109,7 +109,7 @@ export default function Sidebar() {
             </div>
 
             <h1 className="text-sm md:text-base font-bold break-all">
-              {state?.email || "User"}
+              {state?.username || "User"}
             </h1>
           </div>
 

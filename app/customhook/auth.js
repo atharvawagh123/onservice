@@ -57,7 +57,7 @@ export async function deleteprofileimage() {
 
 export async function updateprofile(formData) {
   return fetch(`${BASE_URL}/api/auth/updateadmin`, {
-    method: "POST",
+    method: "PUT",
     body: formData,
   }).then((res) => res.json());
 }
