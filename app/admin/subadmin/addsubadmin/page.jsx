@@ -52,6 +52,7 @@ const Addsubadmin = () => {
     onError: (e) => {
       console.log("Error on mutation", e);
       toast.error("Error form system review code !!");
+      router.back();
     },
   });
 

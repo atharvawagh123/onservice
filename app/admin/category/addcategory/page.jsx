@@ -7,10 +7,13 @@ import { addCategory } from "../../../store/Categoryslice";
 import Link from "next/link";
 import { IoArrowBack } from "react-icons/io5";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { ImSpinner2 } from "react-icons/im";
 
 const AddCategory = () => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState("");
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const submitmutation = useMutation({
@@ -28,10 +31,12 @@ const AddCategory = () => {
       });
       dispatch(addCategory(response.category));
       setCategory("");
+      router.back();
     },
     onError: (error) => {
       console.log("mutaion error ", error?.message);
       toast.error(error?.message || "Something went wrong");
+      router.back();
     },
   });
 
@@ -45,7 +50,7 @@ const AddCategory = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <h1 className="font-serif italic text-5xl text-black dark:text-gray-200 mb-6">
         Add Category
       </h1>
@@ -63,7 +68,10 @@ const AddCategory = () => {
         </Link>
       </div>
 
-      <form onSubmit={onsubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={onsubmit}
+        className="flex flex-col  p-5 gap-4 w-full max-w-md mx-auto"
+      >
         <label
           htmlFor="name"
           className="font-serif italic text-black dark:text-gray-200"
@@ -75,15 +83,22 @@ const AddCategory = () => {
           type="text"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition"
-          disabled={submitmutation.isLoading}
+          className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition"
+          disabled={submitmutation.isPending}
         />
         <button
           type="submit"
-          disabled={submitmutation.isLoading}
-          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 dark:hover:bg-green-700 transition disabled:opacity-50"
+          disabled={submitmutation.isPending}
+          className="flex items-center gap-2 justify-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 dark:hover:bg-green-700 transition disabled:opacity-50"
         >
-          {submitmutation.isLoading ? "Adding..." : "Submit"}
+          {submitmutation.isPending ? (
+            <>
+              <ImSpinner2 className="animate-spin" />
+              Adding...
+            </>
+          ) : (
+            <span>Submit</span>
+          )}
         </button>
       </form>
     </div>

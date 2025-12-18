@@ -14,10 +14,12 @@ import { toast } from "react-toastify";
 import UniversalSearchBar from "../../component/UniversalSearchBar";
 import { FcPrevious } from "react-icons/fc";
 import { FcNext } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 
 const SubAdminpage = () => {
   const dispatch = useDispatch();
   const subadminstate = useSelector((state) => state.subadmin);
+  const router = useRouter();
   // console.log("subadmin from  state", subadminstate);
   const [searchValue, setSearchValue] = useState("");
 
@@ -54,6 +56,7 @@ const SubAdminpage = () => {
       dispatch(toggleSubAdminStatus(response.id));
 
       toast.success(response.message);
+      router.back();
     },
   });
 
