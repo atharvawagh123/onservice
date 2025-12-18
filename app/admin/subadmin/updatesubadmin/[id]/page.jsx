@@ -132,15 +132,15 @@ const UpdateSubadminPage = () => {
         {/* Header Skeleton */}
         <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-4">
           <div className="space-y-3">
-            <div className="h-10 w-80 bg-gray-200 dark:bg-gray-700 rounded" />
-            <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded" />
+            <div className="h-10 w-80 bg-gray-200 dark:bg-gray-700 rounded animate-pulse-slow" />
+            <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse-slow" />
           </div>
 
-          <div className="h-14 w-40 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+          <div className="h-14 w-40 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse-slow" />
         </div>
 
         {/* Form Skeleton */}
-        <div className="w-full max-w-4xl bg-green-50 dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6 mx-auto">
+        <div className="w-full max-w-4xl bg-green-50 dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6 mx-auto animate-shiver">
           {/* Title */}
           <div className="h-8 w-56 bg-gray-200 dark:bg-gray-700 rounded mx-auto" />
 
@@ -165,6 +165,7 @@ const UpdateSubadminPage = () => {
       </div>
     );
   }
+
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-black p-6 font-sans">
@@ -185,35 +186,58 @@ const UpdateSubadminPage = () => {
             </p>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6  p-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 p-4 sm:p-5 lg:p-8">
           {/* LEFT: Image Section */}
-          <div className="flex flex-col items-center gap-4 md:col-span-1">
-            <div className="relative w-48 h-48 rounded-lg border-2 border-dashed flex items-center justify-center bg-gray-100 dark:bg-gray-900 dark:border-gray-600 overflow-hidden">
+          <div className="flex flex-col items-center gap-3 sm:gap-4 md:col-span-1">
+            <div
+              className="
+      relative 
+      w-32 h-32 
+      sm:w-40 sm:h-40 
+      md:w-48 md:h-48 
+      rounded-lg border-2 border-dashed
+      flex items-center justify-center
+      bg-gray-100 dark:bg-gray-900 dark:border-gray-600
+      overflow-hidden
+    "
+            >
               {file ? (
                 <img
                   src={URL.createObjectURL(file)}
                   alt="preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
-              ) : data.user.imageurl ? (
+              ) : data?.user?.imageurl ? (
                 <img
-                  src={data?.user?.imageurl}
+                  src={data.user.imageurl}
                   alt="preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
               ) : (
-                <span className="text-gray-400 text-sm">Profile Image</span>
+                <span className="text-gray-400 text-xs sm:text-sm">
+                  Profile Image
+                </span>
               )}
 
               {updatesubadminmutation.isPending && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <ImSpinner2 className="animate-spin text-white text-2xl" />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-lg">
+                  <ImSpinner2 className="animate-spin text-white text-xl sm:text-2xl" />
                 </div>
               )}
             </div>
 
-            <label className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 bg-blue-100 text-blue-800">
+            <label
+              className="
+      cursor-pointer 
+      px-3 py-2 sm:px-4
+      rounded-lg
+      text-xs sm:text-sm
+      font-medium
+      flex items-center gap-2
+      bg-blue-100 text-blue-800
+      hover:bg-blue-200 transition
+    "
+            >
               {updatesubadminmutation.isPending ? (
                 <>
                   <ImSpinner2 className="animate-spin" />
@@ -221,7 +245,7 @@ const UpdateSubadminPage = () => {
                 </>
               ) : (
                 <>
-                  <FaCloudUploadAlt />
+                  <FaCloudUploadAlt className="text-sm sm:text-base" />
                   Upload Image
                 </>
               )}
@@ -233,27 +257,35 @@ const UpdateSubadminPage = () => {
               />
             </label>
           </div>
+
           {/* RIGHT: Form Section */}
           <form
             onSubmit={handleSubmit}
             className={`
-                         md:col-span-2 bg-green-50 dark:bg-gray-900 rounded-xl shadow-lg p-6 space-y-6
-                         transition-all duration-300
-                         ${
-                           updatesubadminmutation.isPending
-                             ? "opacity-60 pointer-events-none blur-[1px]"
-                             : ""
-                         }
-                      `}
+      md:col-span-2 
+      bg-green-50 dark:bg-gray-800 
+      rounded-xl shadow-lg
+      p-4 sm:p-5 md:p-6
+      space-y-4 sm:space-y-5 md:space-y-6
+      transition-all duration-300
+      ${updatesubadminmutation.isPending ? "opacity-60 pointer-events-none blur-sm" : ""}
+    `}
           >
-            <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 text-center font-serif italic">
+            <h2
+              className="
+      text-lg sm:text-xl md:text-2xl
+      font-bold text-green-700 dark:text-green-400
+      text-center font-serif italic
+      mb-3 sm:mb-4
+    "
+            >
               Update Subadmin
             </h2>
 
             {/* First + Last Name */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <FaUser className="text-green-600" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <FaUser className="text-green-600 text-base sm:text-lg" />
                 <input
                   type="text"
                   name="first_name"
@@ -261,62 +293,96 @@ const UpdateSubadminPage = () => {
                   onChange={onChange}
                   placeholder="First Name"
                   disabled={updatesubadminmutation.isPending}
-                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                  className="
+            w-full p-2.5 sm:p-3
+            text-sm sm:text-base
+            border rounded
+            focus:ring-2 focus:ring-green-400
+            dark:bg-gray-900 dark:text-white
+          "
                 />
               </div>
 
-              <div className="flex items-center gap-2">
-                <FaUser className="text-green-600" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <FaUser className="text-green-600 text-base sm:text-lg" />
                 <input
                   type="text"
                   name="last_name"
                   value={userdetail.last_name}
-                  disabled={updatesubadminmutation.isPending}
                   onChange={onChange}
                   placeholder="Last Name"
-                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                  disabled={updatesubadminmutation.isPending}
+                  className="
+            w-full p-2.5 sm:p-3
+            text-sm sm:text-base
+            border rounded
+            focus:ring-2 focus:ring-green-400
+            dark:bg-gray-900 dark:text-white
+          "
                 />
               </div>
             </div>
 
             {/* Email + Age */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <FaEnvelope className="text-green-600" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <FaEnvelope className="text-green-600 text-base sm:text-lg" />
                 <input
                   type="email"
                   name="email"
                   value={userdetail.email}
-                  disabled={updatesubadminmutation.isPending}
                   onChange={onChange}
                   placeholder="Email"
-                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                  disabled={updatesubadminmutation.isPending}
+                  className="
+            w-full p-2.5 sm:p-3
+            text-sm sm:text-base
+            border rounded
+            focus:ring-2 focus:ring-green-400
+            dark:bg-gray-900 dark:text-white
+          "
                 />
               </div>
 
-              <div className="flex items-center gap-2">
-                <FaBirthdayCake className="text-green-600" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <FaBirthdayCake className="text-green-600 text-base sm:text-lg" />
                 <input
                   type="number"
                   name="age"
                   value={userdetail.age}
-                  disabled={updatesubadminmutation.isPending}
                   onChange={onChange}
                   placeholder="Age"
-                  className="w-full p-3 border rounded focus:ring-2 focus:ring-green-400 dark:bg-black dark:text-white"
+                  disabled={updatesubadminmutation.isPending}
+                  className="
+            w-full p-2.5 sm:p-3
+            text-sm sm:text-base
+            border rounded
+            focus:ring-2 focus:ring-green-400
+            dark:bg-gray-900 dark:text-white
+          "
                 />
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={updatesubadminmutation.isPending}
-              className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white font-bold py-3 rounded flex items-center justify-center gap-2"
+              className="
+        w-full 
+        py-2.5 sm:py-3
+        text-sm sm:text-base
+        bg-green-700 hover:bg-green-800
+        disabled:opacity-50
+        text-white font-bold
+        rounded
+        flex items-center justify-center gap-2
+        transition
+      "
             >
               {updatesubadminmutation.isPending ? (
                 <>
-                  <ImSpinner2 className="animate-spin text-lg" />
+                  <ImSpinner2 className="animate-spin text-base sm:text-lg" />
                   Updating...
                 </>
               ) : (
