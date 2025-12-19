@@ -1,11 +1,32 @@
 import Link from "next/link";
 import { FiEdit, FiTrash2, FiLock, FiUnlock } from "react-icons/fi";
-
-const SubAdminRow = ({ admin, changeActivity }) => {
+import { ImSpinner2 } from "react-icons/im";
+import Swal from "sweetalert2";
+const SubAdminRow = ({
+  admin,
+  changeActivity,
+  deleteSubAdmin,
+  deleteisprending,
+  changeactivityispending,
+  usergoingtochange,
+}) => {
   const isActive = admin?.is_active;
 
   const changeactive = () => {
     changeActivity(admin.id);
+  };
+
+  const removesubadmin = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action remove subadmin confirm",
+      icon: "warning",
+      showCancelButton: true,
+    });
+
+    if (!result.isConfirmed) return;
+    const res = deleteSubAdmin(admin.id);
+    console.log("from subadminrow", res);
   };
 
   return (
@@ -57,26 +78,59 @@ const SubAdminRow = ({ admin, changeActivity }) => {
 
       <td className="px-6 py-4 whitespace-nowrap flex gap-2">
         <Link
-          href={`./subadmin/updatesubadmin/${admin.id}`}
+          href={`./subadmin/updatesubadmin/${admin?.id}`}
           className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500"
         >
           <FiEdit size={16} /> Edit
         </Link>
 
-        <button className="flex items-center gap-1 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-500">
-          <FiTrash2 size={16} /> Delete
+        <button
+          onClick={removesubadmin}
+          disabled={deleteisprending && usergoingtochange === admin?.id}
+          className={`flex items-center gap-1 px-3 py-1 rounded text-white transition
+    ${
+      usergoingtochange === admin?.id
+        ? "bg-red-400 cursor-not-allowed"
+        : "bg-red-600 hover:bg-red-500"
+    }
+  `}
+        >
+          {deleteisprending && usergoingtochange === admin?.id ? (
+            <>
+              <ImSpinner2 size={16} className="animate-spin" />
+              deleting......
+            </>
+          ) : (
+            <>
+              <FiTrash2 size={16} /> Delete
+            </>
+          )}
         </button>
 
         <button
           onClick={changeactive}
-          className={`flex items-center gap-1 px-3 py-1 rounded text-white ${
-            isActive
+          disabled={changeactivityispending && usergoingtochange === admin?.id}
+          className={`flex items-center gap-1 px-3 py-1 rounded text-white transition
+        ${
+          usergoingtochange === admin?.id
+            ? "bg-gray-400 cursor-not-allowed"
+            : isActive
               ? "bg-yellow-600 hover:bg-yellow-500"
               : "bg-green-600 hover:bg-green-500"
-          }`}
+        }
+                    `}
         >
-          {isActive ? <FiLock size={16} /> : <FiUnlock size={16} />}
-          {isActive ? "Block" : "Unblock"}
+          {changeactivityispending && usergoingtochange === admin.id ? (
+            <>
+              <ImSpinner2 size={16} className="animate-spin" />
+              {isActive ? "Blocking..." : "Unblocking..."}
+            </>
+          ) : (
+            <>
+              {isActive ? <FiLock size={16} /> : <FiUnlock size={16} />}
+              {isActive ? "Block" : "Unblock"}
+            </>
+          )}
         </button>
       </td>
     </tr>

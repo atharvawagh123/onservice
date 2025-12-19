@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { addSubAdmin } from "../../../store/subAdminSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { FaPlus, FaSpinner } from "react-icons/fa";
 
 const Addsubadmin = () => {
   const queryClient = useQueryClient();
@@ -202,7 +203,7 @@ const Addsubadmin = () => {
             !form.password ||
             !form.role
           }
-          className={`px-8 py-3 rounded-lg font-serif italic ${
+          className={`px-8 py-3 rounded-lg font-serif italic flex items-center justify-center gap-2 transition-all duration-300 ${
             !form.first_name ||
             !form.last_name ||
             !form.email ||
@@ -213,7 +214,17 @@ const Addsubadmin = () => {
               : "bg-green-600 text-white"
           }`}
         >
-          Create
+          {onsubmitmutation.isPending ? (
+            <>
+              <FaSpinner className="animate-spin" />
+              Creating...
+            </>
+          ) : (
+            <>
+              <FaPlus />
+              Create
+            </>
+          )}
         </button>
       </form>
     </>

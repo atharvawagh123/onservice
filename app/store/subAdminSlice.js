@@ -20,7 +20,6 @@ const subAdminSlice = createSlice({
 
     // ✅ ADD SUBADMIN
     addSubAdmin: (state, action) => {
-      alert("adding subadmin in slice");
       console.log("adding subadmin in slice", action.payload);
       state.subadmins.unshift(action.payload);
       state.total += 1;

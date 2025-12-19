@@ -30,3 +30,9 @@ export async function updatesubadminbyadmin(formData, id) {
 
   return data;
 }
+
+export async function removesubadmin(id) {
+  return fetch(`${BASE_URL}/api/subadmin/${id}`, {
+    method: "DELETE",
+  }).then((res) => res.json());
+}

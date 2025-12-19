@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import SubAdminRow from "../../component/SubAdminRow";
 import { useDispatch, useSelector } from "react-redux";
 import { updateactivity } from "../../customhook/user";
-import { toggleSubAdminStatus, setpage } from "../../store/subAdminSlice";
+import {
+  toggleSubAdminStatus,
+  setpage,
+  deleteSubAdmin,
+} from "../../store/subAdminSlice";
 // import { QueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import UniversalSearchBar from "../../component/UniversalSearchBar";
@@ -16,6 +20,7 @@ import { FcPrevious } from "react-icons/fc";
 import { FcNext } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { removesubadmin } from "../../customhook/subadmin";
 
 const SubAdminpage = () => {
   const dispatch = useDispatch();
@@ -24,7 +29,8 @@ const SubAdminpage = () => {
   const router = useRouter();
   // console.log("subadmin from  state", subadminstate);
   const [searchValue, setSearchValue] = useState("");
-
+  const [usergoingtochange, setusergoingtochange] = useState("");
+  const [usergoingtoactivity, setusergoingtoactivity] = useState("");
   const { data, isLoading } = useQuery({
     queryKey: ["subadmins", searchValue, subadminstate.page],
     queryFn: async () => {
@@ -41,7 +47,6 @@ const SubAdminpage = () => {
     keepPreviousData: true,
   });
 
-  console.log("subadmin detail", data);
   useEffect(() => {
     if (data) {
       dispatch(setSubAdmins(data));
@@ -49,14 +54,43 @@ const SubAdminpage = () => {
   }, [data, subadminstate.page, dispatch]);
   const changeactivitymutation = useMutation({
     mutationFn: async (id) => {
+      setusergoingtochange(id);
       const response = await updateactivity(id);
       console.log("chnage in mutaion", response);
       return response;
     },
     onSuccess: (response) => {
+      setusergoingtochange("");
       dispatch(toggleSubAdminStatus(response.id));
-      // queryClient.invalidateQueries(["subadmin"]);
+      queryClient.invalidateQueries(["subadmin"]);
       toast.success(response.message);
+    },
+  });
+
+  const deletesubadminmutation = useMutation({
+    mutationFn: async (id) => {
+      setusergoingtochange(id);
+      console.log("id for remove subadmin", id);
+      const response = await removesubadmin(id);
+      console.log("chnage in remove subadmin mutaion", response);
+      return response;
+    },
+    onSuccess: (response) => {
+      if (response.error) {
+        setusergoingtochange("");
+        toast.error(response.error || "error in remove subadmin delete");
+        return;
+      }
+      if (response.success) {
+        setusergoingtochange("");
+        toast.success(response.message || "subadmin delete successfully ");
+        dispatch(deleteSubAdmin(response.id));
+        queryClient.invalidateQueries(["subadmin"]);
+      }
+    },
+    onError: (error) => {
+      setusergoingtochange("");
+      toast.error(error.error || "error in delete subadmin");
     },
   });
 
@@ -166,6 +200,10 @@ const SubAdminpage = () => {
                   key={index}
                   admin={admin}
                   changeActivity={changeactivitymutation.mutate}
+                  deleteSubAdmin={deletesubadminmutation.mutate}
+                  deleteisprending={deletesubadminmutation.isPending}
+                  changeactivityispending={changeactivitymutation.isPending}
+                  usergoingtochange={usergoingtochange}
                 />
               ))
             ) : (
@@ -179,30 +217,6 @@ const SubAdminpage = () => {
               </tr>
             )}
           </tbody>
-          {/* <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan="7">Loading...</td>
-              </tr>
-            ) : data?.subadmins.length > 0 ? (
-              data.subadmins.map((admin) => (
-                <SubAdminRow
-                  key={admin.id}
-                  admin={admin}
-                  changeActivity={changeactivitymutation.mutate}
-                />
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="7"
-                  className="text-center py-4 text-gray-500 dark:text-gray-400"
-                >
-                  No sub-admin found
-                </td>
-              </tr>
-            )}
-          </tbody> */}
         </table>
         <div className="w-full p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 my-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <button
