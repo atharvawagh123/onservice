@@ -10,7 +10,7 @@ export async function addsubadmin(formData) {
   }).then(res => res.json());
 }
 
-export async function fetchsubadmin(search = '', page = 1, limit = 1) {
+export async function fetchsubadmin(search = '', page = 1, limit = 5) {
   return fetch(
     `${BASE_URL}/api/subadmin/createsubadmin?search=${search}&page=${page}&limit=${limit}`
   ).then(res => res.json());

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   subadmins: [],
   page: 1,
-  limit: 2,
+  limit: 5,
   total: 0,
   totalPages: 0,
 };
