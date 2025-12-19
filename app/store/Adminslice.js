@@ -1,21 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   id: null,
-  email: "",
-  username: "",
-  first_name: "",
-  last_name: "",
-  imageurl: "",
-  name: "",
+  email: '',
+  username: '',
+  first_name: '',
+  last_name: '',
+  imageurl: '',
+  name: '',
   age: null,
   last_login: null,
-  date_joined: "",
+  date_joined: '',
   islogin: false,
 };
 
 const AdminSlice = createSlice({
-  name: "Admin",
+  name: 'Admin',
   initialState,
   reducers: {
     setinfo(state, action) {

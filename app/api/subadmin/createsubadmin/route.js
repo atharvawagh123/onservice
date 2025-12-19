@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { serialize } from "@/lib/serialize";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { serialize } from '@/lib/serialize';
 
 export async function POST(req) {
   try {
@@ -12,8 +12,8 @@ export async function POST(req) {
     // Validation
     if (!email || !password || !username) {
       return NextResponse.json(
-        { error: "Required fields missing" },
-        { status: 400 },
+        { error: 'Required fields missing' },
+        { status: 400 }
       );
     }
 
@@ -24,8 +24,8 @@ export async function POST(req) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 },
+        { error: 'User already exists' },
+        { status: 409 }
       );
     }
 
@@ -34,12 +34,12 @@ export async function POST(req) {
 
     // ✅ FIX: convert age to number
     const parsedAge =
-      age === "" || age === undefined || age === null ? 18 : Number(age);
+      age === '' || age === undefined || age === null ? 18 : Number(age);
 
     if (Number.isNaN(parsedAge)) {
       return NextResponse.json(
-        { error: "Age must be a valid number" },
-        { status: 400 },
+        { error: 'Age must be a valid number' },
+        { status: 400 }
       );
     }
 
@@ -54,23 +54,23 @@ export async function POST(req) {
         is_active: true,
         is_staff: true,
         is_superuser: false,
-        role: "SUBADMIN",
+        role: 'SUBADMIN',
       },
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "Subadmin created successfully",
+        message: 'Subadmin created successfully',
         subadmin: serialize(subadmin),
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
-    console.error("CREATE SUBADMIN ERROR:", error);
+    console.error('CREATE SUBADMIN ERROR:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
+      { error: 'Internal server error' },
+      { status: 500 }
     );
   }
 }
@@ -80,21 +80,21 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
 
     // pagination (optional)
-    const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 5;
+    const page = Number(searchParams.get('page')) || 1;
+    const limit = Number(searchParams.get('limit')) || 5;
 
     // search (optional)
-    const search = searchParams.get("search") || "";
+    const search = searchParams.get('search') || '';
 
     const skip = (page - 1) * limit;
 
     // WHERE condition
     const where = {
-      role: "SUBADMIN",
+      role: 'SUBADMIN',
       ...(search && {
         OR: [
           // { email: { contains: search, mode: "insensitive" } },
-          { username: { contains: search, mode: "insensitive" } },
+          { username: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };
@@ -105,7 +105,7 @@ export async function GET(req) {
         where,
         skip,
         take: limit,
-        orderBy: { date_joined: "desc" },
+        orderBy: { date_joined: 'desc' },
         select: {
           id: true,
           email: true,
@@ -129,10 +129,10 @@ export async function GET(req) {
       subadmins: serialize(subadmins),
     });
   } catch (error) {
-    console.error("FETCH SUBADMINS ERROR:", error);
+    console.error('FETCH SUBADMINS ERROR:', error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch subadmins" },
-      { status: 500 },
+      { success: false, error: 'Failed to fetch subadmins' },
+      { status: 500 }
     );
   }
 }

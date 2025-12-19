@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { serialize } from "@/lib/serialize.js";
-import cloudinary from "@/lib/cloudinary.js";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { serialize } from '@/lib/serialize.js';
+import cloudinary from '@/lib/cloudinary.js';
 
 export async function PUT(req, { params }) {
   try {
@@ -15,16 +15,16 @@ export async function PUT(req, { params }) {
     });
 
     if (!existingUser) {
-      return Response.json({ error: "User not found" }, { status: 404 });
+      return Response.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Extract fields
-    const first_name = formData.get("first_name");
-    const last_name = formData.get("last_name");
-    const email = formData.get("email");
-    const age = Number(formData.get("age"));
-    const password = formData.get("password");
-    const image = formData.get("image"); // optional
+    const first_name = formData.get('first_name');
+    const last_name = formData.get('last_name');
+    const email = formData.get('email');
+    const age = Number(formData.get('age'));
+    const password = formData.get('password');
+    const image = formData.get('image'); // optional
 
     let imageurl = existingUser.imageurl;
     let imagepublicid = existingUser.imagepublicid;
@@ -41,7 +41,7 @@ export async function PUT(req, { params }) {
 
       const uploadResult = await new Promise((resolve, reject) => {
         cloudinary.uploader
-          .upload_stream({ folder: "subadmins" }, (err, result) => {
+          .upload_stream({ folder: 'subadmins' }, (err, result) => {
             if (err) reject(err);
             resolve(result);
           })
@@ -68,12 +68,12 @@ export async function PUT(req, { params }) {
 
     return Response.json({
       success: true,
-      message: "Subadmin updated successfully",
+      message: 'Subadmin updated successfully',
       updatedUser: serialize(updatedUser),
     });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Update failed" }, { status: 500 });
+    return Response.json({ error: 'Update failed' }, { status: 500 });
   }
 }
 
@@ -87,7 +87,7 @@ export async function DELETE(req, { params }) {
     });
 
     if (!user) {
-      return Response.json({ error: "User not found" }, { status: 404 });
+      return Response.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 🔹 Remove image from Cloudinary
@@ -102,11 +102,11 @@ export async function DELETE(req, { params }) {
 
     return Response.json({
       success: true,
-      message: "Subadmin deleted successfully",
+      message: 'Subadmin deleted successfully',
       id: id.toString(),
     });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Delete failed" }, { status: 500 });
+    return Response.json({ error: 'Delete failed' }, { status: 500 });
   }
 }

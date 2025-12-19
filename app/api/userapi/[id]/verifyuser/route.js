@@ -1,23 +1,23 @@
-import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
+import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
 
 export async function PATCH(req, { params }) {
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return new Response(
-        JSON.stringify({ error: "Authorization header missing" }),
-        { status: 401 },
+        JSON.stringify({ error: 'Authorization header missing' }),
+        { status: 401 }
       );
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
     let payload;
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      console.error("JWT verification failed:", err);
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
+      console.error('JWT verification failed:', err);
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
         status: 401,
       });
     }
@@ -28,14 +28,14 @@ export async function PATCH(req, { params }) {
     });
 
     if (!authUser) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
+      return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404,
       });
     }
 
     // Only staff or superuser can toggle verification
     if (!authUser.is_staff && !authUser.is_superuser) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 403,
       });
     }
@@ -47,7 +47,7 @@ export async function PATCH(req, { params }) {
     });
 
     if (!userToVerify) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
+      return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404,
       });
     }
@@ -62,16 +62,16 @@ export async function PATCH(req, { params }) {
       JSON.stringify({
         success: true,
         user: updatedUser,
-        message: `User has been ${updatedUser.is_verified ? "verified" : "unverified"}`,
+        message: `User has been ${updatedUser.is_verified ? 'verified' : 'unverified'}`,
       }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { 'Content-Type': 'application/json' },
+      }
     );
   } catch (err) {
     console.error(err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     });
   }

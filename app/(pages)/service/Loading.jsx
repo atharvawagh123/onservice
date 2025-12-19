@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export default function Loading({ count = 6 }) {
   return (
@@ -6,12 +6,12 @@ export default function Loading({ count = 6 }) {
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="bg-white shadow-md rounded-lg p-6 animate-pulse flex flex-col"
+          className="flex animate-pulse flex-col rounded-lg bg-white p-6 shadow-md"
         >
-          <div className="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
-          <div className="h-4 bg-gray-300 rounded mb-2"></div>
-          <div className="h-4 bg-gray-300 rounded mb-2"></div>
-          <div className="h-5 bg-gray-300 rounded w-1/2 mt-auto"></div>
+          <div className="mb-3 h-6 w-3/4 rounded bg-gray-300"></div>
+          <div className="mb-2 h-4 rounded bg-gray-300"></div>
+          <div className="mb-2 h-4 rounded bg-gray-300"></div>
+          <div className="mt-auto h-5 w-1/2 rounded bg-gray-300"></div>
         </div>
       ))}
     </>

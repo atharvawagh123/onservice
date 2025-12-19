@@ -1,9 +1,9 @@
-import prisma from "@/lib/prisma";
+import prisma from '@/lib/prisma';
 // import { verifyuser } from "@/lib/auth";
 // import cloudinary from "@/lib/cloudinary";
 // import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
-import { serialize } from "@/lib/serialize";
+import { NextResponse } from 'next/server';
+import { serialize } from '@/lib/serialize';
 
 function serializeUser(user) {
   return {
@@ -14,17 +14,17 @@ function serializeUser(user) {
 export async function GET(req, { params }) {
   try {
     console.log(
-      "hitt........................................................................",
+      'hitt........................................................................'
     );
     const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
         {
-          message: "error user not found check user id or update migration",
+          message: 'error user not found check user id or update migration',
           success: false,
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
     const user = await prisma.userapi_userprofile.findUnique({
@@ -34,29 +34,29 @@ export async function GET(req, { params }) {
     if (!user) {
       return NextResponse.json(
         {
-          message: "error user not found check user id or update migration",
+          message: 'error user not found check user id or update migration',
           success: false,
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
     const userprofile = serializeUser(user);
-    console.log("user getuserbydetailbyid", userprofile);
+    console.log('user getuserbydetailbyid', userprofile);
 
     return NextResponse.json(
       {
-        message: "user profile fetched properly",
+        message: 'user profile fetched properly',
         success: true,
         user: userprofile,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error from frontend check client side" },
-      { status: 500 },
+      { error: 'Error from frontend check client side' },
+      { status: 500 }
     );
   }
 }

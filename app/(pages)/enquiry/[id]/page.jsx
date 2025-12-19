@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useState, use } from "react";
-import { getserviceenquiry, deletedEnquiry } from "../../../customhook/enquiry";
-import EnquiryCard from "../../../component/EnquiryCard";
-import { IoArrowBackCircleSharp } from "react-icons/io5";
-import Link from "next/link";
-import { Suspense } from "react";
-import Loading from "./Loading";
-import { toast } from "react-toastify";
+'use client';
+import React, { useEffect, useState, use } from 'react';
+import { getserviceenquiry, deletedEnquiry } from '../../../customhook/enquiry';
+import EnquiryCard from '../../../component/EnquiryCard';
+import { IoArrowBackCircleSharp } from 'react-icons/io5';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import Loading from './Loading';
+import { toast } from 'react-toastify';
 
 const ServiceEnquiry = ({ params }) => {
   const unwrappedParams = use(params);
@@ -28,7 +28,7 @@ const ServiceEnquiry = ({ params }) => {
       setLoading(false);
     }
   };
-  const removeenquiry = async (id) => {
+  const removeenquiry = async id => {
     try {
       const response = await deletedEnquiry(id);
       if (response.success) {
@@ -41,26 +41,26 @@ const ServiceEnquiry = ({ params }) => {
   };
   if (data.length === 0) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+      <div className="flex min-h-screen flex-col bg-white px-4 py-6 text-gray-900 sm:px-6 lg:px-8 dark:bg-gray-900 dark:text-gray-100">
         {/* Header with Back Link */}
-        <div className="flex items-center mb-10">
+        <div className="mb-10 flex items-center">
           <Link
             href="/profile"
-            className="text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors text-3xl sm:text-4xl"
+            className="text-3xl text-gray-700 transition-colors hover:text-gray-900 sm:text-4xl dark:text-gray-200 dark:hover:text-white"
           >
             <IoArrowBackCircleSharp />
           </Link>
-          <h1 className="flex-1 text-2xl sm:text-3xl md:text-4xl font-serif italic text-center">
+          <h1 className="flex-1 text-center font-serif text-2xl italic sm:text-3xl md:text-4xl">
             Service ID {id}
           </h1>
         </div>
 
         {/* No Service Card */}
-        <div className="flex flex-col items-center justify-center flex-1 text-center px-4">
+        <div className="flex flex-1 flex-col items-center justify-center px-4 text-center">
           {/* Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-24 w-24 sm:h-28 sm:w-28 text-gray-400 dark:text-gray-500 mb-6"
+            className="mb-6 h-24 w-24 text-gray-400 sm:h-28 sm:w-28 dark:text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -74,12 +74,12 @@ const ServiceEnquiry = ({ params }) => {
           </svg>
 
           {/* Title */}
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700 dark:text-gray-200 mb-3">
+          <h2 className="mb-3 text-2xl font-semibold text-gray-700 sm:text-3xl md:text-4xl dark:text-gray-200">
             No Enquiry Found
           </h2>
 
           {/* Subtitle */}
-          <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mb-6">
+          <p className="mb-6 text-sm text-gray-500 sm:text-base dark:text-gray-400">
             It seems there are no enquiry available at the moment.
           </p>
         </div>
@@ -88,16 +88,16 @@ const ServiceEnquiry = ({ params }) => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 sm:px-6 lg:px-8 py-6">
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center mb-6">
+    <div className="min-h-screen bg-white px-4 py-6 text-gray-900 sm:px-6 lg:px-8 dark:bg-gray-900 dark:text-gray-100">
+      <div className="min-h-screen bg-white px-4 py-6 text-gray-900 sm:px-6 lg:px-8 dark:bg-gray-900 dark:text-gray-100">
+        <div className="mb-6 flex items-center">
           <Link
             href="/profile"
-            className="text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors text-3xl sm:text-4xl"
+            className="text-3xl text-gray-700 transition-colors hover:text-gray-900 sm:text-4xl dark:text-gray-200 dark:hover:text-white"
           >
             <IoArrowBackCircleSharp />
           </Link>
-          <h1 className="flex-1 text-2xl sm:text-3xl md:text-4xl font-serif italic text-center">
+          <h1 className="flex-1 text-center font-serif text-2xl italic sm:text-3xl md:text-4xl">
             Service ID {id}
           </h1>
         </div>
@@ -105,8 +105,8 @@ const ServiceEnquiry = ({ params }) => {
         {data.length !== 0 && loading ? (
           <Loading />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.map((enquiry) => (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {data.map(enquiry => (
               <EnquiryCard
                 key={enquiry.id}
                 enquiry={enquiry}

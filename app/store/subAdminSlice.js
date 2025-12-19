@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   subadmins: [],
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const subAdminSlice = createSlice({
-  name: "subadmin",
+  name: 'subadmin',
   initialState,
   reducers: {
     setSubAdmins: (state, action) => {
@@ -20,7 +20,7 @@ const subAdminSlice = createSlice({
 
     // ✅ ADD SUBADMIN
     addSubAdmin: (state, action) => {
-      console.log("adding subadmin in slice", action.payload);
+      console.log('adding subadmin in slice', action.payload);
       state.subadmins.unshift(action.payload);
       state.total += 1;
       state.totalPages = Math.ceil(state.total / state.limit);
@@ -30,7 +30,7 @@ const subAdminSlice = createSlice({
     updateSubAdmin: (state, action) => {
       const updated = action.payload;
 
-      const index = state.subadmins.findIndex((item) => item.id === updated.id);
+      const index = state.subadmins.findIndex(item => item.id === updated.id);
 
       if (index !== -1) {
         state.subadmins[index] = {
@@ -44,7 +44,7 @@ const subAdminSlice = createSlice({
     deleteSubAdmin: (state, action) => {
       const id = action.payload;
 
-      state.subadmins = state.subadmins.filter((item) => item.id !== id);
+      state.subadmins = state.subadmins.filter(item => item.id !== id);
 
       state.total -= 1;
       state.totalPages = Math.ceil(state.total / state.limit);
@@ -54,7 +54,7 @@ const subAdminSlice = createSlice({
     toggleSubAdminStatus: (state, action) => {
       const id = action.payload;
 
-      const subadmin = state.subadmins.find((item) => item.id === id);
+      const subadmin = state.subadmins.find(item => item.id === id);
 
       if (subadmin) {
         subadmin.is_active = !subadmin.is_active;

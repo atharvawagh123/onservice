@@ -1,13 +1,13 @@
-import prisma from "@/lib/prisma";
-import { verifyuser } from "@/lib/auth";
-import jwt from "jsonwebtoken";
+import prisma from '@/lib/prisma';
+import { verifyuser } from '@/lib/auth';
+import jwt from 'jsonwebtoken';
 
 export async function GET(req) {
   try {
     // Pass the request to verifyuser
     const token = await verifyuser(req);
     if (!token) {
-      return new Response(JSON.stringify({ error: "Token not available" }), {
+      return new Response(JSON.stringify({ error: 'Token not available' }), {
         status: 401,
       });
     }
@@ -16,7 +16,7 @@ export async function GET(req) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
         status: 401,
       });
     }
@@ -38,7 +38,7 @@ export async function GET(req) {
     });
 
     if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
+      return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404,
       });
     }
@@ -49,16 +49,16 @@ export async function GET(req) {
     return new Response(JSON.stringify({ ...serializedUser, success: true }), {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*", // <--- frontend origin
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // <--- frontend origin
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     });
   } catch (err) {
-    console.error("Get current user error:", err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+    console.error('Get current user error:', err);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     });
   }

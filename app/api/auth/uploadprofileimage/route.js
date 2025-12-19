@@ -1,9 +1,9 @@
-import prisma from "@/lib/prisma";
-import { verifyuser } from "@/lib/auth";
-import cloudinary from "@/lib/cloudinary";
-import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
-import { Buffer } from "buffer"; // ✅ important
+import prisma from '@/lib/prisma';
+import { verifyuser } from '@/lib/auth';
+import cloudinary from '@/lib/cloudinary';
+import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server';
+import { Buffer } from 'buffer'; // ✅ important
 
 export async function POST(req) {
   try {
@@ -12,8 +12,8 @@ export async function POST(req) {
 
     if (!token) {
       return NextResponse.json(
-        { error: "Token not available" },
-        { status: 401 },
+        { error: 'Token not available' },
+        { status: 401 }
       );
     }
 
@@ -22,23 +22,23 @@ export async function POST(req) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      console.error("Invalid token:", err);
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      console.error('Invalid token:', err);
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     // 🔍 3. Parse uploaded file
     const form = await req.formData();
-    const file = form.get("file");
+    const file = form.get('file');
 
     if (
       !file ||
-      typeof file === "string" ||
+      typeof file === 'string' ||
       !file.size ||
-      !file.type.startsWith("image/")
+      !file.type.startsWith('image/')
     ) {
       return NextResponse.json(
-        { error: "Invalid or no file uploaded" },
-        { status: 400 },
+        { error: 'Invalid or no file uploaded' },
+        { status: 400 }
       );
     }
 
@@ -48,36 +48,36 @@ export async function POST(req) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    console.log("Updating user image. Existing ID:", user.imagepublicid);
+    console.log('Updating user image. Existing ID:', user.imagepublicid);
 
     // 🔍 5. Delete old image if available
     if (user.imagepublicid) {
       try {
         await cloudinary.uploader.destroy(user.imagepublicid);
       } catch (err) {
-        console.error("Old image delete failed:", err);
+        console.error('Old image delete failed:', err);
       }
     }
 
     // 🔍 6. Convert file buffer to Base64
     const arrayBuffer = await file.arrayBuffer();
-    const base64 = Buffer.from(arrayBuffer).toString("base64");
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
 
     // 🔍 7. Upload to Cloudinary
     let uploadedImage;
     try {
       uploadedImage = await cloudinary.uploader.upload(
         `data:${file.type};base64,${base64}`,
-        { folder: "profile_images" },
+        { folder: 'profile_images' }
       );
     } catch (err) {
-      console.error("Cloudinary upload error:", err);
+      console.error('Cloudinary upload error:', err);
       return NextResponse.json(
-        { error: "Image upload failed" },
-        { status: 500 },
+        { error: 'Image upload failed' },
+        { status: 500 }
       );
     }
 
@@ -92,16 +92,16 @@ export async function POST(req) {
 
     return NextResponse.json(
       {
-        message: "Profile image updated",
+        message: 'Profile image updated',
         imageUrl: updatedUser.imageurl,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
-    console.error("Upload profile image error:", err);
+    console.error('Upload profile image error:', err);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
+      { error: 'Internal Server Error' },
+      { status: 500 }
     );
   }
 }
@@ -111,8 +111,8 @@ export async function DELETE(req) {
     const token = await verifyuser(req);
     if (!token) {
       return NextResponse.json(
-        { error: "Token not available" },
-        { status: 401 },
+        { error: 'Token not available' },
+        { status: 401 }
       );
     }
 
@@ -120,7 +120,7 @@ export async function DELETE(req) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     // Fetch user
@@ -129,7 +129,7 @@ export async function DELETE(req) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Delete image from Cloudinary if exists
@@ -137,10 +137,10 @@ export async function DELETE(req) {
       try {
         await cloudinary.uploader.destroy(user.imagePublicId);
       } catch (err) {
-        console.error("Cloudinary delete error:", err);
+        console.error('Cloudinary delete error:', err);
         return NextResponse.json(
-          { error: "Failed to delete image" },
-          { status: 500 },
+          { error: 'Failed to delete image' },
+          { status: 500 }
         );
       }
     }
@@ -155,14 +155,14 @@ export async function DELETE(req) {
     });
 
     return NextResponse.json(
-      { message: "Profile image deleted", imageUrl: updatedUser.imageUrl },
-      { status: 200 },
+      { message: 'Profile image deleted', imageUrl: updatedUser.imageUrl },
+      { status: 200 }
     );
   } catch (err) {
-    console.error("Delete profile image error:", err);
+    console.error('Delete profile image error:', err);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
+      { error: 'Internal Server Error' },
+      { status: 500 }
     );
   }
 }

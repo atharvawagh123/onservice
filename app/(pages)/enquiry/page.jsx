@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { getenquiry, deletedEnquiry } from "../../customhook/enquiry";
-import { useEffect, useState, useCallback } from "react";
-import EnquiryCard from "../../component/EnquiryCard";
-import { toast } from "react-toastify";
+import { getenquiry, deletedEnquiry } from '../../customhook/enquiry';
+import { useEffect, useState, useCallback } from 'react';
+import EnquiryCard from '../../component/EnquiryCard';
+import { toast } from 'react-toastify';
 // import Link from "next/link";
 // import { IoArrowBackOutline } from "react-icons/io5";
 
@@ -28,7 +28,7 @@ const Enquiry = () => {
     loadData();
   }, [fetchEnquiry]);
 
-  const removeEnquiry = async (id) => {
+  const removeEnquiry = async id => {
     try {
       const response = await deletedEnquiry(id);
       if (response.success) {
@@ -36,13 +36,13 @@ const Enquiry = () => {
         fetchEnquiry();
       }
     } catch (error) {
-      toast.error(error?.error || "Something went wrong");
+      toast.error(error?.error || 'Something went wrong');
     }
   };
 
   if (enquiries.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
         {/* empty state UI */}
       </div>
     );
@@ -50,10 +50,10 @@ const Enquiry = () => {
 
   return (
     <div className="min-h-screen p-4 sm:p-6">
-      <h1 className="text-center text-3xl font-serif italic p-5">
+      <h1 className="p-5 text-center font-serif text-3xl italic">
         All Business Enquiry
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {enquiries.map((item, index) => (
           <EnquiryCard key={index} enquiry={item} onDelete={removeEnquiry} />
         ))}

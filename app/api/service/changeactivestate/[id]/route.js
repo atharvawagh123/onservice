@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { serialize } from "@/lib/serialize";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { serialize } from '@/lib/serialize';
 export async function PUT(_, { params }) {
   try {
     const { id } = await params;
@@ -13,11 +13,11 @@ export async function PUT(_, { params }) {
       return NextResponse.json(
         {
           success: false,
-          message: "Service is no longer in the database",
+          message: 'Service is no longer in the database',
         },
         {
           status: 200,
-        },
+        }
       );
     }
 
@@ -31,22 +31,22 @@ export async function PUT(_, { params }) {
     return NextResponse.json(
       {
         success: true,
-        message: "change active of service successfully",
+        message: 'change active of service successfully',
         updateservice: serialize(updateservice),
       },
       {
         status: 200,
-      },
+      }
     );
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
-        error: "error occured !!!!!!!",
+        error: 'error occured !!!!!!!',
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

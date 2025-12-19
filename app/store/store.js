@@ -1,10 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./usersclice"; // Import your slice reducer
-import Adminreducer from "./Adminslice";
-import CategoriesSlice from "./Categoryslice";
-import allUserReducer from "./allUserslice";
-import servicesReducer from "./servicesSlice";
-import subadminSlice from "./subAdminSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './usersclice'; // Import your slice reducer
+import Adminreducer from './Adminslice';
+import CategoriesSlice from './Categoryslice';
+import allUserReducer from './allUserslice';
+import servicesReducer from './servicesSlice';
+import subadminSlice from './subAdminSlice';
 
 export const store = configureStore({
   reducer: {

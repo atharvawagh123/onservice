@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+import Link from 'next/link';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="  dark:bg-gray-900 text-gray-800 dark:text-gray-200 py-8 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between gap-8">
+    <footer className="py-8 text-gray-800 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 px-4 md:flex-row">
         {/* Logo / Brand */}
         <div className="flex flex-col gap-2">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             MyBrand
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             &copy; {new Date().getFullYear()} MyBrand. All rights reserved.
           </p>
         </div>
@@ -24,25 +24,25 @@ const Footer = () => {
           </h3>
           <Link
             href="/"
-            className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+            className="transition hover:text-blue-600 dark:hover:text-blue-400"
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+            className="transition hover:text-blue-600 dark:hover:text-blue-400"
           >
             About
           </Link>
           <Link
             href="/services"
-            className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+            className="transition hover:text-blue-600 dark:hover:text-blue-400"
           >
             Services
           </Link>
           <Link
             href="/contact"
-            className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+            className="transition hover:text-blue-600 dark:hover:text-blue-400"
           >
             Contact
           </Link>
@@ -56,19 +56,19 @@ const Footer = () => {
           <div className="flex gap-3 text-gray-600 dark:text-gray-400">
             <a
               href="#"
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+              className="transition hover:text-blue-600 dark:hover:text-blue-400"
             >
               <FaFacebookF size={18} />
             </a>
             <a
               href="#"
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+              className="transition hover:text-blue-600 dark:hover:text-blue-400"
             >
               <FaTwitter size={18} />
             </a>
             <a
               href="#"
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+              className="transition hover:text-blue-600 dark:hover:text-blue-400"
             >
               <FaInstagram size={18} />
             </a>

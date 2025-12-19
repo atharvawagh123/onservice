@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 // import jwt from "jsonwebtoken";
 
 export function middleware(request) {
-  const token = request.cookies.get("token")?.value;
+  const token = request.cookies.get('token')?.value;
 
-  console.log("Token in middleware:", token); // Debug
+  console.log('Token in middleware:', token); // Debug
 
   if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();
@@ -15,9 +15,9 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
-    "/about/:path*",
-    "/service/:path*",
-    "/profile/:path*",
-    "/admin/:path*",
+    '/about/:path*',
+    '/service/:path*',
+    '/profile/:path*',
+    '/admin/:path*',
   ],
 };

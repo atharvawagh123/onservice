@@ -1,17 +1,17 @@
-import prisma from "@/lib/prisma";
-import { verifyuser } from "@/lib/auth";
-import cloudinary from "@/lib/cloudinary";
-import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
-import { serialize } from "@/lib/serialize";
+import prisma from '@/lib/prisma';
+import { verifyuser } from '@/lib/auth';
+import cloudinary from '@/lib/cloudinary';
+import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server';
+import { serialize } from '@/lib/serialize';
 
 export async function PUT(req) {
   try {
     const token = await verifyuser();
     if (!token) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -19,12 +19,12 @@ export async function PUT(req) {
 
     const formdata = await req.formData();
 
-    const email = formdata.get("email");
-    const age = formdata.get("age");
-    const first_name = formdata.get("first_name");
-    const last_name = formdata.get("last_name");
-    const username = formdata.get("username");
-    const file = formdata.get("file");
+    const email = formdata.get('email');
+    const age = formdata.get('age');
+    const first_name = formdata.get('first_name');
+    const last_name = formdata.get('last_name');
+    const username = formdata.get('username');
+    const file = formdata.get('file');
 
     let imageurl;
     let imagepublicid;
@@ -35,11 +35,11 @@ export async function PUT(req) {
     });
 
     // 🔹 Upload new image only if file exists
-    if (file && typeof file !== "string" && file.size > 0) {
-      if (!file.type.startsWith("image/")) {
+    if (file && typeof file !== 'string' && file.size > 0) {
+      if (!file.type.startsWith('image/')) {
         return NextResponse.json(
-          { error: "Only image files are allowed" },
-          { status: 400 },
+          { error: 'Only image files are allowed' },
+          { status: 400 }
         );
       }
 
@@ -48,26 +48,26 @@ export async function PUT(req) {
         try {
           await cloudinary.uploader.destroy(currentUser.imagepublicid);
         } catch (err) {
-          console.error("Cloudinary delete error:", err);
+          console.error('Cloudinary delete error:', err);
         }
       }
 
       const arrayBuffer = await file.arrayBuffer();
-      const base64 = Buffer.from(arrayBuffer).toString("base64");
+      const base64 = Buffer.from(arrayBuffer).toString('base64');
 
       try {
         const uploadedImage = await cloudinary.uploader.upload(
           `data:${file.type};base64,${base64}`,
-          { folder: "profile_images" },
+          { folder: 'profile_images' }
         );
 
         imageurl = uploadedImage.secure_url;
         imagepublicid = uploadedImage.public_id;
       } catch (err) {
-        console.error("Cloudinary upload error:", err);
+        console.error('Cloudinary upload error:', err);
         return NextResponse.json(
-          { error: "Image upload failed" },
-          { status: 500 },
+          { error: 'Image upload failed' },
+          { status: 500 }
         );
       }
     }
@@ -87,14 +87,14 @@ export async function PUT(req) {
 
     return NextResponse.json({
       success: true,
-      message: "Admin updated successfully",
+      message: 'Admin updated successfully',
       user: serialize(updatedUser),
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { success: false, error: "Failed to update user" },
-      { status: 500 },
+      { success: false, error: 'Failed to update user' },
+      { status: 500 }
     );
   }
 }

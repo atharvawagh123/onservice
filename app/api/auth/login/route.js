@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
   try {
@@ -8,8 +8,8 @@ export async function POST(req) {
 
     if (!email || !password) {
       return new Response(
-        JSON.stringify({ error: "Email and password required" }),
-        { status: 400 },
+        JSON.stringify({ error: 'Email and password required' }),
+        { status: 400 }
       );
     }
 
@@ -20,14 +20,14 @@ export async function POST(req) {
     // console.log("check user :- ",user)
     if (!user || !user.password) {
       // User not found OR password not set
-      return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+      return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
       });
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+      return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
       });
     }
@@ -35,7 +35,7 @@ export async function POST(req) {
     const token = jwt.sign(
       { userId: user.id.toString(), email: user.email, name: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: '1h' }
     );
 
     const cookie = `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=None; Secure=true`;
@@ -43,7 +43,7 @@ export async function POST(req) {
     // ✅ Login successful
     return new Response(
       JSON.stringify({
-        message: "Login successful",
+        message: 'Login successful',
         userId: user.id.toString(),
         token,
         success: true,
@@ -54,21 +54,21 @@ export async function POST(req) {
       {
         status: 200,
         headers: {
-          "Set-Cookie": cookie,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*", // <--- frontend origin
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          'Set-Cookie': cookie,
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // <--- frontend origin
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
-      },
+      }
     );
   } catch (err) {
-    console.error("Login error:", err);
+    console.error('Login error:', err);
     return new Response(
-      JSON.stringify({ error: "Internal Server Error", success: false }),
+      JSON.stringify({ error: 'Internal Server Error', success: false }),
       {
         status: 500,
-      },
+      }
     );
   }
 }

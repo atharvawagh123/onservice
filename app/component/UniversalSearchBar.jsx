@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+import { useState, useEffect } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { MdOutlineCancel } from 'react-icons/md';
 
 export default function UniversalSearchBar({
   value,
   onSearch,
   debounceTime = 200,
   fetchDefault, // function to fetch default data when input cleared
-  placeholder = "Search..",
+  placeholder = 'Search..',
 }) {
   const [timer, setTimer] = useState(null);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value;
 
     // Clear previous debounce
@@ -38,17 +38,11 @@ export default function UniversalSearchBar({
   }, [timer]);
 
   return (
-    <div className="max-w-xl mx-auto">
-      <div
-        className="flex items-center gap-3 px-5 py-3 rounded-full 
-                  border border-gray-300 dark:border-gray-700
-                  bg-white dark:bg-gray-900
-                  focus-within:ring-1 focus-within:ring-gray-400
-                  transition"
-      >
+    <div className="mx-auto max-w-xl">
+      <div className="flex items-center gap-3 rounded-full border border-gray-300 bg-white px-5 py-3 transition focus-within:ring-1 focus-within:ring-gray-400 dark:border-gray-700 dark:bg-gray-900">
         {/* Search Icon */}
         <FaSearch
-          className="text-gray-500 dark:text-gray-400 cursor-pointer"
+          className="cursor-pointer text-gray-500 dark:text-gray-400"
           onClick={() => onSearch(value)}
         />
 
@@ -57,18 +51,15 @@ export default function UniversalSearchBar({
           type="text"
           value={value}
           onChange={handleChange}
-          onKeyDown={(e) => e.key === "Enter" && onSearch(value)}
+          onKeyDown={e => e.key === 'Enter' && onSearch(value)}
           placeholder={placeholder}
-          className="w-full bg-transparent focus:outline-none
-                 text-gray-900 dark:text-gray-100
-                 placeholder-gray-400 dark:placeholder-gray-500
-                 font-serif italic"
+          className="w-full bg-transparent font-serif text-gray-900 italic placeholder-gray-400 focus:outline-none dark:text-gray-100 dark:placeholder-gray-500"
         />
 
         {/* Clear */}
         {value.length > 0 && (
           <MdOutlineCancel
-            className="text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600"
+            className="cursor-pointer text-gray-400 hover:text-gray-600 dark:text-gray-500"
             onClick={() => fetchDefault && fetchDefault()}
           />
         )}

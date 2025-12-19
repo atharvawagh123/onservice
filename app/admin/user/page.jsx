@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { fetchusers, updateactivity } from "../../customhook/user";
-import UserTableCell from "../../component/usertablecell";
-import { toast } from "react-toastify";
+import { useEffect } from 'react';
+import { fetchusers, updateactivity } from '../../customhook/user';
+import UserTableCell from '../../component/usertablecell';
+import { toast } from 'react-toastify';
 import {
   setUsers,
   setchangeactivity,
   // setUserLimit,
   setpage,
   // setloading,
-} from "../../store/allUserslice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { useQuery, useMutation } from "@tanstack/react-query";
+} from '../../store/allUserslice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useQuery, useMutation } from '@tanstack/react-query';
 const UserPage = () => {
   const dispatch = useDispatch();
-  const allusers = useSelector((state) => state.allUser.users || []);
-  const page = useSelector((state) => state.allUser.page);
-  const totalPages = useSelector((state) => state.allUser.totalPages);
-  const totalUsers = useSelector((state) => state.allUser.totalUsers);
-  const limit = useSelector((state) => state.allUser.limit);
-  const loading = useSelector((state) => state.allUser.loading);
+  const allusers = useSelector(state => state.allUser.users || []);
+  const page = useSelector(state => state.allUser.page);
+  const totalPages = useSelector(state => state.allUser.totalPages);
+  const totalUsers = useSelector(state => state.allUser.totalUsers);
+  const limit = useSelector(state => state.allUser.limit);
+  const loading = useSelector(state => state.allUser.loading);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["users", page, limit],
+    queryKey: ['users', page, limit],
     queryFn: () => fetchusers(page, limit),
     staleTime: 5 * 60 * 1000, // 5 minutes: data stays fresh for 5 min
     cacheTime: 30 * 60 * 1000, // 30 minutes: unused data stays in cache before garbage collection
     keepPreviousData: true, // keeps previous page data while fetching next page
   });
 
-  console.log("user admin page ", data);
+  console.log('user admin page ', data);
   useEffect(() => {
     if (data) {
       dispatch(setUsers(data));
@@ -39,13 +39,13 @@ const UserPage = () => {
   }, [page, data, limit]);
 
   const changeactivitymutation = useMutation({
-    mutationFn: async (id) => {
+    mutationFn: async id => {
       const response = await updateactivity(id);
-      console.log("chnage in mutaion", response);
+      console.log('chnage in mutaion', response);
       return response;
     },
-    onSuccess: (response) => {
-      console.log("chnage in onsuccess", response);
+    onSuccess: response => {
+      console.log('chnage in onsuccess', response);
       dispatch(setchangeactivity(response.id));
       toast.success(response.message);
     },
@@ -62,23 +62,20 @@ const UserPage = () => {
   return (
     <>
       {/* Header Section */}
-      <div
-        className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between 
-                  bg-white dark:bg-gray-900 p-6 rounded-xl shadow gap-5"
-      >
+      <div className="mb-10 flex flex-col items-start justify-between gap-5 rounded-xl bg-white p-6 shadow md:flex-row md:items-center dark:bg-gray-900">
         {/* Title */}
         <div>
-          <h1 className="font-serif italic text-3xl md:text-4xl text-gray-900 dark:text-white">
+          <h1 className="font-serif text-3xl text-gray-900 italic md:text-4xl dark:text-white">
             All Users in OnService
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">
+          <p className="mt-1 text-gray-600 dark:text-gray-300">
             Manage and monitor all registered users
           </p>
         </div>
 
         {/* Total Users Box */}
-        <div className="bg-gray-100 dark:bg-gray-800 px-6 py-4 rounded-xl shadow-inner">
-          <p className="text-gray-700 dark:text-gray-300 font-medium text-lg">
+        <div className="rounded-xl bg-gray-100 px-6 py-4 shadow-inner dark:bg-gray-800">
+          <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
             Total Users
           </p>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -88,26 +85,26 @@ const UserPage = () => {
       </div>
 
       {/* Table Section */}
-      <div className="overflow-x-auto mb-10 border dark:border-gray-700 rounded-xl shadow">
-        <table className="min-w-full bg-white dark:bg-gray-900 rounded-xl">
-          <thead className="bg-gray-100 dark:bg-gray-800 border-b dark:border-gray-700">
+      <div className="mb-10 overflow-x-auto rounded-xl border shadow dark:border-gray-700">
+        <table className="min-w-full rounded-xl bg-white dark:bg-gray-900">
+          <thead className="border-b bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
             <tr>
-              <th className="px-6 py-3 text-black dark:text-white text-left">
+              <th className="px-6 py-3 text-left text-black dark:text-white">
                 #
               </th>
-              <th className="px-6 py-3 text-black dark:text-white text-left">
+              <th className="px-6 py-3 text-left text-black dark:text-white">
                 Profile
               </th>
-              <th className="px-6 py-3 text-black dark:text-white text-left">
+              <th className="px-6 py-3 text-left text-black dark:text-white">
                 Name
               </th>
-              <th className="px-6 py-3 text-black dark:text-white text-left">
+              <th className="px-6 py-3 text-left text-black dark:text-white">
                 Email
               </th>
-              <th className="px-6 py-3 text-black dark:text-white text-left">
+              <th className="px-6 py-3 text-left text-black dark:text-white">
                 User ID
               </th>
-              <th className="px-6 py-3 text-black dark:text-white text-center">
+              <th className="px-6 py-3 text-center text-black dark:text-white">
                 Action
               </th>
             </tr>
@@ -117,11 +114,8 @@ const UserPage = () => {
             {isLoading && !data ? (
               <tr>
                 <td colSpan="6">
-                  <div className="w-full flex justify-center p-10">
-                    <div
-                      className="animate-spin inline-block size-6 border-4 border-current border-t-transparent 
-                             text-sky-600 rounded-full"
-                    ></div>
+                  <div className="flex w-full justify-center p-10">
+                    <div className="inline-block size-6 animate-spin rounded-full border-4 border-current border-t-transparent text-sky-600"></div>
                   </div>
                 </td>
               </tr>
@@ -138,7 +132,7 @@ const UserPage = () => {
               <tr>
                 <td
                   colSpan="6"
-                  className="text-center py-4 text-gray-500 dark:text-gray-300"
+                  className="py-4 text-center text-gray-500 dark:text-gray-300"
                 >
                   No users found
                 </td>
@@ -149,14 +143,12 @@ const UserPage = () => {
       </div>
 
       {/* Pagination */}
-      <div className="w-full flex justify-center gap-6 py-5">
+      <div className="flex w-full justify-center gap-6 py-5">
         <button
           type="button"
           disabled={page === 1}
           onClick={moveprevious}
-          className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-black 
-                dark:text-white disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-700 
-                transition"
+          className="rounded-lg bg-gray-200 px-4 py-2 text-black transition hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
         >
           Previous
         </button>
@@ -169,9 +161,7 @@ const UserPage = () => {
           type="button"
           disabled={page === totalPages}
           onClick={movenext}
-          className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-black 
-                dark:text-white disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-700 
-                transition"
+          className="rounded-lg bg-gray-200 px-4 py-2 text-black transition hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
         >
           Next
         </button>

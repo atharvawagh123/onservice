@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+import { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { MdOutlineCancel } from 'react-icons/md';
 
 export default function SearchBar({
   value,
@@ -13,7 +13,7 @@ export default function SearchBar({
 }) {
   const [timer, setTimer] = useState(null);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value;
 
     onChange(inputValue); // lift value to parent
@@ -35,10 +35,10 @@ export default function SearchBar({
   };
 
   return (
-    <div className="max-w-xl mx-auto">
-      <div className="relative flex items-center rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 transition-all duration-200 hover:shadow-md focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-sky-500">
+    <div className="mx-auto max-w-xl">
+      <div className="relative flex items-center rounded-full border border-gray-300 bg-white transition-all duration-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-500 hover:shadow-md dark:border-gray-600 dark:bg-gray-800">
         {/* Search Icon */}
-        <span className="pl-4 text-gray-500 dark:text-gray-400 cursor-pointer">
+        <span className="cursor-pointer pl-4 text-gray-500 dark:text-gray-400">
           <FaSearch className="text-2xl" onClick={() => onSearch(value)} />
         </span>
 
@@ -47,22 +47,22 @@ export default function SearchBar({
           type="text"
           value={value}
           onChange={handleChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
               onSearch(value);
             }
           }}
           placeholder="Search services..."
-          className="w-full bg-transparent focus:outline-none px-3 py-3 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 rounded-full"
+          className="w-full rounded-full bg-transparent px-3 py-3 text-gray-700 placeholder-gray-400 focus:outline-none dark:text-gray-200 dark:placeholder-gray-500"
         />
 
         {/* Clear Button */}
         {value.length > 0 && (
-          <span className="pr-4 text-gray-500 dark:text-gray-400 cursor-pointer">
+          <span className="cursor-pointer pr-4 text-gray-500 dark:text-gray-400">
             <MdOutlineCancel
               className="text-2xl"
               onClick={() => {
-                onChange("");
+                onChange('');
                 fetchservice();
               }}
             />

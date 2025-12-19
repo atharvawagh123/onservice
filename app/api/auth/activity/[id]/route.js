@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { serialize } from "@/lib/serialize.js";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { serialize } from '@/lib/serialize.js';
 
 export async function PATCH(req, { params }) {
   try {
@@ -22,35 +22,35 @@ export async function PATCH(req, { params }) {
     if (!updateuser) {
       return NextResponse.json(
         {
-          error: "user is not available in data base",
+          error: 'user is not available in data base',
           success: true,
         },
         {
           status: 400,
-        },
+        }
       );
     }
 
     return NextResponse.json(
       {
         user: serialize(updateuser),
-        message: "user activity changed",
+        message: 'user activity changed',
         id,
         success: true,
       },
       {
         status: 201,
-      },
+      }
     );
   } catch (err) {
     console.log(err);
     return NextResponse.json(
       {
-        error: "error from frontend!!!!!",
+        error: 'error from frontend!!!!!',
       },
       {
         status: 400,
-      },
+      }
     );
   }
 }

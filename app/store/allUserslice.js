@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   users: [],
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const allUsersSlice = createSlice({
-  name: "allUsers",
+  name: 'allUsers',
   initialState,
   reducers: {
     setUsers(state, action) {
@@ -27,9 +27,9 @@ const allUsersSlice = createSlice({
       state.limit = action.payload;
     },
     setchangeactivity(state, action) {
-      const user = state.users.find((user) => user.id === action.payload);
+      const user = state.users.find(user => user.id === action.payload);
       if (!user) {
-        alert("user not found in state");
+        alert('user not found in state');
       }
       user.is_active = !user.is_active;
     },

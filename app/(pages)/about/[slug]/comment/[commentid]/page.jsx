@@ -1,15 +1,15 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
 export default async function CommentslugPage({ params }) {
   const { slug, commentid } = await params;
-  console.log("Comment Page Slug:", slug);
-  console.log("Comment ID:", commentid);
+  console.log('Comment Page Slug:', slug);
+  console.log('Comment ID:', commentid);
 
   const iseligible = /^\d+$/.test(commentid);
   if (iseligible) {
-    console.log("The comment ID is eligible (numeric).");
+    console.log('The comment ID is eligible (numeric).');
   } else {
-    console.log("The comment ID is not eligible (non-numeric).");
+    console.log('The comment ID is not eligible (non-numeric).');
     // You can handle ineligible comment IDs as needed
     notFound();
   }

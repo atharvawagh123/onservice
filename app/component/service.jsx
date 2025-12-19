@@ -1,78 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { ariseenquiry } from "../customhook/enquiry";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { ariseenquiry } from '../customhook/enquiry';
 
 const ServiceCard = ({ service }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [isCooldown, setIsCooldown] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [selectedServiceId, setSelectedServiceId] = useState('');
 
-  const cooldownTime = 60;
   const [formData, setFormData] = useState({
-    service_id: "",
-    phone: "",
-    message: "",
+    service_id: '',
+    phone: '',
+    message: '',
   });
 
-  useEffect(() => {
-    const lastSubmit = localStorage.getItem("lastEnquiryTime");
-    if (lastSubmit) {
-      const elapsed = Math.floor((Date.now() - parseInt(lastSubmit)) / 1000);
-      if (elapsed < cooldownTime) {
-        setIsCooldown(true);
-        setTimeLeft(cooldownTime - elapsed);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isCooldown) return;
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setIsCooldown(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isCooldown]);
-
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const submitEnquiry = async (e) => {
+  const submitEnquiry = async e => {
     e.preventDefault();
+
     if (!formData.phone || !formData.message || !formData.service_id) {
-      toast.error("Please enter all required information!");
+      toast.error('Please enter all required information!');
       return;
     }
 
-    // console.log(formData);
     try {
       const response = await ariseenquiry(formData);
       if (response.success) {
         toast.success(response.message);
         setIsModalOpen(false);
-        setFormData({ phone: "", message: "" });
-        // Start cooldown and save time
-        const now = Date.now();
-        localStorage.setItem("lastEnquiryTime", now.toString());
-        setIsCooldown(true);
-        setTimeLeft(cooldownTime);
+        setFormData({ service_id: '', phone: '', message: '' });
       }
     } catch (error) {
-      toast.error(error.error);
+      toast.error(error?.error || 'Something went wrong');
     }
   };
 
@@ -87,52 +51,49 @@ const ServiceCard = ({ service }) => {
   return (
     <>
       {/* Card */}
-      <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-3 sm:p-4 flex flex-col justify-between min-h-[250px] transition-transform transform hover:-translate-y-1 hover:shadow-lg">
+      <div className="flex min-h-[250px] flex-col justify-between rounded-lg bg-white p-3 shadow-md transition-transform hover:-translate-y-1 hover:shadow-lg sm:p-4 dark:bg-gray-900">
         {/* Image */}
-        <div className="w-full h-32 sm:h-40 md:h-44 mb-3 overflow-hidden rounded-lg">
+        <div className="mb-3 h-32 w-full overflow-hidden rounded-lg sm:h-40 md:h-44">
           <img
-            src={service.imageurl || "/image.png"}
+            src={service.imageurl || '/image.png'}
             alt={service.title}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-1 truncate">
+        <div className="flex flex-1 flex-col">
+          <h2 className="mb-1 truncate text-lg font-semibold text-gray-900 sm:text-xl dark:text-white">
             {service.title}
           </h2>
 
-          <p className="text-gray-700 dark:text-gray-300 mb-2 text-xs sm:text-sm line-clamp-2">
+          <p className="mb-2 line-clamp-2 text-xs text-gray-700 sm:text-sm dark:text-gray-300">
             {service.description}
           </p>
 
-          <p className="text-sky-600 dark:text-sky-400 font-medium text-sm sm:text-base">
+          <p className="text-sm font-medium text-sky-600 sm:text-base dark:text-sky-400">
             ${service.price.toFixed(2)}
           </p>
         </div>
 
         {/* Footer */}
         <div className="mt-3 flex flex-col gap-1">
-          <p className="text-gray-500 dark:text-gray-400 text-xs">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             User ID: {service.userId}
           </p>
-          <p className="text-gray-400 dark:text-gray-500 text-[10px]">
+          <p className="text-[10px] text-gray-400 dark:text-gray-500">
             Created: {new Date(service.createdat).toLocaleDateString()}
           </p>
 
           <button
             onClick={() => {
               setSelectedServiceId(service.id);
-              setFormData((prev) => ({ ...prev, service_id: service.id }));
+              setFormData(prev => ({ ...prev, service_id: service.id }));
               setIsModalOpen(true);
             }}
-            disabled={isCooldown}
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded-md text-sm transition-colors ${
-              isCooldown ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className="w-full rounded-md bg-blue-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
           >
-            {isCooldown ? `Wait ${timeLeft}s` : "Enquiry"}
+            Enquiry
           </button>
         </div>
       </div>
@@ -140,65 +101,53 @@ const ServiceCard = ({ service }) => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-11/12 max-w-md">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+          <div className="w-11/12 max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+            <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
               Enquiry Form {selectedServiceId}
             </h3>
 
             <form className="flex flex-col gap-4" onSubmit={submitEnquiry}>
               {/* Service ID */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="service-id"
-                  className="mb-1 text-gray-700 dark:text-gray-300 font-semibold"
-                >
+                <label className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
                   Service ID
                 </label>
                 <input
-                  id="service-id"
                   disabled
                   type="text"
-                  value={formData.service_id} // use formData here
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                  value={formData.service_id}
+                  className="rounded border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 />
               </div>
 
-              {/* Phone Number */}
+              {/* Phone */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="phone"
-                  className="mb-1 text-gray-700 dark:text-gray-300 font-semibold"
-                >
+                <label className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
                   Phone Number
                 </label>
                 <input
-                  id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   type="text"
                   placeholder="Enter your phone number"
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="rounded border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 />
               </div>
 
               {/* Message */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="message"
-                  className="mb-1 text-gray-700 dark:text-gray-300 font-semibold"
-                >
+                <label className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
                   Message
                 </label>
                 <textarea
-                  id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Enter your message"
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
                   rows={4}
-                ></textarea>
+                  placeholder="Enter your message"
+                  className="rounded border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                />
               </div>
 
               {/* Buttons */}
@@ -206,13 +155,13 @@ const ServiceCard = ({ service }) => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+                  className="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                  className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                 >
                   Submit
                 </button>

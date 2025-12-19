@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 const page = () => {
   return (
     <div>
-      <div className="p-10 bg-white dark:bg-gray-800 rounded-xl shadow-xl text-center w-80 transition duration-300">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      <div className="w-80 rounded-xl bg-white p-10 text-center shadow-xl transition duration-300 dark:bg-gray-800">
+        <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
           Welcome Back! 👋
         </h1>
 

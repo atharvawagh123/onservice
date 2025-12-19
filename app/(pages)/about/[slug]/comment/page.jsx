@@ -1,6 +1,6 @@
 export default async function CommentPage({ params }) {
   const { slug } = await params;
-  console.log("Comment Page Slug:", slug);
+  console.log('Comment Page Slug:', slug);
 
   return (
     <main>

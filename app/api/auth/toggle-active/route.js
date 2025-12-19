@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import { verifyuser } from "@/lib/auth";
-import jwt from "jsonwebtoken";
+import prisma from '@/lib/prisma';
+import { verifyuser } from '@/lib/auth';
+import jwt from 'jsonwebtoken';
 
 export async function PATCH(req) {
   try {
@@ -8,7 +8,7 @@ export async function PATCH(req) {
     const token = await verifyuser(req);
 
     if (!token) {
-      return new Response(JSON.stringify({ error: "Token not available" }), {
+      return new Response(JSON.stringify({ error: 'Token not available' }), {
         status: 401,
       });
     }
@@ -18,7 +18,7 @@ export async function PATCH(req) {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
       console.log(err);
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
         status: 401,
       });
     }
@@ -26,10 +26,10 @@ export async function PATCH(req) {
     // 2️⃣ Parse body { is_active }
     const { is_active } = await req.json();
 
-    if (typeof is_active !== "boolean") {
+    if (typeof is_active !== 'boolean') {
       return new Response(
-        JSON.stringify({ error: "is_active must be true or false" }),
-        { status: 400 },
+        JSON.stringify({ error: 'is_active must be true or false' }),
+        { status: 400 }
       );
     }
 
@@ -54,21 +54,21 @@ export async function PATCH(req) {
 
     return new Response(
       JSON.stringify({
-        message: "User activity status updated successfully",
+        message: 'User activity status updated successfully',
         user: updatedUser,
         success: true,
       }),
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
-      },
+      }
     );
   } catch (err) {
-    console.error("Update active status error:", err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+    console.error('Update active status error:', err);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     });
   }

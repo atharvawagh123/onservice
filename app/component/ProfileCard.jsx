@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { FaFileUpload } from "react-icons/fa";
+import { FaFileUpload } from 'react-icons/fa';
 import {
   MdDeleteForever,
   MdVisibility,
   MdOutlineVisibilityOff,
   MdOutlineAddBusiness,
   MdPermDeviceInformation,
-} from "react-icons/md";
-import Link from "next/link";
+} from 'react-icons/md';
+import Link from 'next/link';
 
 export default function ProfileCard({
   user,
@@ -25,24 +25,24 @@ export default function ProfileCard({
   setShowService,
 }) {
   return (
-    <div className="bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full mx-auto transition-colors duration-300">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400 text-center sm:text-left">
+    <div className="mx-auto w-full max-w-md rounded-xl bg-white p-6 shadow-lg transition-colors duration-300 sm:p-8 dark:bg-gray-900">
+      <h1 className="mb-6 text-center text-2xl font-bold text-sky-700 sm:text-left sm:text-3xl dark:text-sky-400">
         My Profile
       </h1>
 
       {/* =============== PROFILE IMAGE SECTION =============== */}
-      <div className="flex flex-col items-center mb-4">
+      <div className="mb-4 flex flex-col items-center">
         {/* Image Wrapper */}
-        <div className="w-32 h-32 mb-3 rounded-full overflow-hidden border-2 border-sky-400 dark:border-sky-600 relative shadow-md">
+        <div className="relative mb-3 h-32 w-32 overflow-hidden rounded-full border-2 border-sky-400 shadow-md dark:border-sky-600">
           <img
-            src={preview || user?.imageurl || "/image.png"}
+            src={preview || user?.imageurl || '/image.png'}
             alt="Profile"
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
 
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-              <div className="text-white text-sm animate-pulse">
+              <div className="animate-pulse text-sm text-white">
                 Uploading...
               </div>
             </div>
@@ -62,7 +62,7 @@ export default function ProfileCard({
 
           <label
             htmlFor="file-upload"
-            className="cursor-pointer bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-5 rounded-md flex items-center gap-2 transition-all shadow-sm hover:shadow-md"
+            className="flex cursor-pointer items-center gap-2 rounded-md bg-sky-500 px-5 py-2 font-semibold text-white shadow-sm transition-all hover:bg-sky-600 hover:shadow-md"
           >
             <FaFileUpload className="text-xl" />
             <span>Select File</span>
@@ -70,22 +70,22 @@ export default function ProfileCard({
         </div>
 
         {/* Upload / Delete */}
-        <div className="flex gap-2 mt-3 w-full">
+        <div className="mt-3 flex w-full gap-2">
           {/* Upload */}
           <button
             onClick={handleUpload}
             disabled={!file || loading}
-            className="flex items-center justify-center gap-2 flex-1 bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-md transition-all disabled:opacity-50 shadow-sm hover:shadow-md"
+            className="flex flex-1 items-center justify-center gap-2 rounded-md bg-sky-500 px-4 py-2 font-semibold text-white shadow-sm transition-all hover:bg-sky-600 hover:shadow-md disabled:opacity-50"
           >
             <FaFileUpload className="text-xl" />
-            <span>{loading ? "Uploading..." : "Upload"}</span>
+            <span>{loading ? 'Uploading...' : 'Upload'}</span>
           </button>
 
           {/* Delete */}
           {user?.imageurl && (
             <button
               onClick={handleDeleteProfileImage}
-              className="flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md transition-all shadow-sm hover:shadow-md"
+              className="flex items-center justify-center gap-2 rounded-md bg-black px-4 py-2 font-semibold text-white shadow-sm transition-all hover:bg-gray-800 hover:shadow-md"
             >
               <MdDeleteForever className="text-2xl" />
               <span>Delete</span>
@@ -95,7 +95,7 @@ export default function ProfileCard({
 
         {/* Message */}
         {message && (
-          <p className="text-center text-sky-600 dark:text-sky-400 mt-3 font-medium">
+          <p className="mt-3 text-center font-medium text-sky-600 dark:text-sky-400">
             {message}
           </p>
         )}
@@ -103,12 +103,12 @@ export default function ProfileCard({
 
       {/* =============== USER INFO SECTION =============== */}
       <div className="space-y-4">
-        {userInfo.map((item) => (
+        {userInfo.map(item => (
           <p
             key={item.label}
             className="flex flex-col sm:flex-row sm:items-center"
           >
-            <strong className="text-gray-800 dark:text-gray-100 w-24">
+            <strong className="w-24 text-gray-800 dark:text-gray-100">
               {item.label}:
             </strong>
             <span className="text-gray-900 dark:text-gray-200">
@@ -120,7 +120,7 @@ export default function ProfileCard({
 
       {/* =============== SHOW / HIDE SERVICES BUTTON =============== */}
       <button
-        className="mt-6 w-full py-2 bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 text-white rounded font-medium transition-colors duration-200 active:scale-95 flex items-center justify-center gap-2"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded bg-sky-500 py-2 font-medium text-white transition-colors duration-200 hover:bg-sky-600 active:scale-95 dark:bg-sky-600 dark:hover:bg-sky-700"
         onClick={() => setShowService(!showService)}
       >
         {showService ? (
@@ -138,7 +138,7 @@ export default function ProfileCard({
       {canAddService && (
         <Link
           href="/service/add-service"
-          className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
         >
           <MdOutlineAddBusiness className="text-lg sm:text-xl" />
           <span className="font-medium">Add Service</span>
@@ -148,7 +148,7 @@ export default function ProfileCard({
       {/* =============== ADD ENQUIRY BUTTON =============== */}
       <Link
         href="/enquiry"
-        className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
       >
         <MdPermDeviceInformation className="text-lg sm:text-xl" />
         <span className="font-medium">Add Enquiry</span>

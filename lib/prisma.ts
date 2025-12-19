@@ -1,10 +1,10 @@
 // lib/prisma.ts
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 // Ensure you have DATABASE_URL in your environment
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL must be set in environment variables");
+  throw new Error('DATABASE_URL must be set in environment variables');
 }
 
 // Singleton pattern to avoid multiple clients in dev
@@ -16,10 +16,10 @@ export const prisma =
     adapter: new PrismaPg({
       connectionString: process.env.DATABASE_URL,
     }),
-    log: ["query", "error", "warn"],
+    log: ['query', 'error', 'warn'],
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 

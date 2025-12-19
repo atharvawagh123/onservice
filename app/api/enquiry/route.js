@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
 
 function convertBigInt(obj) {
   return JSON.parse(
     JSON.stringify(obj, (_, value) =>
-      typeof value === "bigint" ? value.toString() : value,
-    ),
+      typeof value === 'bigint' ? value.toString() : value
+    )
   );
 }
 
@@ -15,16 +15,16 @@ export async function POST(req) {
     const body = await req.json();
     const { service_id, phone, message } = body;
 
-    const authHeader = req.headers.get("authorization");
+    const authHeader = req.headers.get('authorization');
 
     const token =
-      req.cookies.get("token")?.value ||
-      (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
+      req.cookies.get('token')?.value ||
+      (authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null);
 
     if (!token) {
       return NextResponse.json(
-        { error: "Unauthorized: Token missing" },
-        { status: 401 },
+        { error: 'Unauthorized: Token missing' },
+        { status: 401 }
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: "Enquiry submitted successfully!",
+      message: 'Enquiry submitted successfully!',
       enquiry: convertBigInt(enquiry),
     });
   } catch (err) {
@@ -55,15 +55,15 @@ export async function POST(req) {
 export async function GET(req) {
   try {
     // Optional: Check auth token
-    const authHeader = req.headers.get("authorization");
+    const authHeader = req.headers.get('authorization');
     const token =
-      req.cookies.get("token")?.value ||
-      (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
+      req.cookies.get('token')?.value ||
+      (authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null);
 
     if (!token) {
       return NextResponse.json(
-        { error: "Unauthorized: Token missing" },
-        { status: 401 },
+        { error: 'Unauthorized: Token missing' },
+        { status: 401 }
       );
     }
 
@@ -75,7 +75,7 @@ export async function GET(req) {
         user_id: parseInt(decoded.userId, 10),
       },
       orderBy: {
-        created_at: "desc",
+        created_at: 'desc',
       },
     });
 
@@ -93,12 +93,12 @@ export async function DELETE(req) {
   try {
     // 1️⃣ Get enquiry ID from query params
     const { searchParams } = new URL(req.url);
-    const enquiryId = searchParams.get("id");
+    const enquiryId = searchParams.get('id');
 
     if (!enquiryId) {
       return NextResponse.json(
-        { error: "Enquiry ID is required" },
-        { status: 400 },
+        { error: 'Enquiry ID is required' },
+        { status: 400 }
       );
     }
 
@@ -127,14 +127,14 @@ export async function DELETE(req) {
 
     if (deletedEnquiry.count === 0) {
       return NextResponse.json(
-        { error: "Enquiry not found or you are not authorized" },
-        { status: 404 },
+        { error: 'Enquiry not found or you are not authorized' },
+        { status: 404 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Enquiry deleted successfully!",
+      message: 'Enquiry deleted successfully!',
     });
   } catch (err) {
     console.error(err);

@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { login } from "../../customhook/auth";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setname } from "@/app/store/usersclice";
-import { FiEye, FiEyeOff, FiMail, FiLock } from "react-icons/fi";
+import { useState } from 'react';
+import { login } from '../../customhook/auth';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setname } from '@/app/store/usersclice';
+import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
 
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
 
@@ -31,33 +31,33 @@ export default function LoginPage() {
       }
 
       if (!res?.is_active) {
-        toast.warning("Your account is currently inactive");
+        toast.warning('Your account is currently inactive');
         // return;
       }
 
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("isLogin", "true");
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('isLogin', 'true');
       dispatch(setname(res.name));
 
-      toast.success("Login successful!");
+      toast.success('Login successful!');
 
-      res.role === "ADMIN" ? router.push("/admin/user") : router.push("/home");
+      res.role === 'ADMIN' ? router.push('/admin/user') : router.push('/home');
     } catch (err) {
       console.error(err);
-      toast.error("Login failed. Try again.");
+      toast.error('Login failed. Try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-sky-50 dark:bg-black font-sans px-4">
-      <div className="w-full max-w-md bg-white dark:bg-neutral-900 rounded-2xl shadow-lg p-6 border border-sky-100 dark:border-neutral-800">
+    <main className="flex min-h-screen items-center justify-center bg-sky-50 px-4 font-sans dark:bg-black">
+      <div className="w-full max-w-md rounded-2xl border border-sky-100 bg-white p-6 shadow-lg dark:border-neutral-800 dark:bg-neutral-900">
         {/* Heading */}
         <h1 className="text-2xl font-semibold text-black dark:text-white">
           Welcome Back 👋
         </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 mb-6">
+        <p className="mt-1 mb-6 text-sm text-gray-600 dark:text-gray-400">
           Login to continue
         </p>
 
@@ -65,50 +65,34 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div className="relative">
-            <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-400" />
+            <FiMail className="absolute top-1/2 left-3 -translate-y-1/2 text-sky-400" />
             <input
               type="email"
               placeholder="Email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
-              className="
-                w-full pl-10 pr-4 py-2.5 rounded-lg
-                bg-white dark:bg-neutral-800
-                text-black dark:text-white
-                border border-gray-300 dark:border-neutral-700
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:ring-2 focus:ring-sky-400
-                transition
-              "
+              className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-4 pl-10 text-black placeholder-gray-500 transition focus:ring-2 focus:ring-sky-400 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:placeholder-gray-400"
             />
           </div>
 
           {/* Password */}
           <div className="relative">
-            <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-400" />
+            <FiLock className="absolute top-1/2 left-3 -translate-y-1/2 text-sky-400" />
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
-              className="
-                w-full pl-10 pr-12 py-2.5 rounded-lg
-                bg-white dark:bg-neutral-800
-                text-black dark:text-white
-                border border-gray-300 dark:border-neutral-700
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:ring-2 focus:ring-sky-400
-                transition
-              "
+              className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-12 pl-10 text-black placeholder-gray-500 transition focus:ring-2 focus:ring-sky-400 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:placeholder-gray-400"
             />
 
             {/* Show / Hide */}
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-sky-400 transition"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition hover:text-sky-400"
             >
               {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
             </button>
@@ -118,16 +102,9 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="
-              w-full py-2.5 rounded-lg font-medium
-              bg-sky-400 text-black
-              hover:bg-sky-500
-              active:scale-95
-              transition-all
-              disabled:opacity-60 disabled:cursor-not-allowed
-            "
+            className="w-full rounded-lg bg-sky-400 py-2.5 font-medium text-black transition-all hover:bg-sky-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 

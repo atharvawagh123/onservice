@@ -1,8 +1,8 @@
-"use client"; // This directive marks the component as a Client Component
+'use client'; // This directive marks the component as a Client Component
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React from 'react';
 
 const ToastProvider = () => {
   return (

@@ -1,12 +1,12 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+import cloudinary from '@/lib/cloudinary';
 
 function convertBigInt(obj) {
   return JSON.parse(
     JSON.stringify(obj, (_, value) =>
-      typeof value === "bigint" ? value.toString() : value,
-    ),
+      typeof value === 'bigint' ? value.toString() : value
+    )
   );
 }
 
@@ -14,7 +14,7 @@ export async function GET(req, context) {
   const params = await context.params;
 
   if (!params?.id) {
-    return NextResponse.json({ error: "ID missing" }, { status: 400 });
+    return NextResponse.json({ error: 'ID missing' }, { status: 400 });
   }
 
   try {
@@ -25,7 +25,7 @@ export async function GET(req, context) {
     });
 
     if (!service) {
-      return NextResponse.json({ error: "Service not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Service not found' }, { status: 404 });
     }
 
     return NextResponse.json(convertBigInt(service));
@@ -41,7 +41,7 @@ export async function PUT(req, context) {
     const params = await context.params;
 
     if (!params?.id) {
-      return NextResponse.json({ error: "ID missing" }, { status: 400 });
+      return NextResponse.json({ error: 'ID missing' }, { status: 400 });
     }
 
     const id = BigInt(params.id);
@@ -60,7 +60,7 @@ export async function PUT(req, context) {
     return NextResponse.json({
       updated: convertBigInt(updated),
       success: true,
-      message: "Service updated successfully",
+      message: 'Service updated successfully',
     });
   } catch (err) {
     console.error(err);
@@ -75,7 +75,7 @@ export async function DELETE(req, context) {
     const { id } = params;
 
     if (!id) {
-      return NextResponse.json({ error: "ID missing" }, { status: 400 });
+      return NextResponse.json({ error: 'ID missing' }, { status: 400 });
     }
 
     const service = await prisma.service.findUnique({
@@ -84,7 +84,7 @@ export async function DELETE(req, context) {
     });
 
     if (!service) {
-      return NextResponse.json({ error: "Service not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Service not found' }, { status: 404 });
     }
 
     // Delete image from Cloudinary if exists
@@ -107,7 +107,7 @@ export async function DELETE(req, context) {
     });
 
     return NextResponse.json({
-      message: "Service deleted successfully",
+      message: 'Service deleted successfully',
       success: true,
     });
   } catch (err) {

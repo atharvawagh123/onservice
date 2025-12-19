@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   categories: [], // current page items
@@ -11,7 +11,7 @@ const initialState = {
 };
 
 const CategoriesSlice = createSlice({
-  name: "Categories",
+  name: 'Categories',
   initialState,
   reducers: {
     setCategories(state, action) {
@@ -31,14 +31,14 @@ const CategoriesSlice = createSlice({
     },
     removeCategory(state, action) {
       state.categories = state.categories.filter(
-        (cat) => cat.id !== action.payload,
+        cat => cat.id !== action.payload
       );
       state.totalCategories -= 1;
       state.totalPages = Math.ceil(state.totalCategories / state.limit);
     },
     updateCategory(state, action) {
       const index = state.categories.findIndex(
-        (cat) => cat.id === action.payload.id,
+        cat => cat.id === action.payload.id
       );
       if (index !== -1) state.categories[index] = action.payload;
     },

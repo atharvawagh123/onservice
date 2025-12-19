@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import {
   FaBars,
   FaTimes,
@@ -10,21 +10,21 @@ import {
   FaList,
   FaCalculator,
   FaQuestionCircle,
-} from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
-import Link from "next/link";
-import { useSelector } from "react-redux";
-import { useAuthContext } from "../context/ContextProvider";
-import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
-import { GrUserAdmin } from "react-icons/gr";
-import { CgProfile } from "react-icons/cg";
+} from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { useAuthContext } from '../context/ContextProvider';
+import { FiSun, FiMoon, FiMenu, FiX } from 'react-icons/fi';
+import { GrUserAdmin } from 'react-icons/gr';
+import { CgProfile } from 'react-icons/cg';
 
 export default function Sidebar() {
   const { logout } = useAuthContext();
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme } = useAuthContext();
   const [mounted, setMounted] = useState(false);
-  const state = useSelector((state) => state.Admin);
+  const state = useSelector(state => state.Admin);
 
   const pathname = usePathname(); // ⭐ detect active route
 
@@ -39,19 +39,19 @@ export default function Sidebar() {
   };
 
   const menuItems = [
-    { name: "User", icon: <FaUser />, link: "/admin/user" },
-    { name: "Service", icon: <FaServicestack />, link: "/admin/service" },
-    { name: "Category", icon: <FaList />, link: "/admin/category" },
-    { name: "SubAdmin", icon: <GrUserAdmin />, link: "/admin/subadmin" },
-    { name: "Counter", icon: <FaCalculator />, link: "/admin/counter" },
-    { name: "Enquiry", icon: <FaQuestionCircle />, link: "/admin/enquiry" },
-    { name: "Profile", icon: <CgProfile />, link: "/admin/profile" },
+    { name: 'User', icon: <FaUser />, link: '/admin/user' },
+    { name: 'Service', icon: <FaServicestack />, link: '/admin/service' },
+    { name: 'Category', icon: <FaList />, link: '/admin/category' },
+    { name: 'SubAdmin', icon: <GrUserAdmin />, link: '/admin/subadmin' },
+    { name: 'Counter', icon: <FaCalculator />, link: '/admin/counter' },
+    { name: 'Enquiry', icon: <FaQuestionCircle />, link: '/admin/enquiry' },
+    { name: 'Profile', icon: <CgProfile />, link: '/admin/profile' },
   ];
 
   return (
     <>
       {/* ---------- Mobile Header ---------- */}
-      <div className="flex items-center justify-between md:hidden p-3 z-50">
+      <div className="z-50 flex items-center justify-between p-3 md:hidden">
         <button
           className="text-gray-800 dark:text-gray-200"
           onClick={() => setOpen(true)}
@@ -63,9 +63,9 @@ export default function Sidebar() {
         {mounted && (
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
+            className="rounded-full bg-gray-300 p-2 text-gray-900 transition hover:scale-110 dark:bg-gray-700 dark:text-yellow-300"
           >
-            {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
+            {theme === 'light' ? <FiMoon size={22} /> : <FiSun size={22} />}
           </button>
         )}
       </div>
@@ -73,43 +73,35 @@ export default function Sidebar() {
       {/* ---------- Overlay ---------- */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm md:hidden z-30"
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm md:hidden"
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* ---------- Sidebar ---------- */}
       <aside
-        className={`
-      fixed top-0 left-0 h-full w-64
-      bg-[#F8FAFC] dark:bg-gray-900
-      text-black dark:text-white
-      p-5 shadow-xl
-      transition-transform duration-300 z-40
-      ${open ? "translate-x-0" : "-translate-x-full"}
-      md:translate-x-0
-    `}
+        className={`fixed top-0 left-0 z-40 h-full w-64 bg-[#F8FAFC] p-5 text-black shadow-xl transition-transform duration-300 dark:bg-gray-900 dark:text-white ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         {/* ---------- Profile + Desktop Theme ---------- */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="mb-10 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* ✅ FIXED IMAGE */}
-            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg bg-gray-300 dark:bg-gray-700">
               {state?.imageurl ? (
                 <img
                   src={state.imageurl}
                   alt="profile"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <span className="text-lg font-bold text-white">
-                  {state?.email?.[0]?.toUpperCase() || "U"}
+                  {state?.email?.[0]?.toUpperCase() || 'U'}
                 </span>
               )}
             </div>
 
-            <h1 className="text-sm md:text-base font-bold break-all">
-              {state?.username || "User"}
+            <h1 className="text-sm font-bold break-all md:text-base">
+              {state?.username || 'User'}
             </h1>
           </div>
 
@@ -117,16 +109,16 @@ export default function Sidebar() {
           {mounted && (
             <button
               onClick={toggleTheme}
-              className="hidden md:flex p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-yellow-300 hover:scale-110 transition"
+              className="hidden rounded-full bg-gray-300 p-2 text-gray-900 transition hover:scale-110 md:flex dark:bg-gray-700 dark:text-yellow-300"
             >
-              {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} />}
+              {theme === 'light' ? <FiMoon size={22} /> : <FiSun size={22} />}
             </button>
           )}
         </div>
 
         {/* ---------- Menu ---------- */}
-        <nav className="space-y-2 flex-1">
-          {menuItems.map((item) => {
+        <nav className="flex-1 space-y-2">
+          {menuItems.map(item => {
             const isActive = pathname === item.link;
 
             return (
@@ -134,20 +126,15 @@ export default function Sidebar() {
                 key={item.name}
                 href={item.link}
                 onClick={() => setOpen(false)}
-                className={`
-              flex items-center space-x-3
-              px-4 py-3 rounded-lg
-              transition
-              ${
-                isActive
-                  ? "bg-white dark:bg-gray-800 text-sky-600 font-semibold border-r-4 border-sky-500 shadow"
-                  : "hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-sky-500"
-              }
-            `}
+                className={`flex items-center space-x-3 rounded-lg px-4 py-3 transition ${
+                  isActive
+                    ? 'border-r-4 border-sky-500 bg-white font-semibold text-sky-600 shadow dark:bg-gray-800'
+                    : 'hover:bg-gray-200 hover:text-sky-500 dark:hover:bg-gray-700'
+                } `}
               >
                 <span
                   className={
-                    isActive ? "text-sky-600" : "text-black dark:text-gray-300"
+                    isActive ? 'text-sky-600' : 'text-black dark:text-gray-300'
                   }
                 >
                   {item.icon}
@@ -161,13 +148,7 @@ export default function Sidebar() {
         {/* ---------- Logout ---------- */}
         <button
           onClick={handleLogout}
-          className="
-        mt-10 w-full flex items-center gap-3
-        px-4 py-3 rounded-lg
-        text-red-600 dark:text-red-400
-        hover:bg-red-100 dark:hover:bg-red-900/30
-        transition
-      "
+          className="mt-10 flex w-full items-center gap-3 rounded-lg px-4 py-3 text-red-600 transition hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/30"
         >
           <FiLogOut size={20} />
           <span className="font-medium">Logout</span>

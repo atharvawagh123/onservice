@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
-import { verifyuser } from "@/lib/auth.js";
-import cloudinary from "@/lib/cloudinary.js";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
+import { verifyuser } from '@/lib/auth.js';
+import cloudinary from '@/lib/cloudinary.js';
 
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value,
-    ),
+      typeof value === 'bigint' ? value.toString() : value
+    )
   );
 }
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
     const skip = (page - 1) * limit;
 
     const total = await prisma.service.count();
@@ -23,7 +23,7 @@ export async function GET(request) {
     const services = await prisma.service.findMany({
       skip,
       take: limit,
-      orderBy: { createdat: "desc" },
+      orderBy: { createdat: 'desc' },
     });
 
     // Always return the same response structure
@@ -35,10 +35,10 @@ export async function GET(request) {
         totalPages: Math.ceil(total / limit),
         services: services || [],
         success: true,
-      }),
+      })
     );
   } catch (err) {
-    console.error("Fetch services error:", err);
+    console.error('Fetch services error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
@@ -51,8 +51,8 @@ export async function POST(req) {
     const token = await verifyuser(req);
     if (!token) {
       return NextResponse.json(
-        { error: "Token not available" },
-        { status: 401 },
+        { error: 'Token not available' },
+        { status: 401 }
       );
     }
 
@@ -60,22 +60,22 @@ export async function POST(req) {
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     // ---------------------------
     // 2️⃣ Parse FormData
     // ---------------------------
     const form = await req.formData();
-    const title = form.get("title");
-    const description = form.get("description");
-    const price = form.get("price");
-    const file = form.get("file");
+    const title = form.get('title');
+    const description = form.get('description');
+    const price = form.get('price');
+    const file = form.get('file');
 
     if (!title || !description || !price) {
       return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 },
+        { error: 'Missing required fields' },
+        { status: 400 }
       );
     }
 
@@ -84,16 +84,16 @@ export async function POST(req) {
 
     if (
       file &&
-      typeof file !== "string" &&
+      typeof file !== 'string' &&
       file.size &&
-      file.type.startsWith("image/")
+      file.type.startsWith('image/')
     ) {
       const arrayBuffer = await file.arrayBuffer();
-      const base64 = Buffer.from(arrayBuffer).toString("base64");
+      const base64 = Buffer.from(arrayBuffer).toString('base64');
 
       const uploadedImage = await cloudinary.uploader.upload(
         `data:${file.type};base64,${base64}`,
-        { folder: "services" },
+        { folder: 'services' }
       );
 
       imageurl = uploadedImage.secure_url;
@@ -109,14 +109,14 @@ export async function POST(req) {
     });
 
     if (!user)
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     if (user.totalservice >= 2) {
       return NextResponse.json(
         {
           success: false,
-          message: "You can only create 2 services per account.",
+          message: 'You can only create 2 services per account.',
         },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
@@ -146,15 +146,15 @@ export async function POST(req) {
       {
         data: toPlainObject(service),
         success: true,
-        message: "Service created!",
+        message: 'Service created!',
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (err) {
-    console.error("Create service error:", err);
+    console.error('Create service error:', err);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
+      { error: 'Internal Server Error' },
+      { status: 500 }
     );
   }
 }

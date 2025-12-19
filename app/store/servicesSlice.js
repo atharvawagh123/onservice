@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   services: [],
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const servicesSlice = createSlice({
-  name: "services",
+  name: 'services',
   initialState,
   reducers: {
     setServices(state, action) {
@@ -22,7 +22,7 @@ const servicesSlice = createSlice({
     },
     updateservice(state, action) {
       const updateservice = action.payload;
-      state.services = state.services.map((ser) => {
+      state.services = state.services.map(ser => {
         if (ser.id.toString() === updateservice.id.toString()) {
           return { ...ser, isactive: !ser.isactive };
         }
@@ -48,7 +48,7 @@ const servicesSlice = createSlice({
     },
 
     toggleServiceActive(state, action) {
-      const service = state.services.find((s) => s.id === action.payload);
+      const service = state.services.find(s => s.id === action.payload);
       if (service) {
         service.isactive = !service.isactive;
       }

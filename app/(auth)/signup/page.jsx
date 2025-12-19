@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { signup } from "@/app/customhook/auth";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import Link from 'next/link';
+import { signup } from '@/app/customhook/auth';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import {
   AiOutlineUser,
   AiOutlineMail,
   AiOutlineLock,
   AiOutlineCalendar,
-} from "react-icons/ai";
+} from 'react-icons/ai';
 
 export default function SignupPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    username: "",
-    email: "",
-    password: "",
-    age: "",
+    first_name: '',
+    last_name: '',
+    username: '',
+    email: '',
+    password: '',
+    age: '',
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setError('');
+    setSuccess('');
     setLoading(true);
 
     try {
@@ -45,46 +45,46 @@ export default function SignupPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        setSuccess("User created successfully!");
+        setSuccess('User created successfully!');
         setFormData({
-          first_name: "",
-          last_name: "",
-          username: "",
-          email: "",
-          password: "",
-          age: "",
+          first_name: '',
+          last_name: '',
+          username: '',
+          email: '',
+          password: '',
+          age: '',
         });
-        toast.success("Signup successful! You can now log in.");
-        router.push("/login");
+        toast.success('Signup successful! You can now log in.');
+        router.push('/login');
       }
     } catch (err) {
       console.log(err);
-      setError("Something went wrong. Please try again.");
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 animate-fade-in">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 text-center">
+    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8 dark:bg-gray-900">
+      <div className="animate-fade-in w-full max-w-lg rounded-xl bg-white p-6 shadow-lg sm:p-8 dark:bg-gray-800">
+        <h1 className="mb-2 text-center text-2xl font-bold text-gray-800 sm:text-3xl dark:text-gray-100">
           Sign Up
         </h1>
-        <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
+        <p className="mb-6 text-center text-gray-600 dark:text-gray-300">
           Fill in the form to create an account.
         </p>
 
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+        {error && <p className="mb-4 text-center text-red-500">{error}</p>}
         {success && (
-          <p className="text-green-500 mb-4 text-center">{success}</p>
+          <p className="mb-4 text-center text-green-500">{success}</p>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
           {/* First & Last Name in one row */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 relative">
-              <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="relative flex-1">
+              <AiOutlineUser className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
               <input
                 type="text"
                 name="first_name"
@@ -92,11 +92,11 @@ export default function SignupPage() {
                 value={formData.first_name}
                 onChange={handleChange}
                 required
-                className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+                className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
               />
             </div>
-            <div className="flex-1 relative">
-              <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+            <div className="relative flex-1">
+              <AiOutlineUser className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
               <input
                 type="text"
                 name="last_name"
@@ -104,14 +104,14 @@ export default function SignupPage() {
                 value={formData.last_name}
                 onChange={handleChange}
                 required
-                className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+                className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
               />
             </div>
           </div>
 
           {/* Username */}
           <div className="relative">
-            <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+            <AiOutlineUser className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="text"
               name="username"
@@ -119,13 +119,13 @@ export default function SignupPage() {
               value={formData.username}
               onChange={handleChange}
               required
-              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+              className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
             />
           </div>
 
           {/* Email */}
           <div className="relative">
-            <AiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+            <AiOutlineMail className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="email"
               name="email"
@@ -133,13 +133,13 @@ export default function SignupPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+              className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
             />
           </div>
 
           {/* Password */}
           <div className="relative">
-            <AiOutlineLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+            <AiOutlineLock className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="password"
               name="password"
@@ -147,13 +147,13 @@ export default function SignupPage() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+              className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
             />
           </div>
 
           {/* Age */}
           <div className="relative">
-            <AiOutlineCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
+            <AiOutlineCalendar className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 dark:text-gray-300" />
             <input
               type="number"
               name="age"
@@ -161,7 +161,7 @@ export default function SignupPage() {
               value={formData.age}
               onChange={handleChange}
               required
-              className="pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 w-full transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+              className="w-full rounded border border-gray-300 bg-white px-4 py-2 pl-10 text-gray-800 transition focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:ring-blue-500"
             />
           </div>
 
@@ -169,14 +169,14 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed w-full mt-2"
+            className="mt-2 w-full rounded bg-blue-500 px-4 py-2 font-medium text-white transition-transform hover:bg-blue-600 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm sm:text-base">
-          Already have an account?{" "}
+        <p className="mt-4 text-center text-sm text-gray-600 sm:text-base dark:text-gray-300">
+          Already have an account?{' '}
           <Link href="/login" className="text-blue-500 hover:underline">
             Log in
           </Link>

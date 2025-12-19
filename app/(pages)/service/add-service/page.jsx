@@ -1,26 +1,26 @@
-"use client";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { createservice } from "../../../customhook/service";
+'use client';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { createservice } from '../../../customhook/service';
 
 const Page = () => {
   const [formdata, setFormdata] = useState({
-    title: "",
-    description: "",
-    price: "",
+    title: '',
+    description: '',
+    price: '',
   });
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const onchange = (e) => {
+  const onchange = e => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
 
-  const handlecreateservice = async (e) => {
+  const handlecreateservice = async e => {
     e.preventDefault();
 
     if (!formdata.title || !formdata.description || !formdata.price) {
-      toast.error("Please fill all fields!");
+      toast.error('Please fill all fields!');
       return;
     }
 
@@ -28,34 +28,34 @@ const Page = () => {
     try {
       const response = await createservice(formdata, file);
 
-      console.log("response create :-", response);
+      console.log('response create :-', response);
       if (response.success) {
         toast.success(response.message);
-        setFormdata({ title: "", description: "", price: "" });
+        setFormdata({ title: '', description: '', price: '' });
       } else {
         toast.error(response.message);
-        setFormdata({ title: "", description: "", price: "" });
+        setFormdata({ title: '', description: '', price: '' });
       }
     } catch (e) {
       console.log(e);
-      toast.error("Failed to create service");
+      toast.error('Failed to create service');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6 dark:bg-gray-900">
       <form
         onSubmit={handlecreateservice}
-        className="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex flex-col gap-4"
+        className="flex w-full max-w-md flex-col gap-4 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
       >
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-200 mb-4">
+        <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-200">
           Create Service
         </h1>
 
         <div>
-          <label className="block mb-1 text-gray-700 dark:text-gray-200">
+          <label className="mb-1 block text-gray-700 dark:text-gray-200">
             Service Title
           </label>
           <input
@@ -63,12 +63,12 @@ const Page = () => {
             name="title"
             value={formdata.title}
             onChange={onchange}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-700 dark:text-gray-200">
+          <label className="mb-1 block text-gray-700 dark:text-gray-200">
             Service Description
           </label>
           <textarea
@@ -76,12 +76,12 @@ const Page = () => {
             value={formdata.description}
             onChange={onchange}
             rows={4}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-700 dark:text-gray-200">
+          <label className="mb-1 block text-gray-700 dark:text-gray-200">
             Service Price
           </label>
           <input
@@ -91,28 +91,28 @@ const Page = () => {
             onChange={onchange}
             step="0.01"
             min="0"
-            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-700 dark:text-gray-200">
+          <label className="mb-1 block text-gray-700 dark:text-gray-200">
             Service image
           </label>
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="w-full border rounded-md p-2 bg-white dark:bg-gray-700"
+            onChange={e => setFile(e.target.files[0])}
+            className="w-full rounded-md border bg-white p-2 dark:bg-gray-700"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition disabled:opacity-50"
+          className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700 disabled:opacity-50"
         >
-          {loading ? "Creating..." : "Create Service"}
+          {loading ? 'Creating...' : 'Create Service'}
         </button>
       </form>
     </div>

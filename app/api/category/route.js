@@ -1,21 +1,21 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // Helper to serialize BigInt to string
 function toPlainObject(data) {
   return JSON.parse(
     JSON.stringify(data, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value,
-    ),
+      typeof value === 'bigint' ? value.toString() : value
+    )
   );
 }
 
 export async function GET(req) {
   try {
     const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get("page")) || 1;
-    const limit = parseInt(url.searchParams.get("limit")) || 10;
-    const search = url.searchParams.get("search") || "";
+    const page = parseInt(url.searchParams.get('page')) || 1;
+    const limit = parseInt(url.searchParams.get('limit')) || 10;
+    const search = url.searchParams.get('search') || '';
 
     const validPage = !isNaN(page) && page > 0 ? page : 1;
     const validLimit = !isNaN(limit) && limit > 0 ? limit : 10;
@@ -23,14 +23,14 @@ export async function GET(req) {
     const skip = (validPage - 1) * validLimit;
 
     const whereCondition = search
-      ? { name: { contains: search, mode: "insensitive" } }
+      ? { name: { contains: search, mode: 'insensitive' } }
       : {};
 
     const categories = await prisma.category.findMany({
       where: whereCondition,
       skip,
       take: validLimit,
-      orderBy: { id: "desc" },
+      orderBy: { id: 'desc' },
     });
 
     const totalCategories = await prisma.category.count({
@@ -47,23 +47,23 @@ export async function GET(req) {
         totalPages: Math.ceil(totalCategories / validLimit),
         categories: categories.length ? categories : [],
       }),
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
-    console.error("GET /categories error:", error);
+    console.error('GET /categories error:', error);
 
     return NextResponse.json(
       toPlainObject({
         success: false,
         page: 1,
         limit: 0,
-        search: "",
+        search: '',
         totalCategories: 0,
         totalPages: 0,
         categories: [],
-        error: "Failed to fetch categories",
+        error: 'Failed to fetch categories',
       }),
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -74,10 +74,10 @@ export async function POST(req) {
     const { name } = await req.json();
 
     // Validate input
-    if (!name || typeof name !== "string" || name.trim() === "") {
+    if (!name || typeof name !== 'string' || name.trim() === '') {
       return NextResponse.json(
-        { error: "Name is required and must be a non-empty string" },
-        { status: 400 },
+        { error: 'Name is required and must be a non-empty string' },
+        { status: 400 }
       );
     }
 
@@ -90,8 +90,8 @@ export async function POST(req) {
 
     if (existingCategory) {
       return NextResponse.json(
-        { error: "Category already exists" },
-        { status: 409 }, // Conflict
+        { error: 'Category already exists' },
+        { status: 409 } // Conflict
       );
     }
 
@@ -103,15 +103,15 @@ export async function POST(req) {
       {
         category: toPlainObject(category),
         success: true,
-        message: "category created successfully !",
+        message: 'category created successfully !',
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
-    console.error("POST /categories error:", error);
+    console.error('POST /categories error:', error);
     return NextResponse.json(
-      { error: "Failed to create category" },
-      { status: 500 },
+      { error: 'Failed to create category' },
+      { status: 500 }
     );
   }
 }

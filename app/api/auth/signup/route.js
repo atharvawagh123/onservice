@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req) {
   try {
@@ -8,8 +8,8 @@ export async function POST(req) {
 
     if (!email || !password) {
       return new Response(
-        JSON.stringify({ error: "Email and password required" }),
-        { status: 400 },
+        JSON.stringify({ error: 'Email and password required' }),
+        { status: 400 }
       );
     }
 
@@ -18,7 +18,7 @@ export async function POST(req) {
     });
 
     if (existingUser) {
-      return new Response(JSON.stringify({ error: "User already exists" }), {
+      return new Response(JSON.stringify({ error: 'User already exists' }), {
         status: 400,
       });
     }
@@ -43,12 +43,12 @@ export async function POST(req) {
 
     // Convert BigInt to string
     return new Response(
-      JSON.stringify({ message: "User created", userId: user.id.toString() }),
-      { status: 201 },
+      JSON.stringify({ message: 'User created', userId: user.id.toString() }),
+      { status: 201 }
     );
   } catch (err) {
-    console.error("Signup error:", err);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+    console.error('Signup error:', err);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     });
   }

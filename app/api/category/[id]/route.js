@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import { serialize } from "@/lib/serialize";
+import prisma from '@/lib/prisma';
+import { serialize } from '@/lib/serialize';
 
 export async function GET(req, { params }) {
   try {
@@ -10,7 +10,7 @@ export async function GET(req, { params }) {
     });
 
     if (!category)
-      return Response.json({ error: "Category not found" }, { status: 404 });
+      return Response.json({ error: 'Category not found' }, { status: 404 });
 
     return Response.json(category, { status: 200 });
   } catch (error) {
@@ -41,14 +41,14 @@ export async function DELETE(req, { params }) {
     const category = await prisma.category.delete({
       where: { id: BigInt(id) },
     });
-    console.log("delete category : ", category);
+    console.log('delete category : ', category);
     return Response.json(
       {
-        message: "Category deleted successfully",
+        message: 'Category deleted successfully',
         success: true,
         category: serialize(category),
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
