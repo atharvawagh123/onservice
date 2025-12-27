@@ -48,7 +48,6 @@ const Adminprofile = () => {
 
   const onChange = e => {
     const { name, value } = e.target;
-    console.log(name, value);
     setuserDetail(prev => ({
       ...prev,
       [name]: value,
